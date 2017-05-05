@@ -1,0 +1,15 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.lmu.ifi.dbs.bigdatascience</groupId>
+    <name>Big Data Science Hello World Example</name>
+
+    <artifactId>hello-world-test</artifactId>
+    <version>1</version>
+
+    <parent>
+        <groupId>de.lmu.ifi.dbs.bigdatascience</groupId>
+        <artifactId>example</artifactId>
+        <version>1</version>
+    </parent>
+
+</project>
