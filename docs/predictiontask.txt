@@ -15,7 +15,8 @@ with n = 10 + i * k + k * n
 with each each of the k links being divided up into i time windows where the travel time is aggregated
 
 ### Specification of output vector:
-[route1_avg_travel_time(time_window_1), routeB_avg_travel_time(time_window_1), ... , route12_avg_travel_time(time_window_42)]
-with a = no_routes = 6
-and w = no_windows_per_route = 2 * 6 * 7 = 84
-and m = no_routes * no_time_windows = 12 * 42 = 505
+[route1_avg_travel_time(time_window_1), routeB_avg_travel_time(time_window_1), ... , route6_avg_travel_time(time_window_6)]
+
+with 6 time windows (20-min time windows in 2 hours)
+and 6 routes (A-2, A-3, B-1, B-3, C-1, C-3)
+m = 6 * 6
