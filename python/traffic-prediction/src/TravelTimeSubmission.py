@@ -75,6 +75,10 @@ class TravelTimeSubmission:
             file_name (string, optional):
 
         """
+        if os.name == 'nt':
+            filepath = '..\\dataset'
+        else:
+            filepath = '../../../dataset'
         df = travel_time_df
 
         file = '.' + os.sep + filepath + os.sep + file_name
@@ -163,6 +167,10 @@ class TravelTimeSubmission:
             first_day (datetime.date, optional): the first day in list. datetime(2016,10,18) or datetime(2016,10,25) (def:2016,10,18)
         
         """
+        if os.name == 'nt':
+            filepath = '..\\dataset'
+        else:
+            filepath = '../../../dataset'
         df = self.by_days(data_days_list, first_day)
 
         if (save_csv):

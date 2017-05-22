@@ -7,6 +7,7 @@ Creates a Submission with the average of the last two hours. Uses the training-d
 """
 import pandas as pd
 import numpy as np
+import os
 from datetime import timedelta
 from datetime import time
 from datetime import date
@@ -19,7 +20,10 @@ from TravelTimeSubmission import TravelTimeSubmission
 #print(os.getcwd())
 
 #training_files = "../../../dataset/testing_phase1/"
-training_files = "../dataset/testing_phase1/"
+if os.name == 'nt':
+    training_files = "../dataset/testing_phase1/"
+else:
+    training_files = "../../../dataset/testing_phase1/"
 trajectories_testing_file = "trajectories(table 5)_test1.csv"
 
 trajectories_df = pd.read_csv(training_files+trajectories_testing_file)

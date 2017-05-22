@@ -7,10 +7,16 @@ Created on Wed May 17 14:40:12 2017
 import csv as csv
 import numpy as np
 import pandas as pd
+import os
 from datetime import datetime
 
 def get_traffic(weekdays, times):
-    path_trajectories = 'D:/Docs/Master/Semester 2/Big Data Science Praktikum/datasets/training/trajectories(table 5)_training.csv'
+    if os.name == 'nt':
+        #if operating system is Windows
+        path_trajectories = 'D:/Docs/Master/Semester 2/Big Data Science Praktikum/datasets/training/trajectories(table 5)_training.csv'
+    else:
+        #Unix filesystem
+        path_trajectories = '../../../dataset/training/trajectories(table 5)_training.csv'
 
     df = pd.DataFrame.from_csv(path_trajectories, index_col=[0,1,2])
 
