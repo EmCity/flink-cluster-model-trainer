@@ -11,12 +11,7 @@ import os
 from datetime import datetime
 
 def get_traffic(weekdays, times):
-    if os.name == 'nt':
-        #if operating system is Windows
-        path_trajectories = 'D:/Docs/Master/Semester 2/Big Data Science Praktikum/datasets/training/trajectories(table 5)_training.csv'
-    else:
-        #Unix filesystem
-        path_trajectories = '../../../dataset/training/trajectories(table 5)_training.csv'
+    path_trajectories = '../../../dataset/training/trajectories(table 5)_training.csv'
 
     df = pd.DataFrame.from_csv(path_trajectories, index_col=[0,1,2])
 
@@ -47,7 +42,7 @@ def get_traffic(weekdays, times):
     del df['extracted_day']
 
     #output
-    print(df.loc[complete_mask])
+    return(df.loc[complete_mask])
 
 
 #test

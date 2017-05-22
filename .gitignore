@@ -103,3 +103,12 @@ ENV/
 
 # mypy
 .mypy_cache/
+flink/flink-java-project/.idea/modules.xml
+flink/flink-java-project/src/main/main.iml
+flink/flink-java-project/.idea/misc.xml
+flink/hello-world/.idea/misc.xml
+flink/hello-world/.idea/modules.xml
+flink/hello-world/src/main/main.iml
+flink/flink-java-project/src/test/test.iml
+flink/hello-world/src/test/test.iml
+python/.idea/misc.xml
