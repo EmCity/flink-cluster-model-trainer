@@ -1,18 +1,17 @@
 ### Specification of the prediction problem of KDD cup 2017 Task 1
 
-The prediction task is to infer a prediction p which has the form
-[intersection_id, tollgate_id, time_window, avg_travel_time]
-where time_window is a tuple [start_time, end_time] with an interval of 20 mins
+The prediction task is to infer a prediction of average travel_times for six 20-min time windows in a 2-hour window based on information from the previous 2 hours.
+The model is trained with historical data from 19.07 - 17.10. 
 
 Let n be the dimensionality of the vector representation of each training example.
 Let m be the dimensionality of the vector representation of the prediction output.
 The machine learning task is therefore a map from R:n -> R:m
 
 ### Specification of input vector:
-[hour, minute, weekday, link1_window1_avg_travel_time, link1_window2_avg_travel_time, .... link1_window_i_avg_travel_time, ....linkK_window_i_avg_travel_time, pressure, sea_pressure, wind_direction, wind_speed, temperature, rel_humidity, precipitation, link1_width, ... linkK_width]
+[hour, minute, weekday, link1_window1_avg_travel_time, link1_window2_avg_travel_time, .... link1_window_i_avg_travel_time, ....linkK_window_i_avg_travel_time, pressure, sea_pressure, wind_direction, wind_speed, temperature, rel_humidity, precipitation, link1_width, ... link6_width]
 
-with n = 10 + i * k + k * n
-with each each of the k links being divided up into i time windows where the travel time is aggregated
+with n = 10 + i * 6 + 6
+with each each of the k links being divided up into i time windows where the travel time is aggregated (The number i can be chosen arbitrarily, but has to be chosen with reason to not blow up the vector to huge dimensions)
 
 ### Specification of output vector:
 [route1_avg_travel_time(time_window_1), routeB_avg_travel_time(time_window_1), ... , route6_avg_travel_time(time_window_6)]
