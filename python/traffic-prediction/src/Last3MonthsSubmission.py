@@ -1,14 +1,18 @@
-import get_traffic as traffic
+import get_traffic_old as traffic
 import pandas as pd
 from datetime import datetime
 import TravelTimeSubmission as submission
 
 def from_index_to_prediction_day(day, h):
-    start = datetime(2016, 10, 18 + day, h[0][0], h[0][1], 0)
-    end = datetime(2016, 10, 18 + day, h[1][0], h[1][1], 0)
+    if(day > 1):
+        start = datetime(2016, 10, 17 + day, h[0][0], h[0][1], 0)
+        end = datetime(2016, 10, 17 + day, h[1][0], h[1][1], 0)
+    else: #monday is the 24.10.2016
+        start = datetime(2016, 10, 24 + day, h[0][0], h[0][1], 0)
+        end = datetime(2016, 10, 24 + day, h[1][0], h[1][1], 0)
     return "[" + str(start) + "," + str(end) + ")"
 
-# we are interested in all weekdays
+#we are interested in all weekdays
 weekdays = [0, 1, 2, 3, 4, 5, 6]
 
 # all 20 min windows
@@ -22,7 +26,7 @@ dfResult = pd.DataFrame(columns=["intersection_id", "tollgate_id", "avg_travel_t
 for day in weekdays:
     for hours in times:
         # calculate for each timewindow the avg_travel_time based on the data in this time window
-        df2 = traffic.get_traffic([day], (hours[0], hours[1])).groupby(['intersection_id', 'tollgate_id'])[
+        df2 = traffic.get_traffic([day],(hours[0],hours[1])).groupby(['intersection_id', 'tollgate_id'])[
             'travel_time'].mean().reset_index(name="avg_travel_time")
         df3 = pd.DataFrame(df2, columns=["intersection_id", "tollgate_id", "avg_travel_time", "time_window"])
 
