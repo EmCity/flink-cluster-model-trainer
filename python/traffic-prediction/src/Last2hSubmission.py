@@ -19,11 +19,11 @@ from TravelTimeSubmission import TravelTimeSubmission
 #import os
 #print(os.getcwd())
 
-#training_files = "../../../dataset/testing_phase1/"
-if os.name == 'nt':
-    training_files = "../dataset/testing_phase1/"
-else:
-    training_files = "../../../dataset/testing_phase1/"
+training_files = "../../../dataset/testing_phase1/"
+#if os.name == 'nt':
+#    training_files = "../dataset/testing_phase1/"
+#else:
+#    training_files = "../../../dataset/testing_phase1/"
 trajectories_testing_file = "trajectories(table 5)_test1.csv"
 
 trajectories_df = pd.read_csv(training_files+trajectories_testing_file)

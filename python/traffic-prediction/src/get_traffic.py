@@ -33,7 +33,7 @@ def get_traffic(weekdays, times):
 
 
     if os.name == 'nt':
-        training_files = "../dataset/training/"
+        training_files = "../../../dataset/training/"
     else:
         training_files = "../../../dataset/training/"
 
