@@ -16,9 +16,9 @@ class TravelTimeSubmission:
     """
     Input:
         A structure of lists
-        Example: 
+        Example:
             [days[time_window_sets[time_window_set[routes[route[time_avg]]]]]]
-    
+
             days
             -day
             --time_window_sets
@@ -27,7 +27,7 @@ class TravelTimeSubmission:
             -----route
             ------time_avg
         Or a DataFrame with ['intersection_id', 'tollgate_id', 'time_window', 'avg_travel_time'] as columns
-    
+
     """
 
     table_columns = ['intersection_id', 'tollgate_id', 'time_window', 'avg_travel_time']
@@ -70,15 +70,15 @@ class TravelTimeSubmission:
             travel_time_df (pandas dataframe): the function takes a pandas dataframe with the following columns:
                 intersection_id, tollgate_id, time_window, avg_travel_time
                     time_window ([timestamp, timestamp]): is a tuple of start_time and end_time as datetime.timestamp
-            filepath (string, optional): 
+            filepath (string, optional):
 
             file_name (string, optional):
 
         """
-        if os.name == 'nt':
-            filepath = '..\\dataset'
-        else:
-            filepath = '../../../dataset'
+        #if os.name == 'nt':
+        #    filepath = '..\\dataset'
+        #else:
+        filepath = '../../../dataset'
         df = travel_time_df
 
         file = '.' + os.sep + filepath + os.sep + file_name
@@ -153,24 +153,24 @@ class TravelTimeSubmission:
         """
         Use this method to safe a submission csv file with a structure of lists.
         The structure is maybe a bit complicated. I hope it makes sense.
-        
+
         Level 1: list of days
         Level 2: the day entry has a time_window_sets_list (there are two sets. First for the time_windows in the morning 8-10 and Second for the time_windows in theevening 17-19)
         Level 3: the time_window_set havs 6 time_windows
         Level 4: a time_window contains the 6 routes_lists
-        Level 5: one route contains 6 avg_time_values sorted like [('A', '2'), ('A', '3'), ('B', '1'), ('B', '3'), ('C', '1'), ('C', '3')]  
-        
-        
-        
+        Level 5: one route contains 6 avg_time_values sorted like [('A', '2'), ('A', '3'), ('B', '1'), ('B', '3'), ('C', '1'), ('C', '3')]
+
+
+
         Args:
             days_list: look above
             first_day (datetime.date, optional): the first day in list. datetime(2016,10,18) or datetime(2016,10,25) (def:2016,10,18)
-        
+
         """
-        if os.name == 'nt':
-            filepath = '..\\dataset'
-        else:
-            filepath = '../../../dataset'
+        #if os.name == 'nt':
+        #    filepath = '..\\dataset'
+        #else:
+        filepath = '../../../dataset'
         df = self.by_days(data_days_list, first_day)
 
         if (save_csv):
