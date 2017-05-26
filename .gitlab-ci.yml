@@ -15,18 +15,18 @@ stages:
 
 maven-build:
   script:
-    - "mvn clean compile -B"
+    - "mvn --flink clean compile -B"
   stage: build
 
 maven-test:
   script:
-    - "mvn test -B"
+    - "mvn --flink test -B"
     - "cat */target/site/jacoco/index.html"
   stage: test
 
 test-coverage:
   script:
-    - "mvn test -B"
+    - "mvn --flink test -B"
     - for file in */target/site/jacoco/index.html; do test `cat $file | perl -pe 's|^.*Total.*?([0-9]+)%.*|\1|'` -gt 10 || exit 1; done
   stage: test
   only:
@@ -34,23 +34,22 @@ test-coverage:
 
 checkstyle:
   script:
-    - "mvn compile checkstyle:check -B"
+    - "mvn --flink compile checkstyle:check -B"
   stage: test
 
 findbugs:
   script:
-    - "mvn compile findbugs:check -B"
+    - "mvn --flink compile findbugs:check -B"
   stage: test
 
 pmd:
   script:
-    - "mvn pmd:check -B"
+    - "mvn --flink pmd:check -B"
   stage: test
 
 maven-package:
   script:
-    - "mvn package -B"
+    - "mvn --flink package -B"
   stage: package
 #  only:
 #    - master
-
