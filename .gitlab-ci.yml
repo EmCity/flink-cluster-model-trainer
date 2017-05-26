@@ -20,13 +20,13 @@ maven-build:
 
 maven-test:
   script:
-    - "mvn -f flink test -B"
+    - "mvn test -B"
     - "cat */target/site/jacoco/index.html"
   stage: test
 
 test-coverage:
   script:
-    - "mvn -f flink test -B"
+    - "mvn test -B"
     - for file in */target/site/jacoco/index.html; do test `cat $file | perl -pe 's|^.*Total.*?([0-9]+)%.*|\1|'` -gt 10 || exit 1; done
   stage: test
   only:
