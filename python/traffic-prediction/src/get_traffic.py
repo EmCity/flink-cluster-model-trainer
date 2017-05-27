@@ -32,17 +32,15 @@ from datetime import datetime
 def get_traffic(weekdays, times):
 
 
-    if os.name == 'nt':
-        training_files = "../../../dataset/training/"
-    else:
-        training_files = "../../../dataset/training/"
-
+    training_files = "../../../dataset/training/"
+    #if os.name == 'nt':
+    #    training_files = "../dataset/testing_phase1/"
+    #else:
+    #    training_files = "../../../dataset/testing_phase1/"
     trajectories_training_file = "trajectories(table 5)_training.csv"
 
-    trajectories_df = pd.DataFrame.from_csv(training_files+trajectories_training_file_file)
 
-    df = trajectories_df
-
+    df = pd.DataFrame.from_csv(training_files+trajectories_training_file, index_col=[0,1,2])
 
     # transform starting_time column from string to timestamp
     df['starting_time'] = pd.to_datetime(df['starting_time'])
@@ -74,8 +72,9 @@ def get_traffic(weekdays, times):
     #output
     print(df.loc[complete_mask])
 
-
-
-
+#test
+#weekdays = [0]
+#times = [[(6,00), (7,50)]]
+#get_traffic(weekdays, times)
         
     
