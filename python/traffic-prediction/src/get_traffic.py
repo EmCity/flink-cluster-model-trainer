@@ -70,7 +70,7 @@ def get_traffic(weekdays, times):
     del df['hour_min_tuples']
 
     #output
-    print(df.loc[complete_mask])
+    return(df.loc[complete_mask])
 
 #test
 #weekdays = [0]
