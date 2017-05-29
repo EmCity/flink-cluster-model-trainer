@@ -21,7 +21,8 @@ maven-build:
 # test for python (christian)
 python_test:
   stage: test
-  script: ./python/traffic-prediction/test/*
+  script: 
+    - "python3 manage.py /python/traffic-prediction/test/ -k"
 
 maven-test:
   script:
