@@ -23,22 +23,14 @@ Input:
         get_traffic(weekdays, times) filters the traffic from Mondays and Tuesdays between 6:00-7:50 and 12:00-12:20
 """
 
-import csv as csv
 import numpy as np
 import pandas as pd
-import os
-from datetime import datetime
+import Paths as path
 
 def get_traffic(weekdays, times):
 
-
-    training_files = "../../../dataset/training/"
-    #if os.name == 'nt':
-    #    training_files = "../dataset/testing_phase1/"
-    #else:
-    #    training_files = "../../../dataset/testing_phase1/"
-    trajectories_training_file = "trajectories(table 5)_training.csv"
-
+    training_files = path.training_files
+    trajectories_training_file = path.trajectories_training_file
 
     df = pd.DataFrame.from_csv(training_files+trajectories_training_file, index_col=[0,1,2])
 
