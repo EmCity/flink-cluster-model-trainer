@@ -22,7 +22,7 @@ maven-build:
 python_test:
   stage: test
   script: 
-    - "python3 manage.py /python/traffic-prediction/test/ -k"
+    - "python manage.py /python/traffic-prediction/test/ -k"
 
 maven-test:
   script:
