@@ -13,15 +13,7 @@ from datetime import datetime
 
 from TravelTimeSubmission import TravelTimeSubmission
 
-
-#import os
-#print(os.getcwd())
-
-training_files = path.training_files
-trajectories_testing_file = path.trajectories_testing_file
-
-trajectories_df = pd.read_csv(training_files+trajectories_testing_file)
-
+trajectories_df = pd.read_csv(path.trajectories_testing_file)
 
 df = trajectories_df
 

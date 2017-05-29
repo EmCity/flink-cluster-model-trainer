@@ -4,7 +4,7 @@ from datetime import datetime
 import TravelTimeSubmission as submission
 
 def from_index_to_prediction_day(day, h):
-    if(day > 0):
+    if day > 0:
         start = datetime(2016, 10, 24 + day, h[0][0], h[0][1], 0)
         end = datetime(2016, 10, 24 + day, h[1][0], h[1][1], 0)
     else: #monday (0) is the 31.10.2016

@@ -29,10 +29,7 @@ import Paths as path
 
 def get_traffic(weekdays, times):
 
-    training_files = path.training_files
-    trajectories_training_file = path.trajectories_training_file
-
-    df = pd.DataFrame.from_csv(training_files+trajectories_training_file, index_col=[0,1,2])
+    df = pd.DataFrame.from_csv(path.trajectories_training_file, index_col=[0,1,2])
 
     # transform starting_time column from string to timestamp
     df['starting_time'] = pd.to_datetime(df['starting_time'])
