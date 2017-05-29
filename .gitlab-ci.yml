@@ -18,6 +18,11 @@ maven-build:
     - "mvn -f flink clean compile -B"
   stage: build
 
+# test for python (christian)
+python_test:
+  stage: test
+  script: ./python/traffic-prediction/test/*
+
 maven-test:
   script:
     - "mvn -f flink test -B"
