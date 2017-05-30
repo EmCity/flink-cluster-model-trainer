@@ -51,7 +51,7 @@ class TravelTimeSubmission:
                           ]
                          ]
 
-    def save_df_travel_time_submission(self, travel_time_df, filepath='..\\new_dataset',
+    def save_df_travel_time_submission(self, travel_time_df, filepath=path.dataset,
                                        file_name='submission_travelTime.csv'):
         """
         Creates the submission file for task1: "estimated travel time average"
@@ -75,7 +75,7 @@ class TravelTimeSubmission:
             file_name (string, optional):
 
         """
-        filepath = path.dataset
+
         df = travel_time_df
 
         file = '.' + os.sep + filepath + os.sep + file_name
@@ -145,7 +145,7 @@ class TravelTimeSubmission:
 
         return df
 
-    def travel_time_submission(self, data_days_list, first_day=date(2016, 10, 18), filepath='..\\new_dataset',
+    def travel_time_submission(self, data_days_list, first_day=date(2016, 10, 18), filepath=path.dataset,
                                file_name='submission_travelTime.csv', save_csv=True):
         """
         Use this method to safe a submission csv file with a structure of lists.
@@ -164,7 +164,7 @@ class TravelTimeSubmission:
             first_day (datetime.date, optional): the first day in list. datetime(2016,10,18) or datetime(2016,10,25) (def:2016,10,18)
 
         """
-        filepath = path.dataset
+
         df = self.by_days(data_days_list, first_day)
 
         if (save_csv):
