@@ -20,8 +20,8 @@ df = trajectories_df
 df['starting_time'] = pd.to_datetime(df['starting_time'])
 
 # filter day
-predict_days = [date(2016, 10, 18), date(2016, 10, 19), date(2016, 10, 20), date(2016, 10, 21), date(2016, 10, 22),
-                date(2016, 10, 23), date(2016, 10, 24)]
+predict_days = [date(2016, 10, 25), date(2016, 10, 26), date(2016, 10, 27), date(2016, 10, 28), date(2016, 10, 29),
+                date(2016, 10, 30), date(2016, 10, 31)]
 
 # tw_set1
 tw_sets = ((time(6, 0), time(8, 0)), (time(15, 0), time(17, 0)))
@@ -47,4 +47,4 @@ print(days_list)
 
 # create it!
 tts = TravelTimeSubmission()
-tts.travel_time_submission(days_list, predict_days[0])
+tts.travel_time_submission(days_list, predict_days[0], file_name='submission_travelTime_2h_tw_avg.csv')
