@@ -23,14 +23,19 @@ def split_dataset(df, train = 0.6, validation = 0.1):
 	if(train + validation > 1.0):
 		raise ValueError("train + validation cannot be larger than 1.0")
 	this_rest_size = 1.0 - train
-	this_test_size = (1.0 - train) - validation
+	this_test_size = 1.0 - (validation / this_rest_size)
 	#print(this_test_size)
 	#print(this_train_size)
 	train, rest = train_test_split(df, test_size = this_rest_size) #split in test and rest
-	print(1.0 - train - validation)
-	valid, test = train_test_split(rest, test_size = this_test_size) #split rest into validation & test set
+	#print(1.0 - train - validation)
+	if(this_test_size < 1.0):
+		valid, test = train_test_split(rest, test_size = this_test_size) #split rest into validation & test set
+	else:
+		valid = pd.DataFrame.empty
+		test = rest #test set will be the whole of the rest after tking a away the training set
 	return train, valid, test
 
+"""
 df3 = pd.DataFrame(np.random.randn(10, 5), columns=['a', 'b', 'c', 'd', 'e'])
 print(df3)
 train_df, valid_df, test_df = split_dataset(df3)
@@ -52,3 +57,5 @@ print(valid_df)
 print("Her comes the test_df")
 print(test_df)
 print(type(test_df))
+
+"""
