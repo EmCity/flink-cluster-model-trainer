@@ -1,14 +1,13 @@
 import unittest
 import get_traffic as traffic
 import pandas as pd
+import Paths as path
+from pandas.util.testing import assert_frame_equal
 
 
 class GetTrafficTest(unittest.TestCase):
 
-    training_files = "../../../dataset/training/"
-    trajectories_file = "trajectories(table 5)_training.csv"
-
-    trajectories_df= None
+    trajectories_df = None
 
     # all weekdays
     weekdays = [0, 1, 2, 3, 4, 5, 6]
@@ -23,7 +22,7 @@ class GetTrafficTest(unittest.TestCase):
     # times_para = [[self.times[0][0], self.times[11][1]]]
 
     def setUp(self):
-        self.trajectories_df = pd.read_csv(self.training_files + self.trajectories_file)
+        self.trajectories_df = pd.read_csv(path.trajectories_training_file)
 
     def test_get_simple_result(self):
         weekdays_para = [self.weekdays[0]]
@@ -40,6 +39,53 @@ class GetTrafficTest(unittest.TestCase):
         df = traffic.get_traffic(weekdays_para, times_para)
 
         self.assertEqual(len(df), len(self.trajectories_df))
+
+    def test_pandas_equal(self):
+        weekdays_para = self.weekdays
+
+        times_para = [[(0, 0), (24, 00)]]
+
+        df = traffic.get_traffic(weekdays_para, times_para)
+
+        df_original = self.trajectories_df
+        df_original = df_original.set_index(['intersection_id', 'tollgate_id', 'vehicle_id'])
+        df_original['starting_time'] = pd.to_datetime(df_original['starting_time'])
+
+        assert_frame_equal(df, df_original)
+
+    def test_pandas_equal_weekday_3(self):
+        weekdays_para = [3]
+
+        times_para = [[(0, 0), (24, 0)]]
+
+        df = traffic.get_traffic(weekdays_para, times_para)
+
+        df_original = self.trajectories_df
+        df_original = df_original.set_index(['intersection_id', 'tollgate_id', 'vehicle_id'])
+        df_original['starting_time'] = pd.to_datetime(df_original['starting_time'])
+
+        df_original = df_original[df_original['starting_time'].dt.dayofweek == weekdays_para]
+        df_original['starting_time'] = pd.to_datetime(df_original['starting_time'])
+
+        assert_frame_equal(df, df_original)
+
+    def test_pandas_equal_weekday_1_tw_59(self):
+        weekdays_para = [1]
+
+        times_para = [[(14, 59), (14, 60)]]
+
+        df = traffic.get_traffic(weekdays_para, times_para)
+
+        df_original = self.trajectories_df
+        df_original = df_original.set_index(['intersection_id', 'tollgate_id', 'vehicle_id'])
+        df_original['starting_time'] = pd.to_datetime(df_original['starting_time'])
+
+        df_original = df_original[df_original['starting_time'].dt.dayofweek == weekdays_para]
+        df_original = df_original[
+            (df_original['starting_time'].dt.hour >= 14) & (df_original['starting_time'].dt.hour <= 14) &
+            (df_original['starting_time'].dt.minute >= 59) & (df_original['starting_time'].dt.minute <= 60)]
+
+        assert_frame_equal(df, df_original)
 
 
 if __name__ == '__main__':
