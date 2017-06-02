@@ -83,7 +83,7 @@ class GetTrafficTest(unittest.TestCase):
         df_original = df_original[df_original['starting_time'].dt.dayofweek == weekdays_para]
         df_original = df_original[
             (df_original['starting_time'].dt.hour >= 14) & (df_original['starting_time'].dt.hour <= 14) &
-            (df_original['starting_time'].dt.minute >= 59) & (df_original['starting_time'].dt.minute <= 60)]
+            (df_original['starting_time'].dt.minute >= 59) & (df_original['starting_time'].dt.minute <= 59)]
 
         assert_frame_equal(df, df_original)
 
