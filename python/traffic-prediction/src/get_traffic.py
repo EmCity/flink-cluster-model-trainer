@@ -49,7 +49,7 @@ def get_traffic(weekdays, times):
     # create time_mask
     time_mask = [False] * df.shape[0]
     for i in times:
-        time_mask = time_mask | ((df['hour_min_tuples'] > i[0]) & (df['hour_min_tuples'] <= tuple(np.subtract(i[1],(0,1)))))
+        time_mask = time_mask | ((df['hour_min_tuples'] >= i[0]) & (df['hour_min_tuples'] <= tuple(np.subtract(i[1],(0,1)))))
 
     #create complete_mask
     complete_mask = day_mask & time_mask
