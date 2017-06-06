@@ -17,14 +17,13 @@ def generate_vector(df_orig):
     for name, group in df_group:
         #Get the averages travel time per link
         df_temp = group.groupby(['link'])['link_travel_time'].mean().reset_index(name="avg_travel_time")
-        np_arr = df_temp.as_matrix(columns=['avg_travel_time'])
+        np_arr = df_temp['avg_travel_time'].tolist()
 
         #Add the averages per link to the List
         mylist_X.append(np_arr)
 
     #Concatenate the X vector (np array) from the list of numpy arrays
     X = np.concatenate(mylist_X)
-    #print(X)
 
     #Generate Y
     df_orig['starting_time'] = df_orig['starting_time'].astype('datetime64[ns]')
@@ -37,11 +36,11 @@ def generate_vector(df_orig):
     for name, group in df_orig_group:
         #Get the averages travel time route
         df_temp = group.groupby(['intersection_id', 'tollgate_id'])['travel_time'].mean().reset_index(name="avg_travel_time")
-        np_arr = df_temp.as_matrix(columns=['avg_travel_time'])
+        np_arr = df_temp['avg_travel_time'].tolist()
         mylist_Y.append(np_arr)
 
     #Delete the first 6 elements because we are not interested in the first 6 time windows (first 2 hours)
-    del mylist_Y[0:5]
+    #del mylist_Y[0:5]
 
     #Concatenate the Y vector (np array) from the list of numpy arrays
     Y = np.concatenate(mylist_Y)
@@ -72,4 +71,4 @@ def prepare_df_travelseq(df):
     link_df = pd.DataFrame(mylist, columns=res_columns)
     return link_df
 
-generate_vector(pd.read_csv(path.trajectories_testing_file))
+generate_vector(pd.read_csv(path.trajectories_training_file))
