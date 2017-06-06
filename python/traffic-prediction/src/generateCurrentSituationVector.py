@@ -1,15 +1,23 @@
-#intersection_id, tollgate_id, vehicle_id, starting_time, travel_seq
 import pandas as pd
-import Paths as path
-#
-def generateVector(df):
-    df = df.travel_seq.str.split(';',)
-    #print (df)
+import generate_vectors_time_link_weather as weather
+import numpy as np
 
-    #pd.to_datetime(df['starting_time'], format='%Y%m%d%H%M%S')
-    #df['starting_time'] = pd.to_datetime(df['starting_time'])
-    #df_1 = df.groupby([pd.Grouper(key='starting_time', freq='30min')])
-    #print (df_1)
 
-df = pd.DataFrame.from_csv("../../../dataset/training2/trajectories(table_5)_training2.csv")
-generateVector(df)
+def generate_vector():
+    #Generate X
+    df = weather.prepare_df_travelseq()
+    df['starting_time'] = df['starting_time'].astype('datetime64[ns]')
+    mylist = []
+    df_group = df.groupby([pd.Grouper(key='starting_time', freq='20min')])
+    for name, group in df_group:
+        group['link_travel_time'] = pd.to_numeric(group['link_travel_time'])
+        df_temp = group.groupby(['link'])['link_travel_time'].mean().reset_index(name="avg_travel_time")
+        np_arr = df_temp.as_matrix(columns=['avg_travel_time'])
+        mylist.append(np_arr)
+    X = np.array(mylist)
+
+    #Generate Y
+    Y = np.array([])
+    return X, Y
+
+generate_vector()
