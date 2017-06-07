@@ -37,5 +37,5 @@ def generate_timeInformationVector(df):
     return(X, Y)
 
 #test
-print(generate_timeInformationVector(pd.read_csv(path.trajectories_testing_file)))
+#print(generate_timeInformationVector(pd.read_csv(path.trajectories_testing_file)))
 
