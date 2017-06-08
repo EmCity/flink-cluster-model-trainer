@@ -12,12 +12,6 @@ class TestVectorTime(unittest.TestCase):
 
         self.assertIsNotNone(result)
 
-    def test_length_results(self):
-        df = pd.read_csv(path.trajectories_testing_file)
-        result = vector.generate_timeInformationVector(df)
-
-        self.assertEqual(len(result[0]), len(result[1])*2)
-
     def test_validity_of_hour_minute(self):
         df = pd.read_csv(path.trajectories_training_file)
         result = vector.generate_timeInformationVector(df)
@@ -32,11 +26,10 @@ class TestVectorTime(unittest.TestCase):
         df = pd.read_csv(path.trajectories_testing_file)
         result = vector.generate_timeInformationVector(df)
 
-        avg_first_20min = df[0:9]['travel_time'].mean()
+        list_index = [0, 2, 7, 8]
+        avg_first_20min_routeA2 = df.ix[list_index]['travel_time'].mean()
 
-        self.assertEqual(avg_first_20min, result[1][0][0])
-
-
+        self.assertEqual(avg_first_20min_routeA2, result[1][0])
 
 if __name__ == '__main__':
     unittest.main()
