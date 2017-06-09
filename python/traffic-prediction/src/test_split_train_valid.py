@@ -16,6 +16,7 @@ class TestDatasetSplit(unittest.TestCase):
         #load trajectories file
         df1 = pd.DataFrame.from_csv(path.trajectories_training_file, index_col=[0,1,2])
         train_df, valid_df, test_df = split.split_dataset(df1, 0.6, 0.2)
+        self.assertEquals(len(train_df.index) + len(test_df.index) + len(valid_df.index), len(df1.index))
         self.assertEquals(len(train_df.index), len(df1.index) * 0.6)
         self.assertEquals(len(valid_df.index), len(df1.index) * 0.2)
         self.assertEquals(len(test_df.index), len(df1.index) * 0.2)
@@ -23,6 +24,7 @@ class TestDatasetSplit(unittest.TestCase):
     def test_normal_split(self):       
         df1 = pd.DataFrame(np.random.randn(10, 5), columns=['a', 'b', 'c', 'd', 'e'])
         train_df, valid_df, test_df = split.split_dataset(df1, 0.6, 0.2)
+        self.assertEquals(len(train_df.index) + len(test_df.index) + len(valid_df.index), len(df1.index))
         self.assertEquals(len(train_df.index), 6)
         self.assertEquals(len(valid_df.index), 2)
         self.assertEquals(len(test_df.index), 2)
@@ -31,6 +33,7 @@ class TestDatasetSplit(unittest.TestCase):
     def test_no_validation_set(self):
         df1 = pd.DataFrame(np.random.randn(10, 5), columns=['a', 'b', 'c', 'd', 'e'])
         train_df, valid_df, test_df = split.split_dataset(df1, 0.6, 0.0)
+        self.assertEquals(len(train_df.index) + len(test_df.index), len(df1.index))
         self.assertEquals(len(train_df.index), 6)
         self.assertEquals(valid_df, pd.DataFrame.empty)
         self.assertEquals(len(test_df.index), 4)
