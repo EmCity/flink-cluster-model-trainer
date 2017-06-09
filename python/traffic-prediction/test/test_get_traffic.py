@@ -1,8 +1,9 @@
 import unittest
-import get_traffic as traffic
+
 import pandas as pd
-import Paths as path
 from pandas.util.testing import assert_frame_equal
+
+from misc import get_traffic as traffic, Paths as path
 
 
 class GetTrafficTest(unittest.TestCase):

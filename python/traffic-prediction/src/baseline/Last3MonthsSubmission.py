@@ -1,7 +1,9 @@
-import get_traffic as traffic
-import pandas as pd
 from datetime import datetime
-import TravelTimeSubmission as submission
+
+import pandas as pd
+
+from misc import TravelTimeSubmission as submission, get_traffic as traffic
+
 
 def from_index_to_prediction_day(day, h):
     if day > 0:

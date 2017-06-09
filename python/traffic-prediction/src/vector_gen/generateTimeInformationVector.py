@@ -1,8 +1,8 @@
 """
 The generate_timeInformationVector() function generates two numpy arrays:
         1. x array
-                contains information about the weekday and the hour for every 2 hours
-                example: [1 2 1 4] means [Tuesday 2am Tuesday 4am]
+                contains information about the weekday, the hour and the minutes
+                example: [1 2 0 1 4 20] means [Tuesday 2:00am Tuesday 4:20am]
 
         2. y array
                 contains the average travel time for every 20 minutes
@@ -11,7 +11,6 @@ The generate_timeInformationVector() function generates two numpy arrays:
 """
 import numpy as np
 import pandas as pd
-import Paths as path
 
 
 def generate_timeInformationVector(df):
@@ -21,10 +20,10 @@ def generate_timeInformationVector(df):
     df_group = df.groupby([pd.Grouper(key='starting_time', freq='20min')])
 
     #Generate X
-    first_row = list(df_group['starting_time'].first())
-    day_hour_tuple = [[first_row[i].dayofweek, first_row[i].hour] for i in range(0, len(first_row))]
-    X = day_hour_tuple[::6]
-    X = [j for i in X for j in i]
+    X = []
+    for name, group in df_group:
+        list = [name.weekday(), name.hour, name.minute]
+        X.append(list)
 
     #delete last 2 h of X -> no prediction can be made on this data
     #del X[-2:]
@@ -42,9 +41,10 @@ def generate_timeInformationVector(df):
     #delete first 2h of Y -> no prediction can be made on this data
     #del Y[0:5]
 
-    #build  Y
+    #build  X and Y
+    X = np.concatenate(X)
     Y = np.concatenate(Y)
-    return(X, Y)
+    return X, Y
 
 #test
 #print(generate_timeInformationVector(pd.read_csv(path.trajectories_testing_file)))

@@ -8,14 +8,10 @@ This is a error in the data. Actually there is no wind_direction without wind_sp
 Actually it is NaN. But does this help?
 
 """
-import Paths as path
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from datetime import timedelta
-from datetime import time
-from datetime import date
-from datetime import datetime
+from misc import Paths as path
 
 
 def prepare_df_travelseq():
