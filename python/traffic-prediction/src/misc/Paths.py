@@ -1,5 +1,5 @@
 #Path file for the used data paths
-dataset = '../../../new_dataset'
+dataset = '../../../../new_dataset'
 
 training_files = dataset + "/training/"
 testing_files = dataset + "/testing_phase/"
