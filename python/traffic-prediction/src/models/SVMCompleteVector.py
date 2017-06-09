@@ -5,7 +5,7 @@ import misc.split_train_valid as split
 import misc.Paths as path
 import pandas as pd
 
-df = pd.DataFrame.from_csv(path.trajectories_training_file, index_col=[0, 1, 2])
+df = pd.DataFrame.from_csv(path.trajectories_training_file)
 training, validation, testing = split.split_dataset(df, 0.8, 0.1)
 X,Y = vec.generate_vector(training)
 
