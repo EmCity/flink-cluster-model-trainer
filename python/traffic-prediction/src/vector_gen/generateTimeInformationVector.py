@@ -11,7 +11,6 @@ The generate_timeInformationVector() function generates two numpy arrays:
 """
 import numpy as np
 import pandas as pd
-import Paths as path
 
 
 def generate_timeInformationVector(df):

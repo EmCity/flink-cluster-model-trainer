@@ -8,3 +8,4 @@ trajectories_training_file = training_files + "trajectories(table 5)_training.cs
 weather_training_file = training_files + "weather (table 7)_training_update.csv"
 trajectories_testing_file = testing_files + "trajectories(table 5)_test2.csv"
 
+test_file= "test.csv"

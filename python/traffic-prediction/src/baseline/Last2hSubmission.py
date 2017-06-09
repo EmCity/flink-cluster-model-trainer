@@ -5,13 +5,14 @@ Created on Wed May 20 11:40:00 2017
 
 Creates a Submission with the average of the last two hours. Uses the training-dataset.
 """
-import pandas as pd
-import Paths as path
-from datetime import time
 from datetime import date
 from datetime import datetime
+from datetime import time
 
-from TravelTimeSubmission import TravelTimeSubmission
+import pandas as pd
+
+from misc import Paths as path
+from misc.TravelTimeSubmission import TravelTimeSubmission
 
 trajectories_df = pd.read_csv(path.trajectories_testing_file)
 

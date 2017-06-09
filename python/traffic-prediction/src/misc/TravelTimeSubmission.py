@@ -4,12 +4,14 @@ Created on Wed May 19 20:40:00 2017
 @author: Christian
 """
 import os
-import Paths as path
-import pandas as pd
-from datetime import timedelta
-from datetime import time
 from datetime import date
 from datetime import datetime
+from datetime import time
+from datetime import timedelta
+
+import pandas as pd
+
+from misc import Paths as path
 
 
 class TravelTimeSubmission:
