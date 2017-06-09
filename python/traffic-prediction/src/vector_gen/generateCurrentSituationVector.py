@@ -40,11 +40,12 @@ def generate_vector(df_orig):
         np_arr = df_temp['avg_travel_time'].tolist()
         mylist_Y.append(np_arr)
 
-    #Delete the first 6 elements because we are not interested in the first 6 time windows (first 2 hours)
-    #del mylist_Y[0:5]
-
     #Concatenate the Y vector (np array) from the list of numpy arrays
     Y = np.concatenate(mylist_Y)
+    # delete first 2h of Y -> no data is available, 6 routes for 2h
+    Y = Y[36:]
+    # delete last 2h of X -> no prediction is available, 6 time windows * 23 values = 138
+    X = X[:-138]
     return X, Y
 
 def prepare_df_travelseq(df):

@@ -24,9 +24,6 @@ def generate_vector(df_orig):
         #Add the averages per link to the List
         mylist_X.append(list)
 
-    #Concatenate the X vector (np array) from the list of numpy arrays
-    X = np.concatenate(mylist_X)
-
     #Generate Y
     df_orig['starting_time'] = df_orig['starting_time'].astype('datetime64[ns]')
 
@@ -41,12 +38,14 @@ def generate_vector(df_orig):
         np_arr = df_temp['avg_travel_time'].tolist()
         mylist_Y.append(np_arr)
 
-    #Delete the first 6 of Y elements because we are not interested in the first 6 time windows (first 2 hours)
-    del mylist_Y[0:5]
-
-    # Delete the Last 156 of X elements, 6(timeWindow) * 26 (23 links + time)
-    del mylist_X[-156:]
+    #Concatenate the X vector (np array) from the list of numpy arrays
+    X = np.concatenate(mylist_X)
 
     #Concatenate the Y vector (np array) from the list of numpy arrays
     Y = np.concatenate(mylist_Y)
+
+    # delete first 2h of Y -> no data is available, 6 routes for 2h
+    Y = Y[36:]
+    # delete last 2h of X -> no prediction is available, 6 time windows * 26 values = 156
+    X = X[:-156]
     return X, Y
