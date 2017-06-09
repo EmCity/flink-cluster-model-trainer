@@ -20,7 +20,6 @@ def generate_vector(df_orig):
         #Get the averages travel time per link
         df_temp = group.groupby(['link'])['link_travel_time'].mean().reset_index(name="avg_travel_time")
         list = [name.weekday(), name.hour, name.minute] + df_temp['avg_travel_time'].tolist()
-        print(len(list))
 
         #Add the averages per link to the List
         mylist_X.append(list)
@@ -42,11 +41,12 @@ def generate_vector(df_orig):
         np_arr = df_temp['avg_travel_time'].tolist()
         mylist_Y.append(np_arr)
 
-    #Delete the first 6 elements because we are not interested in the first 6 time windows (first 2 hours)
-    #del mylist_Y[0:5]
+    #Delete the first 6 of Y elements because we are not interested in the first 6 time windows (first 2 hours)
+    del mylist_Y[0:5]
+
+    # Delete the Last 156 of X elements, 6(timeWindow) * 26 (23 links + time)
+    del mylist_X[-156:]
 
     #Concatenate the Y vector (np array) from the list of numpy arrays
     Y = np.concatenate(mylist_Y)
     return X, Y
-
-generate_vector(pd.read_csv(path.trajectories_training_file))

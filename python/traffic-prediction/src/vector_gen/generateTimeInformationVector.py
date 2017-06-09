@@ -38,8 +38,10 @@ def generate_timeInformationVector(df):
         np_arr = df_temp['avg_travel_time'].tolist()
         Y.append(np_arr)
 
-    #delete first 2h of Y -> no prediction can be made on this data
-    #del Y[0:5]
+    #delete first 2h of Y -> no data is available, 6 routes for 2h
+    del Y[0:5]
+    #delete last 2h of X -> no prediction is available, 6 time windows * 3 values = 18
+    del X[-18:]
 
     #build  X and Y
     X = np.concatenate(X)
