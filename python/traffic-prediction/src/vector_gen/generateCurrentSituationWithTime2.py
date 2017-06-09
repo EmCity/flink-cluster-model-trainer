@@ -2,7 +2,7 @@ from vector_gen import generateCurrentSituationVector as vec
 from vector_gen import generateTimeInformationVector as vec2
 import numpy as np
 
-def generateVector(df):
+def generate_vector(df):
     X, Y = vec.generate_vector(df)
     X_2, _ = vec2.generate_timeInformationVector(df)
     list3 = []
