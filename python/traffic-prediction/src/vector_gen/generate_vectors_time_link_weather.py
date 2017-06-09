@@ -8,10 +8,14 @@ This is a error in the data. Actually there is no wind_direction without wind_sp
 Actually it is NaN. But does this help?
 
 """
-import numpy as np
+import src.Paths as path
 import pandas as pd
+import numpy as np
 
-from misc import Paths as path
+from datetime import timedelta
+from datetime import time
+from datetime import date
+from datetime import datetime
 
 
 def prepare_df_travelseq():
@@ -52,6 +56,20 @@ def prepare_df_travelseq():
 
     link_df = pd.DataFrame(mylist, columns=res_columns)
     return link_df
+
+#def generate_y_vector(df):
+    # y
+    # don't we need to separate it into routes as well?!?
+    # so for each timewindow 6 routes
+    # A 2 2016-07... 58.05
+
+    #df = df
+    #df['starting_time'] = df_orig['starting_time'].astype('datetime64[ns]')
+    #df_y = df.groupby(['intersection_id', 'tollgate_id', pd.Grouper(key='starting_time', freq='20min')])[
+    #    'travel_time'].mean()
+    # missing timewindows
+
+    #return np.array(df_y.tolist())
 
 def generate_vectors_time_link_weather():
     """
