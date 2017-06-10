@@ -9,12 +9,12 @@ from vector_gen import generateTimeInformationVector as timeGen
 class TestVector(unittest.TestCase):
     df = pd.read_csv("../../../new_dataset/testing_phase/trajectories(table 5)_test2.csv")
 
-    def checkXVectors(self):
+    def test_checkXVectors(self):
         x, y = oldGen.generate_vector(self.df)
         x2, y2 = newGen.generate_vector(self.df)
         np.testing.assert_array_equal(x, x2)
 
-    def checkYVectors(self):
+    def test_checkYVectors(self):
         x, y = oldGen.generate_vector(self.df)
         x2, y2 = timeGen.generate_timeInformationVector(self.df)
         np.testing.assert_array_equal(y, y2)
