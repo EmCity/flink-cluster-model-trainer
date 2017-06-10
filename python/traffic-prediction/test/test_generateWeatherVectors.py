@@ -3,6 +3,7 @@ import unittest
 import src.vector_gen.generateWeatherVectors as gwv
 import pandas as pd
 from pandas.util.testing import assert_frame_equal
+import datetime
 
 from misc import get_traffic as traffic, Paths as path
 
@@ -25,8 +26,8 @@ class GenerateWeatherVectorsTest(unittest.TestCase):
     def test_length_of_Y(self):
         X, Y = gwv.generate_timeInformationWeatherVectors(self.trajectories_df, self.weather_df)
 
-        # 90 days of training data, 24hours per day, 3 tw per hour, 6 routes per tw, 1 value (avg_travel_time)
-        number = 90*24*3*6
+        # 91 days of training data, 24hours per day, 3 tw per hour, 6 routes per tw, 1 value (avg_travel_time)
+        number = 91*24*3*6
         # - 2h
         number -= 2*3*6
 
@@ -35,9 +36,9 @@ class GenerateWeatherVectorsTest(unittest.TestCase):
     def test_length_of_timeInformationWeatherVector_X(self):
         X, Y = gwv.generate_timeInformationWeatherVectors(self.trajectories_df, self.weather_df)
 
-        # 90 days of training data, 24hours per day, 3 tw per hour, 10 values (
+        # 91 days of training data, 24hours per day, 3 tw per hour, 10 values (
         # weekday ,hour, minute, pressure, sea_pressure, wind_direction, wind_speed, temperature, rel_humidity, precipitation)
-        number = 90*24*3*10
+        number = 91*24*3*10
         # - 2h
         number -= 2*3*10
 

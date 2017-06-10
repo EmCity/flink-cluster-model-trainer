@@ -50,6 +50,8 @@ def generate_VectorY_df(trajectories_df):
     # get daterange
     date_start = df['starting_time'].min()
     date_end = df['starting_time'].max()
+    # enddate is next day midnight #normalize=True sets it to midnight
+    date_end = pd.to_datetime(date_end) + datetime.timedelta(days=1)
     daterange = pd.date_range(start=date_start, end=date_end, normalize=True, closed='left', freq='20min')
 
     # gen tw_avg
@@ -155,7 +157,8 @@ def generate_timeInformationVectorX_df(trajectories_df):
     df = trajectories_df
     date_start = df['starting_time'].min()
     date_end = df['starting_time'].max()
-
+    # enddate is next day midnight #normalize=True sets it to midnight
+    date_end = pd.to_datetime(date_end) + datetime.timedelta(days=1)
     daterange = pd.date_range(start=date_start, end=date_end, normalize=True, closed='left', freq='20min')
 
     df = pd.DataFrame(daterange, columns=['datetime'])
