@@ -52,7 +52,7 @@ def prepare_df_travelseq(df):
     for index, row in df.iterrows():
         new_row = [index]
         new_row.extend(row[:6])
-        for ele in row[6:]:
+        for ele in row[7:]:
             if ele is not None:
                 row_tmp = ele.split('#')
                 res_row = list(new_row)
