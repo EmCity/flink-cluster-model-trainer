@@ -14,7 +14,22 @@ import numpy as np
 
 import datetime
 
-def generate_VectorY_df(df):
+def generate_VectorY_df(trajectories_df):
+    '''
+
+    with 6 time windows (20-min time windows in 2 hours)
+    and 6 routes (A-2, A-3, B-1, B-3, C-1, C-3)
+    m = 6 * 6
+
+    Args:
+        trajectories_df:
+
+    Returns:
+        df: [route1_avg_travel_time(time_window_1), routeB_avg_travel_time(time_window_1), ... , route6_avg_travel_time(time_window_6)]
+
+    '''
+    df = trajectories_df
+
     def add_tw(x):
         minute = x.minute
         tw_minute = -1
@@ -107,27 +122,109 @@ def prepare_df_travelseq():
 
 def prepare_weather_df(weather_df):
     # prepare weather_df
-    no_wind_dir_value = np.nan
+    #no_wind_dir_value = np.nan
     no_wind_dir_value = 0
     weather_df['wind_direction'] = np.where(weather_df['wind_speed'] <= 0.2, no_wind_dir_value, weather_df['wind_speed'])
     #weather_df[weather_df['wind_speed'] <= 0.3]
 
     weather_df['datetime'] = pd.to_datetime(weather_df['date']) + pd.to_timedelta(weather_df['hour'], unit='h')
 
-    # TODO Check really every h?
-    # make weather for each h
+    # make weather for each tw
     weather_df1 = weather_df.copy()
-    weather_df2 = weather_df1.copy()
-    weather_df3 = weather_df1.copy()
-    weather_df2['datetime'] = weather_df1['datetime'] + pd.Timedelta('1h')
-    weather_df3['datetime'] = weather_df1['datetime'] + pd.Timedelta('2h')
 
-    weather_df_1h = weather_df1.append(weather_df2, ignore_index=True)
-    weather_df_1h = weather_df_1h.append(weather_df3, ignore_index=True)
-    weather_df_1h = weather_df_1h.sort_values('datetime').set_index('datetime')
-    return weather_df_1h
+    delta = pd.Timedelta('0h 20min')
+    for i in range(3*3-1):
+        cpy = weather_df.copy()
+        cpy['datetime'] = weather_df['datetime'] + delta
+        weather_df1 = weather_df1.append(cpy, ignore_index=True)
+        delta = delta + pd.Timedelta('0h 20min')
 
-def generate_vectors_time_link_weather():
+    weather_df1 = weather_df1.sort_values('datetime').set_index('datetime')
+    return weather_df1
+
+def generate_timeInformationVectorX_df(trajectories_df):
+    '''
+
+    Args:
+        trajectories_df:
+
+    Returns:
+        df: [datetime	dayofweek	hour	minute]
+
+    '''
+    df = trajectories_df
+    date_start = df['starting_time'].min()
+    date_end = df['starting_time'].max()
+
+    daterange = pd.date_range(start=date_start, end=date_end, normalize=True, closed='left', freq='20min')
+
+    df = pd.DataFrame(daterange, columns=['datetime'])
+    df['datetime'] = pd.to_datetime(df['datetime'])
+
+    df['dayofweek'] = df['datetime'].dt.dayofweek
+    df['hour'] = df['datetime'].dt.hour
+    df['minute'] = df['datetime'].dt.minute
+
+    #df = df[['dayofweek', 'hour', 'minute']]
+
+    # remove last 2h
+    df = df[:-6]
+
+    return df
+
+
+
+def generate_timeInformationVectors(trajectories_df):
+    '''
+
+    Args:
+        trajectories_df:
+
+    Returns:
+        X: [weekday, hour, minute]
+        Y: [route1_avg_travel_time(time_window_1), routeB_avg_travel_time(time_window_1), ... , route6_avg_travel_time(time_window_6)]
+
+    '''
+    df = trajectories_df
+    X_df = generate_timeInformationVectorX_df(df)
+    Y_df = generate_VectorY_df(df)
+
+    # to vector
+    X = X_df[['dayofweek', 'hour', 'minute']].as_matrix().reshape(len(X_df)*3)
+    Y = np.array(Y_df['avg_travel_time'].tolist())
+
+    return (X, Y)
+
+def generate_timeInformationWeatherVectors(trajectories_df, weather_df):
+    '''
+
+    Args:
+        trajectories_df:
+        weather_df:
+
+    Returns:
+        X: [weekday, hour, minute, pressure, sea_pressure, wind_direction, wind_speed, temperature, rel_humidity, precipitation, ...]
+        Y: [route1_avg_travel_time(time_window_1), routeB_avg_travel_time(time_window_1), ... , route6_avg_travel_time(time_window_6)]
+
+    '''
+    X_df = generate_timeInformationVectorX_df(trajectories_df)
+    Y_df = generate_VectorY_df(trajectories_df)
+    weather_df1 = prepare_weather_df(weather_df)
+
+    # add weather
+    weather_df1 = weather_df1.drop(['date', 'hour'], 1)
+    weather_df2 = X_df.merge(weather_df1.reset_index(), how='left', on='datetime')
+    weather_df2 = weather_df2.drop(['datetime'], 1)
+
+    # to vector
+    X = weather_df2.as_matrix()
+    X = X.reshape(len(weather_df2) * len(weather_df2.columns))
+
+    Y = np.array(Y_df['avg_travel_time'].tolist())
+
+    return (X, Y)
+
+def generate_timeInformationLinkAvgWeatherVectors():
     """
     x = time information + travel time/link + weather information
     y = prediction travel time
@@ -152,61 +249,14 @@ def generate_vectors_time_link_weather():
 
     return (x, y)
 
-def generate_timeInformationVectorX_df(df):
-    date_start = df['starting_time'].min()
-    date_end = df['starting_time'].max()
-
-    daterange = pd.date_range(start=date_start, end=date_end, normalize=True, closed='left', freq='20min')
-
-    df = pd.DataFrame(daterange, columns=['datetime'])
-    df['datetime'] = pd.to_datetime(df['datetime'])
-
-    df['dayofweek'] = df['datetime'].dt.dayofweek
-    df['hour'] = df['datetime'].dt.hour
-    df['minute'] = df['datetime'].dt.minute
-
-    #df = df[['dayofweek', 'hour', 'minute']]
-
-    # remove last 2h
-    df = df[:-6]
-
-    return df
-
-
-def generate_timeInformationVectors(df):
-    X_df = generate_timeInformationVectorX_df(df)
-    Y_df = generate_VectorY_df(df)
-
-    # to vector
-    X = X_df[['dayofweek', 'hour', 'minute']].as_matrix().reshape(len(X_df)*3)
-    Y = np.array(Y_df['avg_travel_time'].tolist())
-
-    return (X, Y)
-
-def generate_timeInformationWeatherVectors(df):
-    X_df = generate_timeInformationVectorX_df(df)
-
-    weather_df_1h = prepare_weather_df(pd.read_csv(path.weather_training_file))
-
-    X_df = X_df.merge(weather_df_1h.reset_index(), how='left', on='datetime')
-
-    X = X_df.as_matrix().reshape(len(X_df) * 13)
-
-
-
-    Y_df = generate_VectorY_df(df)
-    # to vector
-    Y = np.array(Y_df['avg_travel_time'].tolist())
-
-    return (X, Y)
 
 #test
-file = path.trajectories_training_file
+#file = path.trajectories_training_file
 #file = path.trajectories_training_file[3:]
 
-import os
-print(os.getcwd())
-print(file)
+#import os
+#print(os.getcwd())
+#print(file)
 
 #trajectories_df = pd.read_csv(file)
 
@@ -220,3 +270,5 @@ print(file)
 
 
 #print (generate_timeInformationVectors(trajectories_df))
+
+#print(generate_timeInformationWeatherVectors(trajectories_df, pd.read_csv(path.weather_training_file)))
