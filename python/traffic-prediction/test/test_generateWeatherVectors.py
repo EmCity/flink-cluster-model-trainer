@@ -1,12 +1,8 @@
 import unittest
 
-import src.vector_gen.generateWeatherVectors as gwv
+import vector_gen.generateWeatherVectors as gwv
 import pandas as pd
-from pandas.util.testing import assert_frame_equal
-import datetime
-
-from misc import get_traffic as traffic, Paths as path
-
+import test_path as path
 
 class GenerateWeatherVectorsTest(unittest.TestCase):
 

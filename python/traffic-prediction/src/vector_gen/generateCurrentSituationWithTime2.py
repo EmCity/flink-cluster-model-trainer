@@ -1,6 +1,8 @@
 from vector_gen import generateCurrentSituationVector as vec
 from vector_gen import generateTimeInformationVector as vec2
 import numpy as np
+import pandas as pd
+from misc import paths as path
 
 
 def generate_vector(df):
@@ -13,3 +15,4 @@ def generate_vector(df):
         list3.extend(x[:23])
         x = x[23:]
     return np.array(list3), y
+

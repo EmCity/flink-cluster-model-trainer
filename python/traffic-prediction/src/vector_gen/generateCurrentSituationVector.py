@@ -3,13 +3,14 @@ import pandas as pd
 
 
 def generate_vector(df):
-    df['starting_time'] = df['starting_time'].astype('datetime64[ns]')
-    x = generate_x(prepare_df_travelseq(df))
+    x = generate_x(df)
     y = generate_y(df)
     return x, y
 
 
 def generate_x(df):
+    prepare_df_travelseq(df)
+    df['starting_time'] = df['starting_time'].astype('datetime64[ns]')
     # Get a 20 min sliding window for the dataframe
     df_group = df.groupby([pd.Grouper(key='starting_time', freq='20min')])
     df['link_travel_time'] = pd.to_numeric(df['link_travel_time'])
@@ -30,6 +31,7 @@ def generate_x(df):
 def generate_y(df):
     # Get 20 min sliding windows for the data frame
     df_orig_group = df.groupby([pd.Grouper(key='starting_time', freq='20min')])
+    df['starting_time'] = df['starting_time'].astype('datetime64[ns]')
     y = []
     # Iterate over a sliding window data frame
     for name, group in df_orig_group:

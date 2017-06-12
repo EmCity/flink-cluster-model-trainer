@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import
 from vector_gen import generateCurrentSituationVector as vec
 
 
@@ -27,5 +28,5 @@ def generate_x(df):
     # delete last 2h of X -> no prediction is available, 6 time windows * 26 values = 156
     return np_x[:-156]
 
-
+generate_vector(pd.read_csv(path.trajectories_testing_file))
 

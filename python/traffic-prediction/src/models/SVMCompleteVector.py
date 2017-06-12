@@ -2,7 +2,7 @@ from sklearn.svm import SVR
 import sklearn
 import vector_gen.generateCurrentSituationWithTime as vec
 import misc.split_train_valid as split
-import misc.Paths as path
+import misc.paths as path
 import pandas as pd
 
 df = pd.DataFrame.from_csv(path.trajectories_training_file)
