@@ -8,7 +8,7 @@ This is a error in the data. Actually there is no wind_direction without wind_sp
 Actually it is NaN. But does this help?
 
 """
-from src.misc import Paths as path
+from misc import paths as path
 import pandas as pd
 import numpy as np
 
@@ -83,7 +83,7 @@ def generate_VectorY_df(trajectories_df):
 
     return df3
 
-def prepare_df_travelseq():
+def prepare_df_travelseq(df):
     '''
     splits the travel_seq
 
@@ -94,9 +94,6 @@ def prepare_df_travelseq():
     @author: Christian
 
     '''
-    trajectories_df = pd.read_csv(path.trajectories_testing_file)
-    df = trajectories_df
-
 
     df_seq = df.travel_seq.str.split(';', expand=True)
     df = df.join(df_seq)
