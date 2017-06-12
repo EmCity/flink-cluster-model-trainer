@@ -1,15 +1,14 @@
 import numpy as np
 import pandas as pd
+from vector_gen import generateWeatherVectors as vec
 
 
 def generate_vector(df):
-    x = generate_x(df)
-    y = generate_y(df)
-    return x, y
+    return generate_x(df), generate_y(df)
 
 
 def generate_x(df):
-    prepare_df_travelseq(df)
+    vec.prepare_df_travelseq(df)
     df['starting_time'] = df['starting_time'].astype('datetime64[ns]')
     # Get a 20 min sliding window for the dataframe
     df_group = df.groupby([pd.Grouper(key='starting_time', freq='20min')])
@@ -30,8 +29,8 @@ def generate_x(df):
 
 def generate_y(df):
     # Get 20 min sliding windows for the data frame
-    df_orig_group = df.groupby([pd.Grouper(key='starting_time', freq='20min')])
     df['starting_time'] = df['starting_time'].astype('datetime64[ns]')
+    df_orig_group = df.groupby([pd.Grouper(key='starting_time', freq='20min')])
     y = []
     # Iterate over a sliding window data frame
     for name, group in df_orig_group:
@@ -44,28 +43,6 @@ def generate_y(df):
     np_y = np.concatenate(y)
     # delete first 2h of Y -> no data is available, 6 routes for 2h
     return np_y[36:]
-
-
-def prepare_df_travelseq(df):
-
-    df_seq = df.travel_seq.str.split(';', expand=True)
-    df = df.join(df_seq)
-    mylist = []
-    for index, row in df.iterrows():
-        new_row = [index]
-        new_row.extend(row[:6])
-        for ele in row[7:]:
-            if ele is not None:
-                row_tmp = ele.split('#')
-                res_row = list(new_row)
-                res_row.extend(row_tmp)
-                mylist.append(res_row)
-    res_columns = ['trajectorie', 'itersection_id', 'tollgate_id', 'vehicle_id', 'starting_time', 'travel_seq',
-                   'travel_time']
-    res_columns.extend(['link', 'link_starting_time', 'link_travel_time'])
-    link_df = pd.DataFrame(mylist, columns=res_columns)
-    return link_df
-
 
 def calculate_list(df_temp):
     vec = [None] * 23

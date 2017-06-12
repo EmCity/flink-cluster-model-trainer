@@ -19,7 +19,7 @@ def split_dataset(df, train = 0.6, validation = 0.1):
 	train and validation have to sum up to a maximum of 1.0
 	e.g. split_dataset(df_example, 0.8, 0.1) will split the data with the distribution (0.8, 0.1, 0.1)
 	"""
-	print "The length of the original data frame is : " , len(df.index)
+	print ("The length of the original data frame is : " , len(df.index))
 	#sorted_df = df.sort(['starting_time'], ascending=[1]) #sort data set by time stamps
 	#print np.array_split(sorted_df, 10)
 	#check if the parameters are in the right range
@@ -39,7 +39,7 @@ def split_dataset(df, train = 0.6, validation = 0.1):
 		return train_set, valid_set, test_set
 	else: #This is if a validation data set exists
 		k = int(round(1 / min(train, validation)))
-		print "The data set is being split into " , k , "buckets"
+		print ("The data set is being split into " , k , "buckets")
 		validation_idx = rd.randint(0, k-1)
 		datasets_splitted = np.array_split(df, k)
 		#n buckets for test set 
@@ -48,38 +48,38 @@ def split_dataset(df, train = 0.6, validation = 0.1):
 		valid_set = datasets_splitted[validation_idx]
 		test_idx = rd.randint(0, k)
 		test_end = test_idx + n - 1 #because the same index already consitutes an element in the set
-		print "Bucket " , str(validation_idx) , "will be used as validation set"
+		print ("Bucket " , str(validation_idx) , "will be used as validation set")
 		#print "The test end" , test_end
 		while test_idx == validation_idx or test_idx >= (k - 1 - n) or (test_end >= validation_idx and test_idx <= validation_idx):
 			test_idx = rd.randint(0, k-1) #find a new randomly generated index for the test set
 			test_end = test_idx + n -1 #the last bucket of the test set
 			#print(test_idx)
-		print "The test_idx " , test_idx
-		print "The test_end " , test_end
+		print ("The test_idx " , test_idx)
+		print ("The test_end " , test_end)
 		#Check which type the dataset_splitted method has
-		print "The dataset_splitted variable has the type " , type(datasets_splitted)
+		print ("The dataset_splitted variable has the type " , type(datasets_splitted))
 		test_frames = datasets_splitted[int(test_idx) : int(test_end) + 1]
 		test_set = pd.concat(test_frames)
-		print "Slicing data set from " , test_idx, " to ", test_end
-		print "The type of validation set is " , type(valid_set)
-		print "The length of the validation set is " , len(valid_set.index)
-		print "The type of test set is ", type(test_set)
-		print "The length of the test set is " , len(test_set.index)
-		print "k is " , k
+		print ("Slicing data set from " , test_idx, " to ", test_end)
+		print ("The type of validation set is " , type(valid_set))
+		print ("The length of the validation set is " , len(valid_set.index))
+		print ("The type of test set is ", type(test_set))
+		print ("The length of the test set is " , len(test_set.index))
+		print ("k is " , k)
 		bad_indices = range(0, k)
 		good_indices = []
-		print bad_indices
+		print (bad_indices)
 		for i in bad_indices:
-			print i, type(i)
+			print (i, type(i))
 			if i != validation_idx and i!= test_idx and i!= test_end and not (i> test_idx and i < test_end):
 				good_indices.append(i)
 			
 			
-		print good_indices
+		print (good_indices)
 		train_list = [datasets_splitted[i] for i in good_indices]
 		train_set = pd.concat(train_list) 
 		#print "The type of the train set is " , type(train_set)
-		print "The length of the training set is ", len(train_set.index)
+		print ("The length of the training set is ", len(train_set.index))
 		#return "The comeplete amount of indices is " , train_set + valid_set + test_set
 		return train_set, valid_set, test_set
 

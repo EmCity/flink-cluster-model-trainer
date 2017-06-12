@@ -2,7 +2,7 @@ import unittest
 
 from vector_gen import generateTimeInformationVector as vector
 import pandas as pd
-import test_paths as path
+import test_path as path
 
 
 class TestVectorTime(unittest.TestCase):

@@ -1,17 +1,16 @@
 import numpy as np
 import pandas as pd
-import
-from vector_gen import generateCurrentSituationVector as vec
+from misc import paths as path
+from vector_gen import generateWeatherVectors as vec
 
 
 def generate_vector(df):
-    df['starting_time'] = df['starting_time'].astype('datetime64[ns]')
-    x = generate_x(vec.prepare_df_travelseq(df))
-    y = vec.generate_y(df)
-    return x, y
+    return generate_x(df), vec.generate_y(df)
 
 
 def generate_x(df):
+    df = vec.prepare_df_travelseq(df)
+    df['starting_time'] = df['starting_time'].astype('datetime64[ns]')
     # Get a 20 min sliding windows for the data frame
     df_group = df.groupby([pd.Grouper(key='starting_time', freq='20min')])
     df['link_travel_time'] = pd.to_numeric(df['link_travel_time'])
