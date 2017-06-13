@@ -112,7 +112,7 @@ def prepare_df_travelseq(df):
                 # print(res_row)
                 mylist.append(res_row)
 
-    res_columns = ['trajectorie', 'itersection_id', 'tollgate_id', 'vehicle_id', 'starting_time', 'travel_seq',
+    res_columns = ['trajectorie', 'intersection_id', 'tollgate_id', 'vehicle_id', 'starting_time', 'travel_seq',
                    'travel_time']
     res_columns.extend(['link', 'link_starting_time', 'link_travel_time'])
 
