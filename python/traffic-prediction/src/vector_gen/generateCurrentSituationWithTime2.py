@@ -1,5 +1,5 @@
-from vector_gen import generateCurrentSituationVector as vec
-from vector_gen import generateTimeInformationVector as vec2
+import src.vector_gen.generateCurrentSituationVector as vec
+import src.vector_gen.generateTimeInformationVector as vec2
 import numpy as np
 import pandas as pd
 from misc import paths as path
