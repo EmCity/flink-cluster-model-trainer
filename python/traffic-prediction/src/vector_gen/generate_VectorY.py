@@ -1,8 +1,7 @@
-from src.misc import Paths as path
 from decimal import *
 import pandas as pd
 import numpy as np
-
+from misc import paths as path
 import datetime
 
 def generate_VectorY_df(trajectories_df):

@@ -83,41 +83,6 @@ def generate_VectorY_df(trajectories_df):
 
     return df3
 
-def prepare_df_travelseq(df):
-    '''
-    splits the travel_seq
-
-    Returns: a df with ['trajectorie', 'itersection_id', 'tollgate_id', 'vehicle_id',
-       'starting_time', 'travel_seq', 'travel_time', 'link',
-       'link_starting_time', 'link_travel_time'] as coloumns
-
-    @author: Christian
-
-    '''
-
-    df_seq = df.travel_seq.str.split(';', expand=True)
-    df = df.join(df_seq)
-
-    # iterate... the slow way... :-/
-    mylist = []
-    for index, row in df.iterrows():
-        new_row = [index]
-        new_row.extend(row[:6])
-        # print(new_row)
-        for ele in row[6:]:
-            if ele is not None:
-                row_tmp = ele.split('#')
-                res_row = list(new_row)
-                res_row.extend(row_tmp)
-                # print(res_row)
-                mylist.append(res_row)
-
-    res_columns = ['trajectorie', 'intersection_id', 'tollgate_id', 'vehicle_id', 'starting_time', 'travel_seq',
-                   'travel_time']
-    res_columns.extend(['link', 'link_starting_time', 'link_travel_time'])
-
-    link_df = pd.DataFrame(mylist, columns=res_columns)
-    return link_df
 
 def prepare_weather_df(weather_df):
     # prepare weather_df
