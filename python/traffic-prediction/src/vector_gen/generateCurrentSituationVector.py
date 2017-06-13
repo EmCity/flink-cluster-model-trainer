@@ -1,70 +1,40 @@
-import numpy as np
 import pandas as pd
-from vector_gen import generateWeatherVectors as vec
+from vector_gen import generate_VectorY as vec_1
 from misc import paths as path
 import datetime
 
+
 def generate_vector(df):
-    return generate_x(df), generate_y(df)
+    return generate_x(df), vec_1.generate_VectorY_df(df)
 
 
 def generate_x(df):
-    df = vec.prepare_df_travelseq(df)
-    df['starting_time'] = df['starting_time'].astype('datetime64[ns]')
-    # Get a 20 min sliding window for the dataframe
-    df_group = df.groupby([pd.Grouper(key='starting_time', freq='20min')])
-    df['link_travel_time'] = pd.to_numeric(df['link_travel_time'])
-    x = []
-    # Iterate over a sliding window dataframe
-    for name, group in df_group:
-        # Get the averages travel time per link
-        df_temp = group.groupby(['link'])['link_travel_time'].mean().reset_index(name="avg_travel_time")
-        x_temp = calculate_list(df_temp)
-        # Add the averages per link to the List
-        x.append(x_temp)
-    # Concatenate the X vector (np array) from the list of numpy arrays
-    np_x = np.concatenate(x)
-    # delete last 2h of X -> no prediction is available, 6 time windows * 23 values = 138
-    return np_x[:-138]
-
-
-def generate_y(df):
-    df['starting_time'] = pd.to_datetime(df['starting_time'])
-    df['tw'] = df['starting_time'].apply(lambda x: add_tw(x))
-    date_start = df['starting_time'].min()
-    date_end = df['starting_time'].max()
+    df = prepare_df_travelseq(df)
+    df['link_starting_time'] = pd.to_datetime(df['link_starting_time'])
+    df['tw'] = df['link_starting_time'].apply(lambda x: add_tw(x))
+    date_start = df['link_starting_time'].min()
+    date_end = df['link_starting_time'].max()
     date_end = pd.to_datetime(date_end) + datetime.timedelta(days=1)
     daterange = pd.date_range(start=date_start, end=date_end, normalize=True, closed='left', freq='20min')
-    df2 = df.groupby(['tw', 'intersection_id', 'tollgate_id'])['travel_time'].mean().reset_index(name="avg_travel_time")
-    df2 = df2.set_index(['tw', 'intersection_id', 'tollgate_id'])
+    df['link_travel_time'] = pd.to_numeric(df['link_travel_time'])
+    df2 = df.groupby(['tw', 'link'])['link_travel_time'].mean().reset_index(name='link_avg')
+    df2 = df2.set_index(['tw', 'link'])
 
-    # route_tuples
-    route_touples = [('A', 2), ('A', 3), ('B', 1), ('B', 3), ('C', 1), ('C', 3)]
+    list1 = list(range(100,124))
     # gen tuples with tw
     tuples = []
-
     for tw in daterange:
-        for r in route_touples:
-            tuples.append((tw, r[0], r[1]))
+            for i in range(100, 124):
+                tuples.append((tw, i))
 
     # multi_index
-    multi_index = pd.MultiIndex.from_tuples(tuples, names=['tw', 'intersection_id', 'tollgate_id'])
+    multi_index = pd.MultiIndex.from_tuples(tuples, names=['tw', 'link'])
     # set multi_index
-    df3 = pd.DataFrame(df2, index=multi_index, columns=['avg_travel_time'])
-    # remove first 2h -> 12*3 rows
-    df3 = df3[12 * 3:]
-    return df3['avg_travel_time'].tolist()
+    df3 = pd.DataFrame(data=df2, index=multi_index, columns=['link_avg'])
+    # remove first 2h -> 6*23 values
+    df3 = df3[:-6*23]
+    return df3['link_avg'].tolist()
 
-
-def calculate_list(df_temp):
-    vec = [None] * 23
-    pd.to_numeric(df_temp['link'])
-    df_temp['link'] = df_temp['link'].astype(int)
-    df_temp['link'] = df_temp['link'] - 100
-    dict_link_avg = pd.Series(df_temp.avg_travel_time.values, index=df_temp.link).to_dict()
-    for key, value in dict_link_avg.items():
-        vec[key-1] = value
-    return vec
 
 def add_tw(x):
     minute = x.minute
@@ -77,5 +47,52 @@ def add_tw(x):
         tw_minute = 40
     return x.replace(minute=tw_minute, second=0)
 
-x,y = generate_vector(pd.read_csv(path.trajectories_testing_file))
-print (y)
+
+def prepare_df_travelseq(df):
+    '''
+    splits the travel_seq
+
+    Returns: a df with ['trajectorie', 'itersection_id', 'tollgate_id', 'vehicle_id',
+       'starting_time', 'travel_seq', 'travel_time', 'link',
+       'link_starting_time', 'link_travel_time'] as coloumns
+
+    @author: Christian
+
+    '''
+
+    df_seq = df.travel_seq.str.split(';', expand=True)
+    df = df.join(df_seq)
+
+    # iterate... the slow way... :-/
+    mylist = []
+    for index, row in df.iterrows():
+        new_row = [index]
+        new_row.extend(row[:6])
+        # print(new_row)
+        for ele in row[6:]:
+            if ele is not None:
+                row_tmp = ele.split('#')
+                res_row = list(new_row)
+                res_row.extend(row_tmp)
+                # print(res_row)
+                mylist.append(res_row)
+
+    res_columns = ['trajectorie', 'intersection_id', 'tollgate_id', 'vehicle_id', 'starting_time', 'travel_seq',
+                   'travel_time']
+    res_columns.extend(['link', 'link_starting_time', 'link_travel_time'])
+
+    link_df = pd.DataFrame(mylist, columns=res_columns)
+    return link_df
+
+x,y = generate_vector(pd.read_csv(path.trajectories_training_file))
+# days*hours*window/h*values - 2h
+number_Y = 7*24*3*6 - 1*2*3*6
+print(y)
+print (len(y))
+print(number_Y)
+
+# days*hours*window/h*values -2h
+number_X = 7*24*3*23 - 1*2*3*23
+print (x)
+print (len(x))
+print(number_X)
