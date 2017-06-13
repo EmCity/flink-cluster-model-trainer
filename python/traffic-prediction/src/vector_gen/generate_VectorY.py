@@ -79,6 +79,7 @@ def generate_VectorY_df(trajectories_df):
     #remove first 2h -> 12*3 rows
     Y = roundedList[12 * 3:]
 
+    Y = np.array(Y)
     return Y
 
 #print(generate_VectorY_df(pd.read_csv(path.trajectories_training_file)))
