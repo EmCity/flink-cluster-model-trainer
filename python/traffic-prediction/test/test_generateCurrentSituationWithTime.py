@@ -2,10 +2,13 @@ import unittest
 import pandas as pd
 import test_path as path
 from vector_gen import generateCurrentSituationWithTime as gen
+from vector_gen import generate_VectorY as genY
+
 
 class TestVector(unittest.TestCase):
     df = pd.read_csv(path.trajectories_training_file2)
-    x, y = gen.generate_vector(df)
+    x, _ = gen.generate_vector(df)
+    y = genY.generate_VectorY_df(df)
 
     def test_on_training2Y(self):
         # days*hours*window/h*values - 2h
@@ -19,3 +22,4 @@ class TestVector(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
