@@ -33,25 +33,19 @@ def generate_x_df(df):
     date_end = pd.to_datetime(date_end) + datetime.timedelta(days=1)
     daterange = pd.date_range(start=date_start, end=date_end, normalize=True, closed='left', freq='20min')
     df['link_travel_time'] = pd.to_numeric(df['link_travel_time'])
-    df2 = df.groupby(['tw', 'link'])['link_travel_time'].mean().reset_index(name='link_avg')
-    df2 = df2.set_index(['tw', 'link'])
+    df = df.groupby(['tw', 'link'])['link_travel_time'].mean().reset_index(name='link_avg')
+    df = df.set_index(['tw', 'link'])
 
     # links (24)
-    links = list(range(100, 124))
-    links = np.array(links).astype('str')  # as string
-    # gen tuples with tw
-    tuples = []
-    for tw in daterange:
-        for link in links:
-            tuples.append((tw, link))
+    links = np.array(list(range(100, 124))).astype('str')  # as string
 
     # multi_index
-    multi_index = pd.MultiIndex.from_tuples(tuples, names=['tw', 'link'])
+    multi_index = pd.MultiIndex.from_product([daterange, links], names=['tw', 'link'])
     # set multi_index
-    df3 = pd.DataFrame(data=df2, index=multi_index, columns=['link_avg'])
+    df = pd.DataFrame(data=df, index=multi_index, columns=['link_avg'])
     # remove first 2h -> 6*23 values
-    df3 = df3[:-6 * 23]
-    return df3['link_avg']
+    df = df[:-6 * 24]
+    return df['link_avg']
 
 
 def prepare_df_travelseq(df):
@@ -90,15 +84,3 @@ def prepare_df_travelseq(df):
     link_df = pd.DataFrame(mylist, columns=res_columns)
     return link_df
 
-x,y = generate_vector(pd.read_csv(path.trajectories_training_file))
-# days*hours*window/h*values - 2h
-number_Y = 7*24*3*6 - 1*2*3*6
-print(y)
-print (len(y))
-print(number_Y)
-
-# days*hours*window/h*values -2h
-number_X = 7*24*3*23 - 1*2*3*23
-print (x)
-print (len(x))
-print(number_X)
