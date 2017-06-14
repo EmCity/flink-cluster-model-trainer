@@ -1,4 +1,4 @@
-from src.misc import Paths as path
+from misc import Paths as path
 from decimal import *
 import pandas as pd
 import numpy as np

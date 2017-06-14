@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-
+import misc.Paths as path
 
 def generate_vector(df):
     df['starting_time'] = df['starting_time'].astype('datetime64[ns]')
@@ -74,3 +74,5 @@ def calculate_list(df_temp):
     for key, value in dict_link_avg.items():
         vec[key-1] = value
     return vec
+
+X,Y = generate_vector(pd.DataFrame.from_csv(path.trajectories_training_file))
