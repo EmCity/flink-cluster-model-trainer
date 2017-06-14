@@ -1,88 +1,10 @@
-<<<<<<< HEAD
-import numpy as np
-import pandas as pd
-import misc.Paths as path
-
-def generate_vector(df):
-    df['starting_time'] = df['starting_time'].astype('datetime64[ns]')
-    x = generate_x(prepare_df_travelseq(df))
-    y = generate_y(df)
-    return x, y
-
-
-def generate_x(df):
-    # Get a 20 min sliding window for the dataframe
-    df_group = df.groupby([pd.Grouper(key='starting_time', freq='20min')])
-    df['link_travel_time'] = pd.to_numeric(df['link_travel_time'])
-    x = []
-    # Iterate over a sliding window dataframe
-    for name, group in df_group:
-        # Get the averages travel time per link
-        df_temp = group.groupby(['link'])['link_travel_time'].mean().reset_index(name="avg_travel_time")
-        x_temp = calculate_list(df_temp)
-        # Add the averages per link to the List
-        x.append(x_temp)
-    # Concatenate the X vector (np array) from the list of numpy arrays
-    np_x = np.concatenate(x)
-    # delete last 2h of X -> no prediction is available, 6 time windows * 23 values = 138
-    return np_x[:-138]
-
-
-def generate_y(df):
-    # Get 20 min sliding windows for the data frame
-    df_orig_group = df.groupby([pd.Grouper(key='starting_time', freq='20min')])
-    y = []
-    # Iterate over a sliding window data frame
-    for name, group in df_orig_group:
-        # Get the averages travel time route
-        df_temp = group.groupby(['intersection_id', 'tollgate_id'])['travel_time'].mean().reset_index(
-            name="avg_travel_time")
-        y_temp = df_temp['avg_travel_time'].tolist()
-        y.append(y_temp)
-    # Concatenate the Y vector (np array) from the list of numpy arrays
-    np_y = np.concatenate(y)
-    # delete first 2h of Y -> no data is available, 6 routes for 2h
-    return np_y[36:]
-
-
-def prepare_df_travelseq(df):
-
-    df_seq = df.travel_seq.str.split(';', expand=True)
-    df = df.join(df_seq)
-    mylist = []
-    for index, row in df.iterrows():
-        new_row = [index]
-        new_row.extend(row[:6])
-        for ele in row[7:]:
-            if ele is not None:
-                row_tmp = ele.split('#')
-                res_row = list(new_row)
-                res_row.extend(row_tmp)
-                mylist.append(res_row)
-    res_columns = ['trajectorie', 'itersection_id', 'tollgate_id', 'vehicle_id', 'starting_time', 'travel_seq',
-                   'travel_time']
-    res_columns.extend(['link', 'link_starting_time', 'link_travel_time'])
-    link_df = pd.DataFrame(mylist, columns=res_columns)
-    return link_df
-
-
-def calculate_list(df_temp):
-    vec = [None] * 23
-    pd.to_numeric(df_temp['link'])
-    df_temp['link'] = df_temp['link'].astype(int)
-    df_temp['link'] = df_temp['link'] - 100
-    dict_link_avg = pd.Series(df_temp.avg_travel_time.values, index=df_temp.link).to_dict()
-    for key, value in dict_link_avg.items():
-        vec[key-1] = value
-    return vec
-
-X,Y = generate_vector(pd.DataFrame.from_csv(path.trajectories_training_file))
-=======
 import pandas as pd
 import numpy as np
 from vector_gen import generate_VectorY as vec_1
 from misc import paths as path
 import datetime
+from decimal import *
+
 
 
 def generate_vector(df):
@@ -123,10 +45,42 @@ def generate_x_df(df):
     multi_index = pd.MultiIndex.from_product([daterange, links], names=['tw', 'link'])
     # set multi_index
     df = pd.DataFrame(data=df, index=multi_index, columns=['link_avg'])
-    # remove first 2h -> 6*23 values
-    df = df[:-6 * 24]
-    return df['link_avg']
 
+    df['link_avg_withoutNaN'] = handleNaNs(df)
+    df = df[:-6 * 24]
+    return df['link_avg_withoutNaN']
+
+def handleNaNs(df):
+
+    df2 = df
+    # replace NaN's with zero
+    df2[np.isnan(df2)] = 0
+
+    # extract avg_travel_time column as list
+    y_zero = df2['link_avg'].tolist()
+
+    # compute all avarages for every 20 minutes among all days
+    # 3 groups a 20 min x 24 h x 24 links = 1728 averages a 20 min per day
+    avg_20min = []
+    for index in range(0, 1728):
+        average = np.mean(y_zero[index::1728])
+        avg_20min.append(average)
+
+    # create sublists for each day
+    y_zero = [y_zero[i:i + 1728] for i in range(0, len(y_zero), 1728)]
+
+    # fill in NaN's with avg_20min
+    for list in y_zero:
+        for index, item in enumerate(list):
+            if item == 0:
+                list[index] = avg_20min[index]
+    y = np.concatenate(y_zero)
+
+    # round by 2 digits
+    roundedList = [float(Decimal("%.2f" % e)) for e in y]
+
+    Y = np.array(roundedList)
+    return Y
 
 def prepare_df_travelseq(df):
     '''
@@ -164,4 +118,3 @@ def prepare_df_travelseq(df):
     link_df = pd.DataFrame(mylist, columns=res_columns)
     return link_df
 
->>>>>>> ca50fe602aea3be8e6018cc6f214e9f0f79154b6
