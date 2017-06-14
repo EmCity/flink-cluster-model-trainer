@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from vector_gen import generate_VectorY as vec_1
 from misc import paths as path
 import datetime
@@ -9,6 +10,21 @@ def generate_vector(df):
 
 
 def generate_x(df):
+    return generate_x_df(df).tolist();
+
+
+def generate_x_df(df):
+    def add_tw(x):
+        minute = x.minute
+        tw_minute = -1
+        if minute < 20:
+            tw_minute = 0
+        elif minute < 40:
+            tw_minute = 20
+        elif minute <= 60:
+            tw_minute = 40
+        return x.replace(minute=tw_minute, second=0)
+
     df = prepare_df_travelseq(df)
     df['link_starting_time'] = pd.to_datetime(df['link_starting_time'])
     df['tw'] = df['link_starting_time'].apply(lambda x: add_tw(x))
@@ -20,32 +36,22 @@ def generate_x(df):
     df2 = df.groupby(['tw', 'link'])['link_travel_time'].mean().reset_index(name='link_avg')
     df2 = df2.set_index(['tw', 'link'])
 
-    list1 = list(range(100,124))
+    # links (24)
+    links = list(range(100, 124))
+    links = np.array(links).astype('str')  # as string
     # gen tuples with tw
     tuples = []
     for tw in daterange:
-            for i in range(100, 124):
-                tuples.append((tw, i))
+        for link in links:
+            tuples.append((tw, link))
 
     # multi_index
     multi_index = pd.MultiIndex.from_tuples(tuples, names=['tw', 'link'])
     # set multi_index
     df3 = pd.DataFrame(data=df2, index=multi_index, columns=['link_avg'])
     # remove first 2h -> 6*23 values
-    df3 = df3[:-6*23]
-    return df3['link_avg'].tolist()
-
-
-def add_tw(x):
-    minute = x.minute
-    tw_minute = -1
-    if minute < 20:
-        tw_minute = 0
-    elif minute < 40:
-        tw_minute = 20
-    elif minute <= 60:
-        tw_minute = 40
-    return x.replace(minute=tw_minute, second=0)
+    df3 = df3[:-6 * 23]
+    return df3['link_avg']
 
 
 def prepare_df_travelseq(df):
