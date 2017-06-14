@@ -26,7 +26,7 @@ Input:
 import numpy as np
 import pandas as pd
 
-from misc import Paths as path
+from misc import paths as path
 
 
 def get_traffic(weekdays, times):

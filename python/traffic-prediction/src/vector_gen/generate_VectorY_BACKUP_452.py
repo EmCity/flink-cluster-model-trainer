@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+from misc import Paths as path
+=======
+>>>>>>> ca50fe602aea3be8e6018cc6f214e9f0f79154b6
 from decimal import *
 import pandas as pd
 import numpy as np

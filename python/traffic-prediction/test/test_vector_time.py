@@ -1,9 +1,8 @@
 import unittest
 
-import VectorGeneration_xAsTimeInformation as vector
+from vector_gen import generateTimeInformationVector as vector
 import pandas as pd
-
-from misc import Paths as path
+import test_path as path
 
 
 class TestVectorTime(unittest.TestCase):

@@ -2,8 +2,8 @@ import unittest
 
 import numpy as np
 import pandas as pd
-
-from misc import Paths as path, split_train_valid as split
+import test_path as path
+from misc import split_train_valid as split
 
 """
 Test method for split_train_valid.py

@@ -11,7 +11,7 @@ from datetime import time
 
 import pandas as pd
 
-from misc import Paths as path
+from misc import paths as path
 from misc.TravelTimeSubmission import TravelTimeSubmission
 
 trajectories_df = pd.read_csv(path.trajectories_testing_file)
