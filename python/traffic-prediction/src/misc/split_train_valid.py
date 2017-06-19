@@ -38,7 +38,7 @@ def split_dataset(df, train = 0.6, validation = 0.1):
 		valid_set = pd.DataFrame.empty
 		return train_set, valid_set, test_set
 	else: #This is if a validation data set exists
-		k = int(round(1 / min(train, validation)))
+		k = int(1 / min(train, validation))
 		print ("The data set is being split into " , k , "buckets")
 		validation_idx = rd.randint(0, k-1)
 		datasets_splitted = np.array_split(df, k)
