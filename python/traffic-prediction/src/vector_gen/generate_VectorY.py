@@ -1,15 +1,12 @@
 from decimal import *
 import pandas as pd
 import numpy as np
-import src.misc.paths as path
 import datetime
+from src.vector_gen.createTW import createTW as create
 
 
 def generate(y_list, df):
-    date_start = df['starting_time'].min()
-    date_end = df['starting_time'].max()
-    date_end = pd.to_datetime(date_end) + datetime.timedelta(days=1)
-    daterange = pd.date_range(start=date_start, end=date_end, normalize=True, closed='left', freq='2h')
+    df, daterange = create(df)
     routes = ['A2', 'A3', 'B1', 'B3', 'C1', 'C3']
     tw = np.array(list(range(0, 6))).astype('str')
     multi_index = pd.MultiIndex.from_product([tw, routes], names=['tw', 'routes'])
@@ -20,6 +17,7 @@ def generate(y_list, df):
         y_list = y_list[36:]
         i = i + 1
     return df_1
+
 
 def generate_VectorY_df(trajectories_df):
     df = trajectories_df
@@ -102,6 +100,3 @@ def generate_VectorY_df(trajectories_df):
     y = generate(roundedList, df)
     df3[np.isnan(df3)] = 0
     return y[:-1]
-
-#y = generate_VectorY_df(pd.read_csv(path.trajectories_training_file2))
-#print (y.to_string)

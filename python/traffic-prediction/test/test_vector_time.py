@@ -1,6 +1,6 @@
 import unittest
 
-from vector_gen import generateTimeInformationVector as vector
+from src.vector_gen import generateTimeInformationVector as vector
 import pandas as pd
 import test_path as path
 
