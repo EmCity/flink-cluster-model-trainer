@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from misc import evaluation as evaluation
+from src.misc import evaluation as evaluation
 
 
 class TestEvaluation(unittest.TestCase):

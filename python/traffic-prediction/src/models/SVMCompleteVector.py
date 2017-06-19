@@ -1,9 +1,9 @@
 from sklearn.svm import SVR
 import sklearn
-import vector_gen.generateCurrentSituationWithTime as vec
-import misc.split_train_valid as split
-import misc.paths as path
-import pandas as pd
+import src.vector_gen.generateCurrentSituationWithTime as vec
+import src.misc.split_train_valid as split
+import src.misc.paths as path
+import src.pandas as pd
 
 df = pd.DataFrame.from_csv(path.trajectories_training_file)
 training, validation, testing = split.split_dataset(df, 0.8, 0.1)

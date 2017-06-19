@@ -3,7 +3,7 @@ import unittest
 import pandas as pd
 from pandas.util.testing import assert_frame_equal
 import test_path as path
-from misc import get_traffic as traffic
+from src.misc import get_traffic as traffic
 
 class GetTrafficTest(unittest.TestCase):
 

@@ -1,8 +1,8 @@
 import unittest
 import pandas as pd
 import test_path as path
-from vector_gen import generateCurrentSituationWithTime as gen
-from vector_gen import generate_VectorY as genY
+from src.vector_gen import generateCurrentSituationWithTime as gen
+from src.vector_gen import generate_VectorY as genY
 
 
 class TestVector(unittest.TestCase):

@@ -1,4 +1,3 @@
-from sklearn.metrics import mean_absolute_error
 import numpy as np
 
 def mape(y_pred, y_true):
