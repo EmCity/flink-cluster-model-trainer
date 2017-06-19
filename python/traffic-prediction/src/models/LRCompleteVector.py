@@ -4,6 +4,7 @@ import misc.paths as path
 import pandas as pd
 from misc import evaluation as eval
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.svm import SVR
 from sklearn.multioutput import MultiOutputRegressor
 
 df = pd.read_csv(path.trajectories_training_file)
@@ -16,11 +17,10 @@ y_test = vec.convertY(testing)
 
 
 max_depth = 30
-regr_multirf = MultiOutputRegressor(RandomForestRegressor(max_depth=max_depth,
-                                                          random_state=0))
+regr_multirf = MultiOutputRegressor(SVR(C=1.0, epsilon=0.2))
 regr_multirf.fit(X, Y)
 
-regr_rf = RandomForestRegressor(max_depth=max_depth, random_state=2)
+regr_rf = SVR(C=1.0, epsilon=0.2)
 regr_rf.fit(X, Y)
 
 # Predict on new data
