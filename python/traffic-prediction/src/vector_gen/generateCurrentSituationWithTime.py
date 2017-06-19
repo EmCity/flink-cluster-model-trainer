@@ -8,9 +8,7 @@ def generate_vector(df):
 	
 	df_cs = gcsv.generate_x_df(df)
 	df = df_cs.copy()
-	df['datetime'] = pd.to_datetime(df_cs.index.values)
-	df['weekday'] = df['datetime'].dt.dayofweek
-	df['hour'] = df['datetime'].dt.hour
-	df['minute'] = df['datetime'].dt.minute
-	df = df.drop('datetime',axis=1)
+	df['weekday'] = df_cs.index.dayofweek
+	df['hour'] = df_cs.index.hour
+	df['minute'] = df_cs.index.minute
 	return df
