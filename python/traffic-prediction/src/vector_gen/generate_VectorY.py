@@ -1,7 +1,7 @@
 from decimal import *
 import pandas as pd
 import numpy as np
-from misc import paths as path
+import src.misc.paths as path
 import datetime
 
 
@@ -103,5 +103,5 @@ def generate_VectorY_df(trajectories_df):
     df3[np.isnan(df3)] = 0
     return y[:-1]
 
-y = generate_VectorY_df(pd.read_csv(path.trajectories_training_file2))
-print (y.to_string)
+#y = generate_VectorY_df(pd.read_csv(path.trajectories_training_file2))
+#print (y.to_string)
