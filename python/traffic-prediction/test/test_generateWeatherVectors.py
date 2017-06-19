@@ -1,6 +1,6 @@
 import unittest
 
-import vector_gen.generateWeatherVectors as gwv
+import src.vector_gen.generateWeatherVectors as gwv
 import pandas as pd
 import test_path as path
 

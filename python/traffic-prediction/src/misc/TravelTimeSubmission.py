@@ -11,7 +11,7 @@ from datetime import timedelta
 
 import pandas as pd
 
-from misc import paths as path
+from src.misc import paths as path
 
 
 class TravelTimeSubmission:

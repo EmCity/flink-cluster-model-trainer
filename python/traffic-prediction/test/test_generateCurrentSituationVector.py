@@ -1,7 +1,7 @@
 import unittest
 import test_path as path
 import pandas as pd
-from vector_gen import generateCurrentSituationVector as gen
+from src.vector_gen import generateCurrentSituationVector as gen
 
 class TestVector(unittest.TestCase):
     df = pd.read_csv(path.trajectories_training_file2)
