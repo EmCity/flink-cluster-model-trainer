@@ -1,26 +1,31 @@
-import src.vector_gen.generateWeatherVectors as vec
+#import src.vector_gen.generateWeatherVectors as vec
+import src.vector_gen.generateCurrentSituationWithTime as vec
 import src.vector_gen.generate_VectorY as vecY
 import src.misc.split_train_valid as split
 import src.misc.paths as path
 import pandas as pd
-from sklearn.svm import SVR
+from sklearn import linear_model
+from src.misc import evaluation as eval
+import numpy as np
+from sklearn.externals import joblib
 
 
 df = pd.read_csv(path.trajectories_training_file)
 df_w = pd.read_csv(path.weather_training_file)
 training, validation, testing = split.split_dataset(df)
-X = vec.generate_TimeInformationCurrentSituationWeatherVectors(training, df_w)
+X = vec.generate_vector(training)
 
-print(X.isnull().any())
 
 y = vecY.generate_VectorY_df(training)
-y_1 = y['2', 'A2']
+y#_1 = y['2', 'A2']
 
 #print(X)
-clf = SVR(C=1.0, epsilon=0.2)
-clf.fit(X, y_1)
+clf = linear_model.MultiTaskElasticNet()
+clf.fit(X, y)
 
-X_test = vec.generate_TimeInformationCurrentSituationWeatherVectors(testing)
+joblib.dump(clf, 'MultiTaskElasticNetCurrentSituationWithTime.pkl')
+
+X_test = vec.generate_vector(testing)
 y_test = vecY.generate_VectorY_df(training)
 y_pred = clf.predict(X)
 
@@ -29,6 +34,6 @@ y_pred = clf.predict(X)
 
 #print(len(y_pred))
 #print (len(y_test_1))
-error = eval.mape(y_pred, y_1)
-print (error)
-
+error = eval.mape(y_pred, y)
+print(error)
+print(np.mean(np.array(error)))
