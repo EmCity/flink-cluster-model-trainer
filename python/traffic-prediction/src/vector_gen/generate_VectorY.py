@@ -73,7 +73,6 @@ def generate_VectorY_df(trajectories_df):
     df4 = df.groupby(['intersection_id', 'tollgate_id'])['travel_time'].mean().reset_index(name="avg_travel_time")
     route_avg = df4['avg_travel_time'].tolist()
 
-    print(route_avg)
     # compute all avarages for every 20 minutes among all days
     # 3 groups a 20 min x 24 h x 6 routes = 432 averages a 20 min per day
     avg_20min = []

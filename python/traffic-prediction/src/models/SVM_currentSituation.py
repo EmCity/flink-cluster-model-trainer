@@ -1,5 +1,5 @@
 from sklearn import svm, model_selection
-import vector_gen.generateCurrentSituationVector as vec
+import src.vector_gen.generateCurrentSituationVector as vec
 import misc.split_train_valid as split
 import misc.paths as path
 import pandas as pd
