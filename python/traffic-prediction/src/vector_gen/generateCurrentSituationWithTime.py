@@ -1,6 +1,6 @@
 import src.vector_gen.generateCurrentSituationVector as gcsv
 
-
+import src.misc.paths as path
 import numpy as np
 import pandas as pd
 
@@ -12,3 +12,5 @@ def generate_vector(df):
 	df['hour'] = df_cs.index.hour
 	df['minute'] = df_cs.index.minute
 	return df
+
+print(generate_vector(pd.read_csv(path.trajectories_training_file2)))

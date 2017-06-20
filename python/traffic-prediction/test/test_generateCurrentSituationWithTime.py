@@ -7,7 +7,7 @@ from src.vector_gen import generate_VectorY as genY
 
 class TestVector(unittest.TestCase):
     df = pd.read_csv(path.trajectories_training_file2)
-    x, _ = gen.generate_vector(df)
+    x = gen.generate_vector(df)
     y = genY.generate_VectorY_df(df)
 
     def test_on_training2Y(self):
