@@ -1,30 +1,46 @@
 from sklearn import svm, model_selection
-import src.vector_gen.generateCurrentSituationVector as vec
-import misc.split_train_valid as split
-import misc.paths as path
+import src.vector_gen.generateCurrentSituationVector as vecX
+import src.vector_gen.generate_VectorY as vecY
+import src.misc.split_train_valid as split
+import src.misc.paths as path
 import pandas as pd
-import numpy
-numpy.set_printoptions(threshold=numpy.nan)
+import numpy as np
+from sklearn.multioutput import MultiOutputRegressor
 
+
+np.set_printoptions(threshold=np.nan)
 
 df = pd.read_csv(path.trajectories_training_file2)
-#print(df)
-#X,Y = vec.generate_vector(df)
-#print(X,Y)
-#X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X,Y,test_size=0.2)
+
 training, validation, testing = split.split_dataset(df)
-X_train,Y_train = vec.generate_vector(training)
-# X_train = vec.generate_x_df(training)
-# Y_train = vec.convertY(training)
-X_test,Y_test = vec.generate_vector(testing)
 
-print(X_train)
-print("############")
-print(Y_train)
-clf = svm.SVC()
-#X_train.reshape(2988,84)
+X_train = vecX.generate_x_df(training)
+Y_train = vecY.generate_VectorY_df(training)
 
-clf.fit(X_train,Y_train)
+X_test = vecX.generate_x_df(testing)
+Y_test = vecY.generate_VectorY_df(testing)
 
-accuracy = clf.score(X_test,Y_test)
-print(accuracy)
+
+#model
+
+from sklearn.multioutput import MultiOutputRegressor
+
+clf = svm.SVR(C=30, epsilon=0.005)
+
+regr_multi_svr = MultiOutputRegressor(clf)
+
+regr_multi_svr.fit(X_train, Y_train)
+Y_pred= regr_multi_svr.predict(X_test)
+
+#print(Y_pred)
+#print(len(Y_pred))
+
+
+#MAPE
+
+from src.misc import evaluation as eval
+error = eval.mape(Y_pred, Y_test)
+
+print(error)
+print(np.mean(np.array(error)))
+
