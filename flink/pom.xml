@@ -9,6 +9,7 @@
     <modules>
         <module>hello-world</module>
         <module>flink-java-project</module>
+	<module>flink-python-job</module>
     </modules>
 
     <packaging>pom</packaging>
