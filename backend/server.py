@@ -1,7 +1,7 @@
 from flask import Flask
 app = Flask(__name__)
 
-@app.route('/predict')
+@app.route('/predict', methods=['GET', 'POST'])
 def start_prediction():
 	#read the JSON format
 	#return the result in JSON format
