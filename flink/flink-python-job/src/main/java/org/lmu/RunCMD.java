@@ -1,23 +1,29 @@
-package org.myorg.quickstart;
+package org.lmu;
 
+import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.ExecutionEnvironment;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class RunCMD {
+	
+	/** private constructor. */
+    private RunCMD() { }
 
 	public static void main(String[] args) throws Exception {
 		// set up the batch execution environment
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-
+		
+		// DataSet<String> text = env.readTextFile("path/to/file");
+		// text.writeAsCsv(outputPath, "\n", " ");
 
 		Runtime rt = Runtime.getRuntime();
 		String[] commands = {"system.exe","-get t"};
 		String cmd1 = "pwd";
 
 		// path depends on the folder where the command of flink run was called
-		String cmd2 = "python ./BigDataScience/sose17-small-data/python/mysklearntest.py";
+		String cmd2 = "python ./BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/mysklearntest.py";
 
 		
 
@@ -45,6 +51,9 @@ public class RunCMD {
 
 
 		// execute program
-		env.execute("Flink Batch RunCMD Java API");
+		env.execute("Flink Batch RunCMD Job");
 	}
+	
+	
+	
 }
