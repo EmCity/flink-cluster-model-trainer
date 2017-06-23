@@ -2,15 +2,18 @@ from decimal import *
 import pandas as pd
 import numpy as np
 import datetime
+import itertools
+
 from src.vector_gen.createTW import createTW as create
 
 
 def generate(y_list, df):
     df, daterange = create(df)
     routes = ['A2', 'A3', 'B1', 'B3', 'C1', 'C3']
-    tw = np.array(list(range(0, 6))).astype('str')
-    multi_index = pd.MultiIndex.from_product([tw, routes], names=['tw', 'routes'])
-    df_1 = pd.DataFrame(index=daterange, columns=multi_index, dtype='float64')
+    tw = ['00:00', '00:20', '00:40', '01:00', '01:20', '01:40']
+
+    columns = list(itertools.product(tw, routes))
+    df_1 = pd.DataFrame(index=daterange, columns=columns, dtype='float64')
     i = 0
     while len(y_list) != 0:
         df_1.loc[daterange[i]] = np.array(y_list[:36])

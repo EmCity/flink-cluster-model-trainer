@@ -1,41 +1,29 @@
-#import src.vector_gen.generateWeatherVectors as vec
-import src.vector_gen.generateCurrentSituationWithTime as vec
-import src.vector_gen.generate_VectorY as vecY
-import src.misc.split_train_valid as split
 import pandas as pd
 from sklearn import linear_model
 from src.misc import evaluation as eval
 import numpy as np
+import sklearn.pipeline as Pipeline
 from sklearn.externals import joblib
 
 ##load data
-df = pd.read_csv('../../../../../dataset/training/trajectories(table 5)_training.csv')
-#df_w = pd.read_csv('../../../../../dataset/training2/weather (table 7)_training_update.csv')
-
-##split into training, validation, testing
-training, validation, testing = split.split_dataset(df)
-
-#generate training vectors
-X = vec.generate_vector(training).as_matrix()
-y = vecY.generate_VectorY_df(training).as_matrix()
+x_train = pd.read_csv('train_X.csv')
+x_test = pd.read_csv('test_X.csv')
+y_train = pd.read_csv('train_Y.csv')
+y_test = pd.read_csv('test_Y.csv')
 
 #generate model
-clf = linear_model.MultiTaskElasticNet()
+clf = linear_model.MultiTaskElasticNet(l1_ratio=[.1, .5, .7, .9, .95, .99, 1])
 
 #train model with training vectors
-clf.fit(X, y)
+clf.fit(x_train, y_train)
 
-#generate test vectors
-X_test = vec.generate_vector(testing).as_matrix()
-y_test = vecY.generate_VectorY_df(training).as_matrix()
 
-#
-y_pred = clf.predict(X)
+y_pred = clf.predict(x_test)
 
 #calculate error
-error = eval.mape(y_pred, y)
+error = eval.mape(y_pred, y_test)
 print(error)
 print(np.mean(np.array(error)))
 
 #save model
-joblib.dump(clf, 'MultiTaskElasticNetCurrentSituationWithTime.pkl')
+#joblib.dump(clf, 'MultiTaskElasticNetCurrentSituationWithTime.pkl')
