@@ -5,8 +5,6 @@ import src.misc.split_train_valid as split
 import src.misc.paths as path
 import pandas as pd
 import numpy as np
-from sklearn.multioutput import MultiOutputRegressor
-
 
 np.set_printoptions(threshold=np.nan)
 
