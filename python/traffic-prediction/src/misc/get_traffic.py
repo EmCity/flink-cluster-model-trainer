@@ -7,6 +7,8 @@ Filters the traffic from specific weekdays, between specific hours
 
 Input:
     Structure of lists:
+        dataframe = df
+
         weekdays =[day_of_week, ...]
                  =[0-6, ...]                                Monday = 0, Tuesday = 1, ..., Sunday = 6
 
@@ -28,9 +30,7 @@ import pandas as pd
 from src.misc import paths as path
 
 
-def get_traffic(weekdays, times):
-
-    df = pd.DataFrame.from_csv(path.trajectories_training_file, index_col=[0,1,2])
+def get_traffic(df, weekdays, times):
 
     # transform starting_time column from string to timestamp
     df['starting_time'] = pd.to_datetime(df['starting_time'])
@@ -63,8 +63,9 @@ def get_traffic(weekdays, times):
     return(df.loc[complete_mask])
 
 #test
-#weekdays = [0]
-#times = [[(6,00), (7,50)]]
-#get_traffic(weekdays, times)
+# df = pd.DataFrame.from_csv(path.trajectories_training_file, index_col=[0,1,2])
+# weekdays = [0]
+# times = [[(6,00), (7,50)]]
+# print(get_traffic(df, weekdays, times))
         
     

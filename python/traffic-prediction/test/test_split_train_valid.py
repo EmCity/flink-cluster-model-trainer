@@ -4,7 +4,7 @@ import unittest
 import math
 import numpy as np
 import pandas as pd
-import test_path as path
+from test import test_path as path
 import src.misc.split_train_valid as split
 
 """

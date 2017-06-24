@@ -1,8 +1,7 @@
 import unittest
-
 import pandas as pd
 from pandas.util.testing import assert_frame_equal
-import test_path as path
+from test import test_path as path
 from src.misc import get_traffic as traffic
 
 class GetTrafficTest(unittest.TestCase):
@@ -28,27 +27,25 @@ class GetTrafficTest(unittest.TestCase):
         weekdays_para = [self.weekdays[0]]
         times_para = [[self.times[0][0], self.times[0][1]]]
 
-        df = traffic.get_traffic(weekdays_para, times_para)
+        df = traffic.get_traffic(self.trajectories_df, weekdays_para, times_para)
+
         self.assertIsNotNone(df)
 
     def test_number_of_results(self):
         weekdays_para = self.weekdays
-
         times_para = [[(0, 0), (24, 00)]]
 
-        df = traffic.get_traffic(weekdays_para, times_para)
+        df = traffic.get_traffic(self.trajectories_df, weekdays_para, times_para)
 
         self.assertEqual(len(df), len(self.trajectories_df))
 
     def test_pandas_equal(self):
         weekdays_para = self.weekdays
-
         times_para = [[(0, 0), (24, 00)]]
 
-        df = traffic.get_traffic(weekdays_para, times_para)
+        df = traffic.get_traffic(self.trajectories_df, weekdays_para, times_para)
 
         df_original = self.trajectories_df
-        df_original = df_original.set_index(['intersection_id', 'tollgate_id', 'vehicle_id'])
         df_original['starting_time'] = pd.to_datetime(df_original['starting_time'])
 
         assert_frame_equal(df, df_original)
@@ -58,10 +55,9 @@ class GetTrafficTest(unittest.TestCase):
 
         times_para = [[(0, 0), (24, 0)]]
 
-        df = traffic.get_traffic(weekdays_para, times_para)
+        df = traffic.get_traffic(self.trajectories_df, weekdays_para, times_para)
 
         df_original = self.trajectories_df
-        df_original = df_original.set_index(['intersection_id', 'tollgate_id', 'vehicle_id'])
         df_original['starting_time'] = pd.to_datetime(df_original['starting_time'])
 
         df_original = df_original[df_original['starting_time'].dt.dayofweek == weekdays_para]
@@ -74,10 +70,9 @@ class GetTrafficTest(unittest.TestCase):
 
         times_para = [[(14, 59), (14, 60)]]
 
-        df = traffic.get_traffic(weekdays_para, times_para)
+        df = traffic.get_traffic(self.trajectories_df, weekdays_para, times_para)
 
         df_original = self.trajectories_df
-        df_original = df_original.set_index(['intersection_id', 'tollgate_id', 'vehicle_id'])
         df_original['starting_time'] = pd.to_datetime(df_original['starting_time'])
 
         df_original = df_original[df_original['starting_time'].dt.dayofweek == weekdays_para]
