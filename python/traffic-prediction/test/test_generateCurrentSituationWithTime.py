@@ -1,24 +1,30 @@
 import unittest
 import pandas as pd
-import test_path as path
+from test import test_path as path
 from src.vector_gen import generateCurrentSituationWithTime as gen
-from src.vector_gen import generate_VectorY as genY
 
 
 class TestVector(unittest.TestCase):
-    df = pd.read_csv(path.trajectories_training_file2)
-    x = gen.generate_vector(df)
-    y = genY.generate_VectorY_df(df)
+    trajectories_df = None
+    x = None
 
-    def test_on_training2Y(self):
-        # days*hours*window/h*values - 2h
-        number_Y = 7 * 24 * 3 * 6 - 1 * 2 * 3 * 6
-        self.assertEqual(len(self.y), number_Y)
+    def setUp(self):
+        self.trajectories_df = pd.read_csv(path.trajectories_training_file2)
+        self.x = gen.generate_vector(self.trajectories_df)
 
-    def test_on_training2X(self):
-        # days*hours*window/h*values -2h
-        number_X = 7 * 24 * 3 * 27 - 1 * 2 * 3 * 27
-        self.assertEqual(len(self.x), number_X)
+    def test_number_columns(self):
+        # links * 20min-windws/h + minute + hour + day
+        number_columns = 24 * 6 + 3
+        self.assertEqual(self.x.shape[1], number_columns)
+
+    def test_number_rows(self):
+        # days * 2h-windows/day - 2h
+        number_rows = 7 * 12 - 1
+        self.assertEqual(self.x.shape[0], number_rows)
+
+    def test_value_is_nan(self):
+        self.assertFalse(self.x.isnull().values.any())
+
 
 if __name__ == '__main__':
     unittest.main()
