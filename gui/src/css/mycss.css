@@ -1,5 +1,4 @@
 
-
 .group 			  {
   position:relative;
   margin-bottom:45px;
@@ -107,10 +106,10 @@ background-position: center center;              /* optional, center the image *
 }
 
 #centerwrap {
-     max-width: 500px;
+     max-width: 600px;
      margin: auto;
-     margin-top : 50px;
-     max-height:60%;
+     margin-top : 50px
+     max-height:40%;
      background:rgba(255,255,255,0.7); /* applies a 50% transparent white background */
 
     }

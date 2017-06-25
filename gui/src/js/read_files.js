@@ -19,7 +19,7 @@ function handleFileSelect(fileID) {
         alert("This browser doesn't seem to support the `files` property of file inputs.");
     }
      else if (!input.files[0]) {
-         console.log("Please select a file before clicking 'Load'");
+         //console.log("Please select a file before clicking 'Load'");
     }
      else {
         file = input.files[0];
@@ -50,5 +50,4 @@ function handleFileSelect(fileID) {
         }
         reader.readAsText(file);
     }
-    console.log(data);
 }
