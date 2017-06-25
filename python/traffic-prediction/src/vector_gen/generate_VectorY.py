@@ -101,4 +101,5 @@ def generate_VectorY_df(trajectories_df):
 
     y = generate(roundedList, df)
     df3[np.isnan(df3)] = 0
-    return y[:-1]
+    print(len(y))
+    return y

@@ -26,10 +26,10 @@ def split_dataset(df_X, df_Y, train = 0.6, validation = 0.1, test = 0.3):
         test_end = test_start + datetime.timedelta(days=int(round((delta.days + 1) * test)) - 1)
 
         train_X = df_X.loc[train_start : train_end][:-1]
-        train_Y = df_Y.loc[train_start : train_end][:-1]
+        train_Y = df_Y.loc[train_start : train_end][1:]
 
-        test_X = df_X.loc[test_start : test_end]
-        test_Y = df_Y.loc[test_start : test_end]
+        test_X = df_X.loc[test_start : test_end][:-1]
+        test_Y = df_Y.loc[test_start : test_end][1:]
 
         files = [file for file in glob.glob("../../../../python/traffic-prediction/src/misc/splitting_csv_files/*.csv") if not file.startswith("valid")]
         for file in files:
@@ -51,13 +51,13 @@ def split_dataset(df_X, df_Y, train = 0.6, validation = 0.1, test = 0.3):
         test_end = test_start + datetime.timedelta(days=int(round((delta.days + 1) * test)))
 
         train_X = df_X.loc[train_start : train_end][:-1]
-        train_Y = df_Y.loc[train_start : train_end][:-1]
+        train_Y = df_Y.loc[train_start : train_end][1:]
 
         validation_X = df_X.loc[valid_start : valid_end][:-1]
-        validation_Y = df_Y.loc[valid_start : valid_end][:-1]
+        validation_Y = df_Y.loc[valid_start : valid_end][1:]
 
-        test_X = df_X.loc[test_start : test_end]
-        test_Y = df_Y.loc[test_start : test_end]
+        test_X = df_X.loc[test_start : test_end][:-1]
+        test_Y = df_Y.loc[test_start : test_end][1:]
 
         train_X.to_csv(path_or_buf= "../../../../python/traffic-prediction/src/misc/splitting_csv_files/train_X.csv")
         train_Y.to_csv(path_or_buf= "../../../../python/traffic-prediction/src/misc/splitting_csv_files/train_Y.csv")
