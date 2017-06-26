@@ -112,3 +112,9 @@ flink/hello-world/src/main/main.iml
 flink/flink-java-project/src/test/test.iml
 flink/hello-world/src/test/test.iml
 python/.idea/misc.xml
+flink/flink-python-job/flink-python-job.iml
+flink/flink-python-job/.idea/compiler.xml
+flink/flink-python-job/.idea/encodings.xml
+flink/flink-python-job/.idea/kotlinc.xml
+flink/flink-python-job/.idea/misc.xml
+flink/flink-python-job/.idea/modules.xml
