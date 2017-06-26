@@ -1,5 +1,15 @@
 from sklearn import linear_model
 from sklearn.svm import SVR
+import sys
+import json as json
+
+
+print('Number of args: ', len(sys.argv))
+print('args: ',str(sys.argv))
+
+jsonString = sys.argv[0]
+jsonDict = json.load(jsonString)
+
 
 def trainModel(df_x_train, df_x_test, df_y_train, df_y_test, df_x_valid, df_y_valid, args):
     x_train = df_x_train
