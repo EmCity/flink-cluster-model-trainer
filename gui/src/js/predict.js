@@ -36,7 +36,7 @@ function predict() {
         d.validation.x && d.validation.y && data.job_name.length !== 0) {
         $.ajax({
             type: "POST",
-            url: "http://teamsamba.pythonanywhere.com/predict",
+            url: "http://sambahost.dyndns.lrz.de:8000/predict",
             data: data,
             success: function(data) {
                 console.log("Data Loaded: " + data);
