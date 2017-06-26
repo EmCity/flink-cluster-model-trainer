@@ -1,17 +1,18 @@
 package org.lmu;
 
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.avro.data.Json;
 import org.apache.flink.api.java.ExecutionEnvironment;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
-import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Collector;
-import org.apache.flink.api.common.functions.util.ListCollector;
+import org.lmu.JSON.JSONArray;
+import org.lmu.JSON.JSONObject;
+import org.lmu.JSON.parser.JSONParser;
+import org.mortbay.util.ajax.JSON;
 
 
-
+import java.io.FileReader;
 import java.util.Locale;
 import java.util.*;
 
@@ -27,20 +28,42 @@ public class RunCMD2 {
 	public static void main(String[] args) throws Exception {
 		// set up the batch execution environment
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-		
+		String jsonPath = args[0];
+		JSONObject json;
+		if(jsonPath!=null){
+			 json = (JSONObject) new JSONParser().parse(new FileReader(jsonPath));
+		}
+		else{
+			throw new Exception("NO JSON PATH AS INPUT");
+		}
+
+		JSONObject algorithms = (JSONObject) json.get("algorithms");
+		JSONObject data = (JSONObject) json.get("data");
+
+		JSONObject svm = (JSONObject) algorithms.get("SVM");
+		JSONObject lr = (JSONObject) algorithms.get("LR");
+		JSONObject nn = (JSONObject) algorithms.get("NN");
+
+		System.out.println(lr);
+
+		JSONArray svmArray = svm!= null ? createSVMJobs(svm) : new JSONArray();
+		JSONArray lrArray = lr != null ? createLRJobs(svm) : new JSONArray();
+		JSONArray nnArray = nn != null ? createNNJobs(svm) : new JSONArray();
+
 		if(args.length > 0){
 			System.out.println("----args:" + args[0]);
 		}else{
 			System.out.println("----args: none");
 		}
-		
-		
+
 		// DataSet<String> text = env.readTextFile("path/to/file");
 		// get input data
-        DataSet<String> elementsDataSet = env.fromElements(
-                "42", "43"
-        );
-		
+		ArrayList<String> tasks = new ArrayList<>();
+		fillList(data, svmArray, tasks);
+		fillList(data, lrArray, tasks);
+		fillList(data, nnArray, tasks);
+
+		DataSet<String> elementsDataSet = env.fromCollection(tasks);
 		DataSet<String> res = elementsDataSet.flatMap(new OnWorkers());
 		// text.writeAsCsv(outputPath, "\n", " ");
 
@@ -51,7 +74,57 @@ public class RunCMD2 {
 		// execute and print result
         res.print();
 	}
-	
+
+	private static void fillList(JSONObject data, JSONArray array, ArrayList<String> tasks) {
+		for(Object obj : array){
+			obj = new JSONObject((JSONObject)obj);
+			((JSONObject) obj).put("data", data);
+			tasks.add(obj.toString());
+			System.out.println(obj);
+		}
+	}
+
+	private static JSONArray createSVMJobs(JSONObject svm) {
+		JSONArray cParams = (JSONArray) svm.get("C");
+		JSONArray eParams = (JSONArray) svm.get("E");
+		JSONArray result = new JSONArray();
+		for(int i = 0; i < cParams.size(); i++){
+			for(int j = 0; j< eParams.size(); j++){
+				Long c = (Long)cParams.get(i);
+				Double e = (Double)eParams.get(j);
+				JSONObject obj = new JSONObject();
+				obj.put("algorithm", "SVM");
+				obj.put("C", c);
+				obj.put("E", e);
+				result.add(obj);
+			}
+		}
+
+		return result;
+	}
+
+	private static JSONArray createLRJobs(JSONObject lr) {
+		Boolean normalize = Boolean.parseBoolean((String)lr.get("normalize"));
+		JSONArray result = new JSONArray();
+		//for(int i = 0; i < cParams.size(); i++){
+		//	for(int j = 0; j< eParams.size(); j++){
+		//		Long c = (Long)cParams.get(i);
+		//		Double e = (Double)eParams.get(j);
+				JSONObject obj = new JSONObject();
+		obj.put("algorithm", "LR");
+		obj.put("normalize", normalize);
+		//obj.put("E", e);
+		result.add(obj);
+		System.out.println(result);
+		//	}
+		//}
+		return result;
+	}
+
+	private static JSONArray createNNJobs(JSONObject nn) {
+    	return new JSONArray();
+	}
+
 	public static final class OnWorkers
             implements FlatMapFunction<String, String>{
 
@@ -68,7 +141,7 @@ public class RunCMD2 {
 			String cmd1 = "pwd";
 
 			// path depends on the folder where the command of flink run was called
-			String cmd2 = "python ../BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/mysklearntest.py";
+			String cmd2 = "python3 ../BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/mysklearntest.py";
 
 			
 			Process proc = rt.exec(cmd2);

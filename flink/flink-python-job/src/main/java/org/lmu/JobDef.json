@@ -1,0 +1,29 @@
+{
+  "algorithms":{
+    "SVM":{
+      "C":[
+        0,
+        1,
+        2,
+        4,
+        6
+      ],
+      "E":[
+        0.1,
+        0.2,
+        0.3
+      ]
+    },
+    "LR":{
+      "normalize":true
+    }
+  },
+  "data":{
+    "train_X":"train_x.csv",
+    "train_y":"train_y.csv",
+    "test_x":"test_x.csv",
+    "test_y":"test_y.csv",
+    "valid_x":" valid_x.csv",
+    "valid_y":"valid_y csv"
+  }
+}
