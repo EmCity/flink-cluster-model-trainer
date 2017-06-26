@@ -19,7 +19,7 @@ class TestVector(unittest.TestCase):
 
     def test_number_rows(self):
         # days * 2h-windows/day - 2h
-        number_rows = 7 * 12 - 1
+        number_rows = 7 * 12
         self.assertEqual(self.x.shape[0], number_rows)
 
     def test_value_is_nan(self):

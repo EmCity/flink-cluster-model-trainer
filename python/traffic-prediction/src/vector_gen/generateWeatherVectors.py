@@ -276,6 +276,9 @@ def generate_TimeInformationCurrentSituationWeatherVectors(trajectories_df, weat
     cols= ['pressure', 'sea_pressure', 'wind_direction', 'wind_speed', 'temperature', 'rel_humidity', 'precipitation']
     res = df
     res[cols] = df2[cols]
+
+    res = res.apply(lambda x: x.fillna(x.mean()),axis=0)
+
     return res
     
 

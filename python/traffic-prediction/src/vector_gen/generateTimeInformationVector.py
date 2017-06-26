@@ -24,6 +24,6 @@ def generate_timeInformation_df(df):
 	df3['weekday'] = df3['datetime'].dt.dayofweek
 	df3['hour'] = df3['datetime'].dt.hour
 	df3['minute'] = df3['datetime'].dt.minute
-	return df3[['weekday', 'hour', 'minute']][:-1]
+	return df3[['weekday', 'hour', 'minute']]
 
 
