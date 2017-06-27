@@ -15,14 +15,23 @@ def run_flink_jar():
     job_name = 'testJob'
     job_def_json = '~/BigDataScience/sose17-small-data/flink/flink-python-job/src/main/java/org/lmu/JobDef.json'
 
-    #out = subprocess.check_output("echo %cd%", shell=True) # win
-    out = subprocess.check_output("pwd", shell=True) # linux
-
     cmd1 = 'flink-1.3.0/bin/flink run -c org.lmu.RunCMD BigDataScience/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar '
     
     cmd2 = 'flink-1.3.0/bin/flink run -c org.lmu.RunCMD2 BigDataScience/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar '+ job_def_json
+    cmd = cmd2
+
+    #out = subprocess.check_output("echo %cd%", shell=True) # win
+    out = 'called backend from: ' + subprocess.check_output("pwd", shell=True) # linux
     
-    out += subprocess.check_output(cmd2, shell=True)
+    out += '<br><br>'
+    out += 'job_def_json: ' + job_def_json
+    
+    out += '<br><br>'
+    out += 'call: '+cmd
+    
+    out += '<br><br><hr>'
+    outres = subprocess.check_output(cmd, shell=True)
+    out += outres.replace('\n', '<br>')
 
     return  out
 
