@@ -56,7 +56,7 @@ def generate_TimeInformationCurrentSituationWeatherVectors(trajectories_df, weat
     df2.index = df2.index - pd.Timedelta('1h')
     df2.index.names = ['tw']
 
-    df = gcst.generate_vector(df_data)
+    df = gcst.generate_x_df(df_data)
     
     
     first_datetime = df.index.min()
@@ -86,7 +86,8 @@ def generate_TimeInformationCurrentSituationWeatherVectors(trajectories_df, weat
 # from misc import paths as path
 
 # trajectories_file = path.trajectories_training_file
-# weather_file = path.weather_training_file
+# weather_file = path.
+#  weather_training_file
 
 # import os
 # print(os.getcwd())

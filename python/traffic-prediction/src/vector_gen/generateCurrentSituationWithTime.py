@@ -1,7 +1,7 @@
 import src.vector_gen.generateCurrentSituationVector as gcsv
 
 
-def generate_vector(df):
+def generate_x_df(df):
 
 	df_cs = gcsv.generate_x_df(df)
 	df = df_cs.copy()
