@@ -19,7 +19,7 @@ print(res)
 ######flink-1.3.0/bin/flink run -c org.myorg.quickstart.RunCMD BigDataScience/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar
 
 
-#flink-1.3.0/bin/flink run -c org.lmu.RunCMD BigDataScience/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar -port 6123
+#flink-1.3.0/bin/flink run -c org.lmu.RunCMD2 BigDataScience/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar -port 6123
 
 #--jobmanager localhost:6123
 #--parallelism 1
