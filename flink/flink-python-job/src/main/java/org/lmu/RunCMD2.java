@@ -53,6 +53,8 @@ public class RunCMD2 {
 
 		// execute program
 		env.execute("Flink Batch RunCMD Job");
+		res.print();
+
 	}
 
 	private static void fillList(JSONObject data, JSONArray array, ArrayList<String> tasks) {
@@ -110,7 +112,7 @@ public class RunCMD2 {
 			String[] commands = {"system.exe","-get t"};
 			String cmd1 = "pwd";
 			String cmd = "python3";
-			String pythonPath = "../BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+			String pythonPath = "../../sose17-small-data/python/traffic-prediction/src/flink/mysklearntest.py";
 
 			// path depends on the folder where the command of flink run was called
 			String cmd2 = cmd + " " + pythonPath + " " + value;

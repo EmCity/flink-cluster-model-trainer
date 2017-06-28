@@ -17,15 +17,15 @@ X_train_scale = min_max_scaler.transform(x_train)
 X_test_scale = min_max_scaler.transform(x_test)
 
 model = Sequential()
-model.add(Dense(input_dim=147, output_dim=200, activation='relu'))
+model.add(Dense(input_dim=154, output_dim=200, activation='relu'))
 model.add(Dense(input_dim=200, output_dim=500,activation='relu'))
 model.add(Dense(input_dim=500, output_dim=36,activation='relu'))
 
 model.compile(loss='mean_absolute_percentage_error', optimizer='rmsprop')
 
 model.fit(X_train_scale, y_train,
-          batch_size=1, epochs=15, verbose=2,
-          validation_data=(X_test_scale, y_test))
+          batch_size=1, epochs=100, verbose=2,
+          validation_data=(X_test_scale, y_test), shuffle=False)
 
 y = model.predict(X_test_scale, batch_size=1)
 mape = mape(y, y_test)
