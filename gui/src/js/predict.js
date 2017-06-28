@@ -25,26 +25,35 @@ function predict() {
         });
     });
 
+
     console.log(data)
-    // $.post("http://teamsamba.pythonanywhere.com/predict", function(data) {
-    //     console.log("Data Loaded: " + data);
-    //     window.open("results.html");
-    // });
+    console.log(typeof(data))
+    $.ajax({
+   url: 'http://sambahost.dyndns.lrz.de:8000/api',
+   type: 'POST',
+   data: data,
+   contentType: 'application/json; charset=utf-8',
+   dataType: 'json',
+   success: function(msg) {
+       alert(msg);
+   }
+});
     var d = data.data;
-    if (d.training.x && d.training.y &&
-        d.testing.x && d.testing.y &&
-        d.validation.x && d.validation.y && data.job_name.length !== 0) {
-        $.ajax({
-            type: "POST",
-            url: "http://sambahost.dyndns.lrz.de:8000/predict",
-            data: data,
-            success: function(data) {
-                console.log("Data Loaded: " + data);
-                window.open("results.html");
-            }
-        });
-    } else {
-        alert("complete form please");
-    }
+    // if (d.training.x && d.training.y &&
+    //     d.testing.x && d.testing.y &&
+    //     d.validation.x && d.validation.y && data.job_name.length !== 0) {
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "http://sambahost.dyndns.lrz.de:8000/predict",
+    //         data: data,
+    //         dataType : jsonp,
+    //         success: function(data) {
+    //             console.log("Data Loaded: " + data);
+    //             window.open("results.html");
+    //         }
+    //     });
+    // } else {
+    //     alert("complete form please");
+    // }
 
 }
