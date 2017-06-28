@@ -25,26 +25,19 @@ function predict() {
         });
     });
 
-    console.log(data)
-    // $.post("http://teamsamba.pythonanywhere.com/predict", function(data) {
-    //     console.log("Data Loaded: " + data);
-    //     window.open("results.html");
-    // });
-    var d = data.data;
-    if (d.training.x && d.training.y &&
-        d.testing.x && d.testing.y &&
-        d.validation.x && d.validation.y && data.job_name.length !== 0) {
-        $.ajax({
-            type: "POST",
-            url: "http://sambahost.dyndns.lrz.de:8000/predict",
-            data: data,
-            success: function(data) {
-                console.log("Data Loaded: " + data);
-                window.open("results.html");
-            }
-        });
-    } else {
-        alert("complete form please");
-    }
 
+    fetch("http://sambahost.dyndns.lrz.de:8500/api", {
+  method: 'POST',
+  body: JSON.stringify(data), // stringify JSON
+  headers: new Headers({ "Content-Type": "application/json" }) // add headers
+}).then(function(response) {
+    // The response is a Response instance.
+    // You parse the data into a useable format using `.json()`
+    return response.json();
+  }).then(function(data) {
+    // `data` is the parsed version of the JSON returned from the above endpoint.
+    console.log(data);  // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+  }).catch(function(error) {
+    console.log('Request failed', error);
+  });
 }
