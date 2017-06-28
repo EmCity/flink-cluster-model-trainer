@@ -16,14 +16,44 @@
     },
     "LR":{
       "normalize":true
+    },
+    "NN": {
+      "error" : "mean_absolute_percentage_error",
+      "optimizer": "rmsprop",
+      "batch_size": 1,
+      "epochs":10,
+      "layers": [
+        {
+          "layer_1": {
+            "input_size": "147",
+            "output_size": "200",
+            "activation_fun": "relu"
+          }
+        },
+        {
+          "layer_2": {
+            "input_size": "200",
+            "output_size": "500",
+            "activation_fun": "relu"
+          }
+        },
+        {
+          "layer_3": {
+            "input_size": "500",
+            "output_size": "36",
+            "activation_fun": "relu"
+          }
+        }
+      ]
     }
   },
   "data":{
+    "job_name": "JobDe",
     "train_X":"train_x.csv",
     "train_y":"train_y.csv",
     "test_x":"test_x.csv",
     "test_y":"test_y.csv",
-    "valid_x":" valid_x.csv",
+    "valid_x":"valid_x.csv",
     "valid_y":"valid_y csv"
   }
 }
