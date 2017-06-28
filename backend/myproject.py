@@ -20,6 +20,7 @@ def run_flink_jar():
     cmd2 = 'flink-1.3.0/bin/flink run -c org.lmu.RunCMD2 BigDataScience/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar '+ job_def_json
     cmd = cmd2
 
+
     #out = subprocess.check_output("echo %cd%", shell=True) # win
     out = 'called backend from: ' + subprocess.check_output("pwd", shell=True) # linux
     
