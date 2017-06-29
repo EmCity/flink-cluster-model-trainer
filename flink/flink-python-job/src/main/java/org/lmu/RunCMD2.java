@@ -4,29 +4,95 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.util.Collector;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.varia.NullAppender;
 import org.lmu.JSON.JSONArray;
 import org.lmu.JSON.JSONObject;
 import org.lmu.JSON.parser.JSONParser;
+
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import org.apache.http.client.*;
-import org.apache.http.impl.client.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RunCMD2 {
 	
 	public RunCMD2() { }
 
-	public void distribute(JSONObject json) throws Exception {
+	public static void main(String[] args) throws Exception{
+
+		String jobName= "";
+		if(args.length > 0 && args[0] != null){
+			jobName = args[0];
+			System.out.println("Got JobName: "+jobName);
+		} else {
+			throw new Exception("check args parameters: " + args);
+		}
+
+		/*
+		//connect to DB
+		MongoClient mongoClient = new MongoClient("sambahost.dyndns.lrz.de", 27017);
+		DBCollection coll = mongoClient.getDB("samba").getCollection("jobs");
+
+
+		BasicDBObject query = new BasicDBObject("job_name", jobName);
+		DBCursor cursor = coll.find(query);
+
+		if(cursor== null){
+			System.out.println("Problem with Database");
+			return ;
+		}
+
+		BasicDBObject jobs = null;
+		try{
+			while(cursor.hasNext()){
+				jobs = (BasicDBObject) cursor.curr();
+				System.out.println(jobs);
+
+			}
+		} finally{
+				cursor.close();
+		}
+
+		if(jobs != null){
+			System.out.println("jobs: " + jobs.toString());
+		} else {
+			System.out.println("Query: " + query + " found nothing");
+		}
+		*/
+
+		String testjsonFile = "./BigDataScience/sose17-small-data/flink/flink-python-job/src/main/java/org/lmu/JobDef.json";
+		JSONObject jobsjson;
+		jobsjson = (JSONObject) new JSONParser().parse(new FileReader(testjsonFile));
+
+		//JSONObject jobsjson = (JSONObject) new JSONParser().parse(obj.toString());
+
+		System.out.println("jobsjson: " + jobsjson.toString());
+
+		List<Tuple2<String, String>> resCollect = distribute(jobsjson);
+
+		System.out.println("resCollect: "+ resCollect);
+
+		//String response = sendResultPostToBackend((JSONObject) new JSONParser().parse(tasks.get(0)));
+		//System.out.println("-----------" + response + "----------");
+
+	}
+
+	public static List<Tuple2<String, String>> distribute(JSONObject json) throws Exception {
 		// set up the batch execution environment
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 		env.getConfig().disableSysoutLogging();
@@ -54,25 +120,26 @@ public class RunCMD2 {
 		DataSet<String> elementsDataSet = env.fromCollection(tasks);
 
 		//distribute on workers
-		DataSet<String> res = elementsDataSet.flatMap(new OnWorkers());
+		DataSet<String> dataset = elementsDataSet.flatMap(new OnWorkers());
 
 
 		//saves the result as text
-		res.writeAsText("result.txt", FileSystem.WriteMode.OVERWRITE);
+		dataset.writeAsText("result.txt", FileSystem.WriteMode.OVERWRITE);
+
+		// workers are executing
+		List<Tuple2<String, String>> res = new ArrayList<Tuple2<String, String>>();
+		//dataset.output(new LocalCollectionOutputFormat(res));
 
 
 		// execute program
 		env.execute("Flink Batch RunCMD Job");
-		res.print();
 
-		// workers are executing
-		List<String> resCollect = res.collect();
+		dataset.print();
 
-		System.out.println(resCollect);
 
 		//String response = sendResultPostToBackend((JSONObject) new JSONParser().parse(tasks.get(0)));
 		//System.out.println("-----------" + response + "----------");
-
+		return res;
 	}
 
 	private static void fillList(JSONObject data, JSONArray array, ArrayList<String> tasks) {
@@ -151,7 +218,9 @@ public class RunCMD2 {
 
         @Override
         public void flatMap(String value, final Collector<String> out) {
-			try{
+
+			String res = "Worker res: ";
+        	try{
 			Runtime rt = Runtime.getRuntime();
 			String cmd = "python";
 			String pythonPath = "../../../sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
@@ -166,7 +235,7 @@ public class RunCMD2 {
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 
-			String res = "";
+
 			System.out.println(res);
 
 				// read the output from the command
@@ -176,7 +245,6 @@ public class RunCMD2 {
 				System.out.println(s);
 				res += "\nvalue: "+ value + " " + s;
 			}
-			
 
 			// read any errors from the attempted command
 			//System.out.println("----Here is the standard error of the command (if any):\n");
@@ -184,12 +252,12 @@ public class RunCMD2 {
 				System.out.println(s);
 				res += "\n"+s;
 			}
-			out.collect(res);
 
-			out.close();
+			//out.close();
 			} catch(Exception e){
 				System.out.println(e);
 			}
+			out.collect(res);
         }
     }
 }
