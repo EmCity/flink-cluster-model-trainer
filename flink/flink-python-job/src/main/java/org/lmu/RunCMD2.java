@@ -51,6 +51,7 @@ public class RunCMD2 {
 		//saves the result as text
 		res.writeAsText("result.txt", FileSystem.WriteMode.OVERWRITE);
 
+		System.out.println(res);
 		// execute program
 		env.execute("Flink Batch RunCMD Job");
 		res.print();
@@ -106,27 +107,23 @@ public class RunCMD2 {
 
         @Override
         public void flatMap(final String value, final Collector<String> out) {
-			
-			try{									
+			try{
 			Runtime rt = Runtime.getRuntime();
-			String[] commands = {"system.exe","-get t"};
-			String cmd1 = "pwd";
-			String cmd = "python3";
-			String pythonPath = "../../sose17-small-data/python/traffic-prediction/src/flink/mysklearntest.py";
+			String cmd = "python";
+			String pythonPath = "../../../sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
 
 			// path depends on the folder where the command of flink run was called
 			String cmd2 = cmd + " " + pythonPath + " " + value;
-
+			rt.exec("source activate dataScience");
 			Process proc = rt.exec(cmd2);
-			BufferedReader stdInput = new BufferedReader(new
-					InputStreamReader(proc.getInputStream()));
 
-			BufferedReader stdError = new BufferedReader(new
-					InputStreamReader(proc.getErrorStream()));
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+			BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 
-			String res = "";
-			
-			// read the output from the command
+			String res = "blabla";
+			System.out.println(res);
+
+				// read the output from the command
 			//System.out.println("----Here is the standard output of the command:\n");
 			String s = null;
 			while ((s = stdInput.readLine()) != null) {
@@ -141,7 +138,6 @@ public class RunCMD2 {
 				System.out.println(s);
 				res += "\n"+s;
 			}
-
 			out.collect(res);
 			} catch(Exception e){
 			}
