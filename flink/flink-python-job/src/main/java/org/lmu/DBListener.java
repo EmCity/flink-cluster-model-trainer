@@ -20,7 +20,7 @@ public class DBListener {
 
         //db listener
         DBCursor cur = coll.find().sort(BasicDBObjectBuilder.start("$natural", 1).get())
-                .addOption(Bytes.QUERYOPTION_TAILABLE | Bytes.QUERYOPTION_AWAITDATA);
+                .addOption(Bytes.QUERYOPTION_TAILABLE | Bytes.QUERYOPTION_AWAITDATA | Bytes.QUERYOPTION_NOTIMEOUT);
 
         JSONParser parser = new JSONParser();
 

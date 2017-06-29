@@ -1,5 +1,6 @@
 package org.lmu;
 import com.mongodb.*;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
@@ -13,6 +14,8 @@ import org.lmu.JSON.JSONArray;
 import org.lmu.JSON.JSONObject;
 import org.lmu.JSON.parser.JSONParser;
 import java.io.FileReader;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -67,8 +70,8 @@ public class RunCMD2 {
 
 		System.out.println(resCollect);
 
-		String response = sendResultPostToBackend((JSONObject) new JSONParser().parse(tasks.get(0)));
-		System.out.println("-----------" + response + "----------");
+		//String response = sendResultPostToBackend((JSONObject) new JSONParser().parse(tasks.get(0)));
+		//System.out.println("-----------" + response + "----------");
 
 	}
 
@@ -76,7 +79,7 @@ public class RunCMD2 {
 		for(Object obj : array){
 			obj = new JSONObject((JSONObject)obj);
 			((JSONObject) obj).put("data", data);
-			tasks.add(obj.toString());
+			tasks.add(((JSONObject) obj).toJSONString());
 		}
 	}
 
@@ -147,21 +150,23 @@ public class RunCMD2 {
         public static final long serialVersionUID = 1L;
 
         @Override
-        public void flatMap(final String value, final Collector<String> out) {
+        public void flatMap(String value, final Collector<String> out) {
 			try{
 			Runtime rt = Runtime.getRuntime();
 			String cmd = "python";
 			String pythonPath = "../../../sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
-
+			//value=value.replaceAll("\"", "\\\\\"");
 			// path depends on the folder where the command of flink run was called
 			String cmd2 = cmd + " " + pythonPath + " " + value;
-			rt.exec("source activate dataScience");
+			System.out.println(cmd2);
+
+				//rt.exec("activate dataScience");
 			Process proc = rt.exec(cmd2);
 
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 
-			String res = "blabla";
+			String res = "";
 			System.out.println(res);
 
 				// read the output from the command
@@ -183,6 +188,7 @@ public class RunCMD2 {
 
 			out.close();
 			} catch(Exception e){
+				System.out.println(e);
 			}
         }
     }
