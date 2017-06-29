@@ -4,6 +4,9 @@ import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.util.Collector;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.lmu.JSON.JSONArray;
 import org.lmu.JSON.JSONObject;
 import org.lmu.JSON.parser.JSONParser;
@@ -11,6 +14,8 @@ import java.io.FileReader;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import org.apache.http.client.*;
+import org.apache.http.impl.client.*;
 
 public class RunCMD2 {
 	
@@ -21,7 +26,7 @@ public class RunCMD2 {
 		// set up the batch execution environment
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 		JSONObject json;
-		if(args[0]!=null){
+		if(args.length > 0 && args[0]!=null){
 			 json = (JSONObject) new JSONParser().parse(new FileReader(args[0]));
 		}
 		else{
@@ -43,18 +48,32 @@ public class RunCMD2 {
 		fillList(data, lrArray, tasks);
 		fillList(data, nnArray, tasks);
 
+		// print tasks
+		for (int i = 0; i < tasks.size(); i++) {
+			System.out.println(tasks.get(i).toString());
+		}
+
 		DataSet<String> elementsDataSet = env.fromCollection(tasks);
 
 		//distribute on workers
 		DataSet<String> res = elementsDataSet.flatMap(new OnWorkers());
 
+
 		//saves the result as text
 		res.writeAsText("result.txt", FileSystem.WriteMode.OVERWRITE);
 
-		System.out.println(res);
+
 		// execute program
 		env.execute("Flink Batch RunCMD Job");
 		res.print();
+
+		// workers are executing
+
+		System.out.println(res);
+
+
+		String response = sendResultPostToBackend((JSONObject) new JSONParser().parse(tasks.get(0)));
+		System.out.println("-----------" + response + "----------");
 
 	}
 
@@ -96,6 +115,33 @@ public class RunCMD2 {
 
 	private static JSONArray createNNJobs(JSONObject nn) {
     	return new JSONArray();
+	}
+
+	public static String sendResultPostToBackend(JSONObject resultJSON){
+		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead
+		String jsonString = resultJSON.toJSONString();
+		String serverResponse = "error";
+
+		try {
+
+			HttpPost request = new HttpPost("http://sambahost.dyndns.lrz.de:8000/save_result");
+			//StringEntity params =new StringEntity("details={\"name\":\"myname\",\"age\":\"20\"} ");
+			StringEntity se = new StringEntity(jsonString);
+			request.addHeader("content-type", "application/x-www-form-urlencoded");
+			request.setEntity(se);
+			HttpResponse response = httpClient.execute(request);
+			serverResponse = response.toString();
+			//handle response here...
+
+		}catch (Exception ex) {
+
+			//handle exception here
+			serverResponse = ex.toString();
+		} finally {
+			//Deprecated
+			//httpClient.getConnectionManager().shutdown();
+		}
+		return serverResponse;
 	}
 
 	public static final class OnWorkers

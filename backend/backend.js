@@ -8,7 +8,7 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/samba";
 
 
-
+// save AlgoParaImputs?
 app.post('/api/', (req, res) => {
   console.log(typeof(req))
   console.log(req.body)
@@ -21,6 +21,21 @@ app.post('/api/', (req, res) => {
   });
     res.send(req.body);
 });
+
+app.post('/save_result/', (req, res) => {
+  console.log(typeof(req))
+  console.log(req.body)
+  data = req.body;
+
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    // TODO db.collection("results").insertOne(data);
+    db.close();
+  });
+    //res.send(req.body);
+    res.send('ok');
+});
+
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
