@@ -7,6 +7,14 @@ const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/samba";
 
+// save AlgoParaImputs?
+app.get('/', (req, res) => {
+  console.log(typeof(req))
+  console.log(req.body)
+  data = req.body;
+  res.send("node is running. indexhtml will get here");
+});
+
 
 // save AlgoParaImputs?
 app.post('/api/', (req, res) => {
@@ -33,10 +41,14 @@ app.post('/save_result/', (req, res) => {
     db.close();
   });
     //res.send(req.body);
-    res.send('ok');
+    res.send('ok-....'+ req.body);
 });
 
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+
+// we need that right?
+app.listen(8500);

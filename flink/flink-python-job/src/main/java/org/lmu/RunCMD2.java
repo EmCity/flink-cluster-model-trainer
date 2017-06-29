@@ -69,7 +69,9 @@ public class RunCMD2 {
 
 		// workers are executing
 
-		System.out.println(res);
+		List<String> resCollect = res.collect();
+
+		System.out.println(resCollect);
 
 
 		String response = sendResultPostToBackend((JSONObject) new JSONParser().parse(tasks.get(0)));
@@ -124,10 +126,10 @@ public class RunCMD2 {
 
 		try {
 
-			HttpPost request = new HttpPost("http://sambahost.dyndns.lrz.de:8000/save_result");
-			//StringEntity params =new StringEntity("details={\"name\":\"myname\",\"age\":\"20\"} ");
-			StringEntity se = new StringEntity(jsonString);
-			request.addHeader("content-type", "application/x-www-form-urlencoded");
+			HttpPost request = new HttpPost("http://sambahost.dyndns.lrz.de:8500/save_result");
+			StringEntity se =new StringEntity("details={\"name\":\"myname\",\"age\":\"20\"} ");
+			//StringEntity se = new StringEntity(jsonString);
+			request.addHeader("content-type", "application/json");
 			request.setEntity(se);
 			HttpResponse response = httpClient.execute(request);
 			serverResponse = response.toString();
@@ -185,6 +187,8 @@ public class RunCMD2 {
 				res += "\n"+s;
 			}
 			out.collect(res);
+
+			out.close();
 			} catch(Exception e){
 			}
         }
