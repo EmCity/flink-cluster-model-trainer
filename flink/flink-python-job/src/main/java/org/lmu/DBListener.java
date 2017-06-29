@@ -32,13 +32,15 @@ public class DBListener {
                     JSONObject jsonObj = null;
                     try{
                         jsonObj = (JSONObject) parser.parse(json);
+                        System.out.println("New Entry" + jsonObj.toJSONString());
+                        if(jsonObj != null){
+                            queue.add(jsonObj);
+                        }
                     }
                     catch(Exception e){
                         System.out.println(e);
                     }
-                    if(jsonObj != null){
-                        queue.add(jsonObj);
-                    }
+
                 }
             };
         new Thread(task).start();
@@ -46,14 +48,20 @@ public class DBListener {
         //flink thread
         FlinkJobDistribution flink = new FlinkJobDistribution();
         Runnable task1 = () -> {
-           while(true){
-               try{
-                    flink.distribute(queue.poll());
-               }
-               catch(Exception e){
-                   System.out.println(e);
-               }
-           }
+            try {
+                while (true) {
+                    if (!queue.isEmpty()) {
+                        JSONObject obj = queue.poll();
+                        System.out.println("New Job" + obj.toJSONString());
+                        flink.distribute(obj);
+                    } else {
+                        Thread.currentThread().sleep(1000);
+                    }
+                }
+            }
+            catch(Exception e){
+                //System.out.println(e);
+            }
         };
         new Thread(task1).start();
     }

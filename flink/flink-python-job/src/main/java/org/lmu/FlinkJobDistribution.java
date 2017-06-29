@@ -104,6 +104,9 @@ public class FlinkJobDistribution {
         fillList(data, lrArray, tasks);
         fillList(data, nnArray, tasks);
 
+
+        System.out.println("Distribute: " + tasks.size() + " jobs on the workers:");
+
         DataSet<String> elementsDataSet = env.fromCollection(tasks);
 
         //distribute on workers
@@ -144,26 +147,30 @@ public class FlinkJobDistribution {
         Long cache_size = (Long) svm.get("cache_size");
         Integer max_iter = (Integer) svm.get("max_iter");
 
+
         JSONArray result = new JSONArray();
-        for (Object c : c_array) {
-            for (Object e : e_array) {
-                for (Object kernel : kernel_array) {
-                    for (Object degree : degree_array) {
-                        for (Object gamma : gamma_array) {
-                            for (Object coef0 : coef_array) {
-                                JSONObject obj = new JSONObject();
-                                obj.put("algorithm", "SVM");
-                                obj.put("C", c);
-                                obj.put("epsilon", e);
-                                obj.put("kernel", kernel);
-                                obj.put("degree", degree);
-                                obj.put("gamma", gamma);
-                                obj.put("coef0", coef0);
-                                obj.put("shrinking", shrinking);
-                                obj.put("tol", tol);
-                                obj.put("cache_size", cache_size);
-                                obj.put("max_iter", max_iter);
-                                result.add(obj);
+        if(c_array != null & e_array != null & kernel_array != null & degree_array != null & gamma_array != null & coef_array != null) {
+            for (Object c : c_array) {
+                for (Object e : e_array) {
+                    for (Object kernel : kernel_array) {
+                        for (Object degree : degree_array) {
+                            for (Object gamma : gamma_array) {
+                                for (Object coef0 : coef_array) {
+                                    JSONObject obj = new JSONObject();
+                                    obj.put("algorithm", "SVM");
+                                    obj.put("C", c);
+                                    obj.put("epsilon", e);
+                                    obj.put("kernel", kernel);
+                                    obj.put("degree", degree);
+                                    obj.put("gamma", gamma);
+                                    obj.put("coef0", coef0);
+                                    obj.put("shrinking", shrinking);
+                                    obj.put("tol", tol);
+                                    obj.put("cache_size", cache_size);
+                                    obj.put("max_iter", max_iter);
+                                    result.add(obj);
+                                    System.out.println(obj);
+                                }
                             }
                         }
                     }
