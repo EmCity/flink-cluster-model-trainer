@@ -139,7 +139,7 @@ public class RunCMD2 {
 
 		//String response = sendResultPostToBackend((JSONObject) new JSONParser().parse(tasks.get(0)));
 		//System.out.println("-----------" + response + "----------");
-
+		return res;
 	}
 
 	private static void fillList(JSONObject data, JSONArray array, ArrayList<String> tasks) {
@@ -218,7 +218,9 @@ public class RunCMD2 {
 
         @Override
         public void flatMap(String value, final Collector<String> out) {
-			try{
+
+			String res = "Worker res: ";
+        	try{
 			Runtime rt = Runtime.getRuntime();
 			String cmd = "python";
 			String pythonPath = "../../../sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
@@ -233,7 +235,7 @@ public class RunCMD2 {
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 
-			String res = "";
+
 			System.out.println(res);
 
 				// read the output from the command
