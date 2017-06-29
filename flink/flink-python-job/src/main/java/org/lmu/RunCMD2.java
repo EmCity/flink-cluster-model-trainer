@@ -8,6 +8,7 @@ import org.apache.flink.util.Collector;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.log4j.varia.NullAppender;
 import org.lmu.JSON.JSONArray;
 import org.lmu.JSON.JSONObject;
 import org.lmu.JSON.parser.JSONParser;
@@ -20,28 +21,13 @@ import org.apache.http.impl.client.*;
 
 public class RunCMD2 {
 	
-	/** private constructor. */
-    private RunCMD2() { }
+	public RunCMD2() { }
 
-	public static void main(String[] args) throws Exception {
+	public void distribute(JSONObject json) throws Exception {
 		// set up the batch execution environment
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-		MongoClient mongoClient = new MongoClient("localhost", 27017);
-		DB db = mongoClient.getDB("samba");
-		DBCollection coll = db.getCollection("jobs");
-
-		//TODO insert job name / time stamp key here
-		DBObject el = coll.findOne();
-		System.out.println(el);
-        el.get()
-		JSONObject json;
-		if(args.length > 0 && args[0]!=null){
-			 json = (JSONObject) new JSONParser().parse(new FileReader(args[0]));
-		}
-		else{
-			throw new Exception("NO JSON PATH AS INPUT");
-		}
-
+		env.getConfig().disableSysoutLogging();
+		org.apache.log4j.BasicConfigurator.configure(new NullAppender());
 		JSONObject algorithms = (JSONObject) json.get("algorithms");
 		JSONObject data = (JSONObject) json.get("data");
 		JSONObject svm = (JSONObject) algorithms.get("SVM");
@@ -77,11 +63,9 @@ public class RunCMD2 {
 		res.print();
 
 		// workers are executing
-
 		List<String> resCollect = res.collect();
 
 		System.out.println(resCollect);
-
 
 		String response = sendResultPostToBackend((JSONObject) new JSONParser().parse(tasks.get(0)));
 		System.out.println("-----------" + response + "----------");
