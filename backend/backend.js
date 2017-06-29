@@ -7,6 +7,10 @@ const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/samba";
 
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname + '../backend/src/index.html'));
+});
+
 
 // save AlgoParaImputs?
 app.post('/api/', (req, res) => {
