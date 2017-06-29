@@ -9,6 +9,7 @@ import pandas as pd
 def trainModel(jsonDict):
     algorithms = jsonDict['algorithm']
     data = jsonDict['data']
+
     train_x = data['train_X']
     test_x = data['test_x']
     train_y = data['train_y']
@@ -28,27 +29,43 @@ def trainModel(jsonDict):
         trainLR(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
     if "SVM" == algorithms:
         trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
-    #if "NN" in algorithms.keys():
-     #   trainNN(df_x_train, df_x_test, df_y_train, df_y_test, algorithms['NN'])
+    if "NN" == algorithms.keys():
+        #trainNN(df_x_train, df_x_test, df_y_train, df_y_test, algorithms['NN'])
+        print("NO NN IMPLEMENTED YET")
+
+def trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, params):
+    c = params("C");
+    epsilon = params("epsilon");
+    kernel = params("kernel");
+    degree = params("degree");
+    gamma = params("gamma");
+    coef0 = params("coef0");
+    shrinking = params("shrinking");
+    tol = params("tol");
+    cache_size = params("cache_size");
+    max_iter = params("max_iter");
+
+    svr = sklearn.svm.SVR(c=c, epsilon=epsilon, kernel=kernel, degree=degree, gamma=gamma, coef0=coef0,
+                                       shrinking=shrinking, tol=tol, cache_size=cache_size, max_iter=max_iter)
+    regr_multi_svr = MultiOutputRegressor(svr)
+    regr_multi_svr.fit(df_x_train, df_y_train)
+
+    print("SVM Error:")
+    print(get_error(regr_multi_svr, df_x_test, df_y_test))
 
 
 def trainLR(df_x_train, df_x_test, df_y_train, df_y_test, params):
-    #todo: get params
-    lr = linear_model.LinearRegression()
+    lr = linear_model.LinearRegression(normalize=params("normalize"), fit_intercept=params("fit_intercept"))
     lr.fit(df_x_train, df_y_train)
     print("Linear Regression Error:")
-    getError(lr, df_x_test, df_y_test)
+    print(get_error(lr, df_x_test, df_y_test))
 
 
-def trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, params):
-    #todo: get params
-    svr = sklearn.svm.SVR()
-    regr_multi_svr = MultiOutputRegressor(svr)
-    regr_multi_svr.fit(df_x_train, df_y_train)
-    print("SVM Error:")
-    getError(regr_multi_svr, df_x_test, df_y_test)
+def get_error(model, df_x_test, df_y_test):
+    return  np.mean(np.abs((df_y_test - model.predict(df_x_test)) / df_y_test))
 
 
+#TODO: implement tensorflow NN here
 # def trainNN(df_x_train, df_x_test, df_y_train, df_y_test, params):
 #     matrix_x_train = df_x_train.as_matrix()
 #     matrix_y_train = df_y_train.as_matrix()
@@ -60,7 +77,6 @@ def trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, params):
 #     batch_size = params["batch_size"]
 #     epochs = params["epochs"]
 #
-#     #todo:get params
 #     min_max_scaler = preprocessing.MinMaxScaler()
 #     min_max_scaler.fit(np.concatenate((matrix_x_train, matrix_x_test)))
 #     X_train_scale = min_max_scaler.transform(matrix_x_train)
@@ -81,12 +97,6 @@ def trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, params):
 #     error = mape(y, matrix_y_test)
 #     print(error)
 
-def getError(model, df_x_test, df_y_test):
-    df_y_prediction= model.predict(df_x_test)
-    error = np.mean(np.abs((df_y_test - df_y_prediction) / df_y_test))
-    print(np.mean(error))
 
-string_json = sys.argv[1]
-test = string_json.replace('?', '"')
-jsonDict = json.loads(test)
-trainModel(jsonDict)
+json_string = sys.argv[1].replace('?', '"')
+trainModel(json.loads(json_string))

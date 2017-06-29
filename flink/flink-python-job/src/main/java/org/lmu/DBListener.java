@@ -2,10 +2,8 @@ package org.lmu;
 
 import com.mongodb.*;
 import com.mongodb.util.JSON;
-import org.bson.types.BSONTimestamp;
 import org.lmu.JSON.JSONObject;
 import org.lmu.JSON.parser.JSONParser;
-
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class DBListener {
@@ -25,6 +23,7 @@ public class DBListener {
         JSONParser parser = new JSONParser();
 
         //db listener thread
+        //TODO: fix that only new elements are added to queue
         Runnable task = () -> {
             System.out.println("\tWaiting for events");
                 while (cur.hasNext()) {
@@ -35,6 +34,7 @@ public class DBListener {
                         jsonObj = (JSONObject) parser.parse(json);
                     }
                     catch(Exception e){
+                        System.out.println(e);
                     }
                     if(jsonObj != null){
                         queue.add(jsonObj);
@@ -44,18 +44,17 @@ public class DBListener {
         new Thread(task).start();
 
         //flink thread
-        RunCMD2 flink = new RunCMD2();
+        FlinkJobDistribution flink = new FlinkJobDistribution();
         Runnable task1 = () -> {
            while(true){
                try{
                     flink.distribute(queue.poll());
                }
                catch(Exception e){
-
+                   System.out.println(e);
                }
            }
         };
-
         new Thread(task1).start();
     }
 }
