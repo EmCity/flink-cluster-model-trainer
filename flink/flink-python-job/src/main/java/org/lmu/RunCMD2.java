@@ -1,4 +1,5 @@
 package org.lmu;
+import com.mongodb.*;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
@@ -25,6 +26,14 @@ public class RunCMD2 {
 	public static void main(String[] args) throws Exception {
 		// set up the batch execution environment
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+		DB db = mongoClient.getDB("samba");
+		DBCollection coll = db.getCollection("jobs");
+
+		//TODO insert job name / time stamp key here
+		DBObject el = coll.findOne();
+		System.out.println(el);
+        el.get()
 		JSONObject json;
 		if(args.length > 0 && args[0]!=null){
 			 json = (JSONObject) new JSONParser().parse(new FileReader(args[0]));
