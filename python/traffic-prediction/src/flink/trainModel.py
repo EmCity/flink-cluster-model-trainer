@@ -7,22 +7,27 @@ import numpy as np
 import pandas as pd
 
 def trainModel(jsonDict):
-    algorithms = jsonDict['algorithms']
+    algorithms = jsonDict['algorithm']
     data = jsonDict['data']
+    train_x = data['train_X']
+    test_x = data['test_x']
+    train_y = data['train_y']
+    test_y = data['test_y']
 
-    df_x_train = pd.read_csv(data['train_X'], index_col=0)
-    df_x_test = pd.read_csv(data['test_x'], index_col=0)
+    #TODO: fix paths!
+    df_x_train = pd.read_csv('C:/Users/Effi2/Documents/sose17-small-data/python/traffic-prediction/src/flink/train_x.csv', index_col=0)
+    df_x_test = pd.read_csv('C:/Users/Effi2/Documents/sose17-small-data/python/traffic-prediction/src/flink/test_x.csv', index_col=0)
     #df_x_valid = pd.read_csv(data['valid_x'], index_col=0)
 
-    df_y_train = pd.read_csv(data['train_y'], index_col=0)
-    df_y_test = pd.read_csv(data['test_y'], index_col=0)
+    df_y_train = pd.read_csv('C:/Users/Effi2/Documents/sose17-small-data/python/traffic-prediction/src/flink/train_y.csv', index_col=0)
+    df_y_test = pd.read_csv('C:/Users/Effi2/Documents/sose17-small-data/python/traffic-prediction/src/flink/test_y.csv', index_col=0)
     #df_y_valid = pd.read_csv(data['valid_y'], index_col=0)
 
 
-    if "LR" in algorithms.keys():
-        trainLR(df_x_train, df_x_test, df_y_train, df_y_test, algorithms['LR'])
-    if "SVM" in algorithms.keys():
-        trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, algorithms['SVM'])
+    if "LR" == algorithms:
+        trainLR(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
+    if "SVM" == algorithms:
+        trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
     #if "NN" in algorithms.keys():
      #   trainNN(df_x_train, df_x_test, df_y_train, df_y_test, algorithms['NN'])
 
@@ -79,9 +84,9 @@ def trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, params):
 def getError(model, df_x_test, df_y_test):
     df_y_prediction= model.predict(df_x_test)
     error = np.mean(np.abs((df_y_test - df_y_prediction) / df_y_test))
-    sys.stdout(np.mean(error))
+    print(np.mean(error))
 
 string_json = sys.argv[1]
-print(string_json)
-jsonDict = json.loads(string_json, encoding='UTF-8')
+test = string_json.replace('?', '"')
+jsonDict = json.loads(test)
 trainModel(jsonDict)

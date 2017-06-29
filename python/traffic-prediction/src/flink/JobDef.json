@@ -49,11 +49,11 @@
   },
   "data":{
     "job_name": "JobDe",
-    "train_X":"train_x.csv",
+    "train_x":"train_x.csv",
     "train_y":"train_y.csv",
     "test_x":"test_x.csv",
     "test_y":"test_y.csv",
     "valid_x":"valid_x.csv",
-    "valid_y":"valid_y csv"
+    "valid_y":"valid_y.csv"
   }
 }

@@ -224,13 +224,13 @@ public class RunCMD2 {
 			Runtime rt = Runtime.getRuntime();
 			String cmd = "python";
 			String pythonPath = "../../../sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
-			//value=value.replaceAll("\"", "\\\\\"");
+			value=value.replaceAll("\"", "?");
 			// path depends on the folder where the command of flink run was called
 			String cmd2 = cmd + " " + pythonPath + " " + value;
 			System.out.println(cmd2);
 
 				//rt.exec("activate dataScience");
-			Process proc = rt.exec(cmd2);
+			Process proc = rt.exec(new String[] { cmd, pythonPath, value});
 
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
