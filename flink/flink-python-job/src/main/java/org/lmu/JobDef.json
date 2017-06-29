@@ -1,29 +1,58 @@
 {
   "algorithms":{
     "SVM":{
-      "C":[
-        0,
-        1,
-        2,
-        4,
-        6
-      ],
-      "E":[
-        0.1,
-        0.2,
-        0.3
-      ]
+      "C":[0, 1, 2, 4, 6],
+      "epsilon":[0.1, 0.2, 0.3],
+      "kernel":["rbf", "linear", "poly", "sigmoid"],
+      "degree":[1,2,3],
+      "gamma":[0.1,0.2,0.3],
+      "coef0":[0,1,2,3,4],
+      "shrinking" : true,
+      "tol" : 0.0001,
+      "cache_size": 500,
+      "max_iter":-1
     },
     "LR":{
-      "normalize":true
+      "normalize":false,
+      "fit_intercept":false
+    },
+    "NN": {
+      "error" : "mean_absolute_percentage_error",
+      "optimizer": "rmsprop",
+      "batch_size": 1,
+      "epochs":10,
+      "layers": [
+        {
+          "layer_1": {
+            "input_size": "147",
+            "output_size": "200",
+            "activation_fun": "relu"
+          }
+        },
+        {
+          "layer_2": {
+            "input_size": "200",
+            "output_size": "500",
+            "activation_fun": "relu"
+          }
+        },
+        {
+          "layer_3": {
+            "input_size": "500",
+            "output_size": "36",
+            "activation_fun": "relu"
+          }
+        }
+      ]
     }
   },
   "data":{
+    "job_name": "JobDe",
     "train_X":"train_x.csv",
     "train_y":"train_y.csv",
     "test_x":"test_x.csv",
     "test_y":"test_y.csv",
-    "valid_x":" valid_x.csv",
+    "valid_x":"valid_x.csv",
     "valid_y":"valid_y csv"
   }
 }
