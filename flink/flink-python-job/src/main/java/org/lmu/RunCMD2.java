@@ -1,4 +1,5 @@
 package org.lmu;
+import com.mongodb.*;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
@@ -25,6 +26,14 @@ public class RunCMD2 {
 	public static void main(String[] args) throws Exception {
 		// set up the batch execution environment
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+		DB db = mongoClient.getDB("samba");
+		DBCollection coll = db.getCollection("jobs");
+
+		//TODO insert job name / time stamp key here
+		DBObject el = coll.findOne();
+		System.out.println(el);
+        el.get()
 		JSONObject json;
 		if(args.length > 0 && args[0]!=null){
 			 json = (JSONObject) new JSONParser().parse(new FileReader(args[0]));
@@ -69,7 +78,9 @@ public class RunCMD2 {
 
 		// workers are executing
 
-		System.out.println(res);
+		List<String> resCollect = res.collect();
+
+		System.out.println(resCollect);
 
 
 		String response = sendResultPostToBackend((JSONObject) new JSONParser().parse(tasks.get(0)));
@@ -124,10 +135,10 @@ public class RunCMD2 {
 
 		try {
 
-			HttpPost request = new HttpPost("http://sambahost.dyndns.lrz.de:8000/save_result");
-			//StringEntity params =new StringEntity("details={\"name\":\"myname\",\"age\":\"20\"} ");
-			StringEntity se = new StringEntity(jsonString);
-			request.addHeader("content-type", "application/x-www-form-urlencoded");
+			HttpPost request = new HttpPost("http://sambahost.dyndns.lrz.de:8500/save_result");
+			StringEntity se =new StringEntity("details={\"name\":\"myname\",\"age\":\"20\"} ");
+			//StringEntity se = new StringEntity(jsonString);
+			request.addHeader("content-type", "application/json");
 			request.setEntity(se);
 			HttpResponse response = httpClient.execute(request);
 			serverResponse = response.toString();
@@ -185,6 +196,8 @@ public class RunCMD2 {
 				res += "\n"+s;
 			}
 			out.collect(res);
+
+			out.close();
 			} catch(Exception e){
 			}
         }
