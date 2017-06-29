@@ -1,0 +1,115 @@
+
+.group 			  {
+  position:relative;
+  margin-bottom:45px;
+}
+#job 				{
+  font-size:18px;
+  padding:10px 10px 10px 5px;
+  display:block;
+  width:300px;
+  border:none;
+  border-bottom:1px solid #757575;
+}
+#job:focus 		{ outline:none; }
+
+/* LABEL ======================================= */
+.jobLabel				 {
+  color:#999;
+  font-size:18px;
+  font-weight:normal;
+  position:absolute;
+  pointer-events:none;
+  left:5px;
+  top:10px;
+  transition:0.2s ease all;
+  -moz-transition:0.2s ease all;
+  -webkit-transition:0.2s ease all;
+}
+
+/* active state */
+#job:focus ~ .jobLabel, #job:valid ~ .jobLabel 		{
+  top:-20px;
+  font-size:14px;
+  color:#5264AE;
+}
+
+/* BOTTOM BARS ================================= */
+.bar 	{ position:relative; display:block; width:300px; }
+.bar:before, .bar:after 	{
+  content:'';
+  height:2px;
+  width:0;
+  bottom:1px;
+  position:absolute;
+  background:#5264AE;
+  transition:0.2s ease all;
+  -moz-transition:0.2s ease all;
+  -webkit-transition:0.2s ease all;
+}
+.bar:before {
+  left:50%;
+}
+.bar:after {
+  right:50%;
+}
+
+/* active state */
+#job:focus ~ .bar:before, #job:focus ~ .bar:after {
+  width:50%;
+}
+
+/* HIGHLIGHTER ================================== */
+.highlight {
+  height:50%;
+  width:100px;
+  top:25%;
+  left:0;
+  pointer-events:none;
+  opacity:0.5;
+}
+
+/* active state */
+#job:focus ~ .highlight {
+  -webkit-animation:inputHighlighter 0.3s ease;
+  -moz-animation:inputHighlighter 0.3s ease;
+  animation:inputHighlighter 0.3s ease;
+}
+
+/* ANIMATIONS ================ */
+@-webkit-keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}
+@-moz-keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}
+@keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}
+
+
+/*FILE UPLOADS */
+
+.none {
+  display: none;
+}
+/* ----------------------------------------------*/
+
+html {
+  background:url(../img/samba.jpg) no-repeat center center fixed;
+background-size:     cover;                      /* <------ */
+background-repeat:   no-repeat;
+background-position: center center;              /* optional, center the image */
+}
+
+#centerwrap {
+     max-width: 600px;
+     margin: auto;
+     margin-top : 50px
+     max-height:40%;
+     background:rgba(255,255,255,0.7); /* applies a 50% transparent white background */
+
+    }

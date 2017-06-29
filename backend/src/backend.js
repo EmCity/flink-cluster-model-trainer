@@ -10,7 +10,8 @@ var path = require('path');
 
 app.get('/', function(req, res) {
   //res.sendFile(path.join(__dirname + '../gui/src/index.html'));
-  res.sendFile('/root/code/sose17-small-data/gui/src/index.html') 
+  //res.sendFile('/root/code/sose17-small-data/gui/src/index.html') 
+  res.sendFile('/root/code/sose17-small-data/backend/src/index.html')
 });
 
 
@@ -23,7 +24,6 @@ app.post('/api/', (req, res) => {
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
     db.collection("jobs").insertOne(data);
-    db.collection("jobs").find().sort({timestart:-1},function(err,cursor){});
     db.close();
   });
     res.send(req.body);
