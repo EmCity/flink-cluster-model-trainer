@@ -1,5 +1,7 @@
 package org.lmu;
 
+import com.mongodb.*;
+import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
@@ -16,87 +18,96 @@ import org.apache.log4j.varia.NullAppender;
 import org.lmu.JSON.JSONArray;
 import org.lmu.JSON.JSONObject;
 import org.lmu.JSON.parser.JSONParser;
+import org.lmu.JSON.parser.ParseException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class FlinkJobDistribution {
 
-    public static void main(String[] args) throws Exception {
+    public JSONObject getJobJSONObject(String jobName) throws UnknownHostException, ParseException {
+        MongoClient mongoClient = new MongoClient("sambahost.dyndns.lrz.de", 27017);
+        DBCollection coll = mongoClient.getDB("samba").getCollection("jobs");
 
-        String jobName = "";
-        if (args.length > 0 && args[0] != null) {
-            jobName = args[0];
-            System.out.println("Got JobName: " + jobName);
-        } else {
-            throw new Exception("check args parameters: " + args);
+        BasicDBObject query = new BasicDBObject("data.job_name", jobName);
+
+        DBCursor cursor = coll.find(query);
+        if(cursor== null){
+            //System.out.println("Problem with Database");
+            return null;
         }
 
-		/*
-        //connect to DB
-		MongoClient mongoClient = new MongoClient("sambahost.dyndns.lrz.de", 27017);
-		DBCollection coll = mongoClient.getDB("samba").getCollection("jobs");
+        BasicDBObject job = null;
+        try{
+            while(cursor.hasNext()){
+                job = (BasicDBObject) cursor.next();
+                //System.out.println(job);
 
+            }
+        } finally{
+            cursor.close();
+        }
 
-		BasicDBObject query = new BasicDBObject("job_name", jobName);
-		DBCursor cursor = coll.find(query);
+        if(job == null){
+            System.out.println("Query: " + query + " found nothing");
+        }
 
-		if(cursor== null){
-			System.out.println("Problem with Database");
-			return ;
-		}
+        mongoClient.close();
 
-		BasicDBObject jobs = null;
-		try{
-			while(cursor.hasNext()){
-				jobs = (BasicDBObject) cursor.curr();
-				System.out.println(jobs);
-
-			}
-		} finally{
-				cursor.close();
-		}
-
-		if(jobs != null){
-			System.out.println("jobs: " + jobs.toString());
-		} else {
-			System.out.println("Query: " + query + " found nothing");
-		}
-		*/
-
-        String testjsonFile = "./BigDataScience/sose17-small-data/flink/flink-python-job/src/main/java/org/lmu/JobDef.json";
-        JSONObject jobsjson;
-        jobsjson = (JSONObject) new JSONParser().parse(new FileReader(testjsonFile));
-
-        //JSONObject jobsjson = (JSONObject) new JSONParser().parse(obj.toString());
-
-        System.out.println("jobsjson: " + jobsjson.toString());
-
-        List<Tuple2<String, String>> resCollect = distribute(jobsjson);
-
-        System.out.println("resCollect: " + resCollect);
-
-        //String response = sendResultPostToBackend((JSONObject) new JSONParser().parse(tasks.get(0)));
-        //System.out.println("-----------" + response + "----------");
+        return (JSONObject) new JSONParser().parse(job.toString());
 
     }
 
-    public static List<Tuple2<String, String>> distribute(JSONObject json) throws Exception {
+    public void saveResultJSONObjectToMongoDB(JSONObject jsonObject) throws UnknownHostException {
+        MongoClient mongoClient = new MongoClient("sambahost.dyndns.lrz.de", 27017);
+        DBCollection coll = mongoClient.getDB("samba").getCollection("results");
+
+        DBObject b = (DBObject)com.mongodb.util.JSON.parse(jsonObject.toString()) ;
+        System.out.println("Object: " + b);
+        coll.insert(b);
+
+        mongoClient.close();
+    }
+
+    public JSONObject getBestMapeJsonObject(JSONArray resultsJSONArray){
+        double bestmape = 420;
+        JSONObject bestJsonObject = new JSONObject();
+        for (Object o: resultsJSONArray) {
+            JSONObject jsonObject = (JSONObject) o;
+            double mape = (double)jsonObject.get("mape");
+            if(bestmape > mape){
+                bestmape = mape;
+                bestJsonObject = jsonObject;
+            }
+        }
+        return bestJsonObject;
+    }
+
+    public static JSONArray distribute(JSONObject json) throws Exception {
         // set up the batch execution environment
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.getConfig().disableSysoutLogging();
         org.apache.log4j.BasicConfigurator.configure(new NullAppender());
+
         JSONObject algorithms = (JSONObject) json.get("algorithms");
         JSONObject data = (JSONObject) json.get("data");
         JSONObject svm = (JSONObject) algorithms.get("SVM");
         JSONObject lr = (JSONObject) algorithms.get("LR");
         JSONObject nn = (JSONObject) algorithms.get("NN");
+
+        String jobName = data.get("job_name").toString();
+
+        System.out.println("Job: " + jobName);
+        //TODO env.createProgramPlan(jobName);
+
         JSONArray svmArray = svm != null ? createSVMJobs(svm) : new JSONArray();
-        JSONArray lrArray = lr != null ? createLRJobs(svm) : new JSONArray();
-        JSONArray nnArray = nn != null ? createNNJobs(svm) : new JSONArray();
+        JSONArray lrArray = lr != null ? createLRJobs(lr) : new JSONArray();
+        JSONArray nnArray = nn != null ? createNNJobs(nn) : new JSONArray();
 
         // get input data
         ArrayList<String> tasks = new ArrayList<>();
@@ -104,27 +115,31 @@ public class FlinkJobDistribution {
         fillList(data, lrArray, tasks);
         fillList(data, nnArray, tasks);
 
-
         System.out.println("Distribute: " + tasks.size() + " jobs on the workers:");
+        for (String task: tasks) {
+            System.out.println(task);
+        }
 
         DataSet<String> elementsDataSet = env.fromCollection(tasks);
 
         //distribute on workers
         DataSet<String> dataset = elementsDataSet.flatMap(new OnWorkers());
 
+        System.out.println("collect");
+        List<String> res = dataset.collect();
+
+        JSONArray resJsonArray = new JSONArray();
+        for (String s : res) {
+            resJsonArray.add((JSONObject)new JSONParser().parse(s));
+        }
+
+
+
         //saves the result as text
-        dataset.writeAsText("result.txt", FileSystem.WriteMode.OVERWRITE);
+        //dataset.writeAsText("result.txt", FileSystem.WriteMode.OVERWRITE);
+        //dataset.print();
 
-        // workers are executing
-        List<Tuple2<String, String>> res = new ArrayList<>();
-
-        // execute program
-        env.execute("Flink Batch RunCMD Job");
-        dataset.print();
-
-        //String response = sendResultPostToBackend((JSONObject) new JSONParser().parse(tasks.get(0)));
-        //System.out.println("-----------" + response + "----------");
-        return res;
+        return resJsonArray;
     }
 
     private static void fillList(JSONObject data, JSONArray array, ArrayList<String> tasks) {
@@ -138,14 +153,15 @@ public class FlinkJobDistribution {
     private static JSONArray createSVMJobs(JSONObject svm) {
         JSONArray c_array = (JSONArray) svm.get("C");
         JSONArray e_array = (JSONArray) svm.get("epsilon");
-        JSONArray kernel_array = (JSONArray) svm.get("kernels");
+        JSONArray kernel_array = (JSONArray) svm.get("kernel");
         JSONArray degree_array = (JSONArray) svm.get("degree");
         JSONArray gamma_array = (JSONArray) svm.get("gamma");
         JSONArray coef_array = (JSONArray) svm.get("coef0");
-        Boolean shrinking = Boolean.parseBoolean((String) svm.get("shrinking"));
+        Boolean shrinking = (Boolean)svm.get("shrinking");
         Double tol = (Double) svm.get("tol");
         Long cache_size = (Long) svm.get("cache_size");
-        Integer max_iter = (Integer) svm.get("max_iter");
+        Integer max_iter = Math.toIntExact((long)svm.get("max_iter"));
+
 
 
         JSONArray result = new JSONArray();
@@ -169,7 +185,6 @@ public class FlinkJobDistribution {
                                     obj.put("cache_size", cache_size);
                                     obj.put("max_iter", max_iter);
                                     result.add(obj);
-                                    System.out.println(obj);
                                 }
                             }
                         }
@@ -181,8 +196,8 @@ public class FlinkJobDistribution {
     }
 
     private static JSONArray createLRJobs(JSONObject lr) {
-        Boolean normalize = Boolean.parseBoolean((String) lr.get("normalize"));
-        Boolean fit_intercept = Boolean.parseBoolean((String) lr.get("normalize"));
+        Boolean normalize = (Boolean)lr.get("normalize");
+        Boolean fit_intercept = (Boolean)lr.get("fit_intercept");
         JSONArray result = new JSONArray();
         JSONObject obj = new JSONObject();
         obj.put("algorithm", "LR");
@@ -205,67 +220,41 @@ public class FlinkJobDistribution {
         @Override
         public void flatMap(String value, final Collector<String> out) {
 
-            String res = "Worker res: ";
+            String res = "";
             try {
                 Runtime rt = Runtime.getRuntime();
                 String cmd = "python";
                 // TODO: check path
-                String pythonPath = "../../../sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
-                value = value.replaceAll("\"", "?");
+                String pythonPath = "../BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+                //value = value.replaceAll("\"", "?");
 
                 //TODO: activate correct environment
                 //rt.exec("activate dataScience");
+                cmd = "/home/l/lemkec/anaconda3/envs/python2/bin/python";
+
                 Process proc = rt.exec(new String[]{cmd, pythonPath, value});
 
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 
-                // read the output from the command
-                //System.out.println("----Here is the standard output of the command:\n");
                 String s = null;
                 while ((s = stdInput.readLine()) != null) {
-                    System.out.println(s);
-                    res += "\nvalue: " + value + " " + s;
+
+                    res += "\n" + s;
                 }
 
                 // read any errors from the attempted command
                 //System.out.println("----Here is the standard error of the command (if any):\n");
                 while ((s = stdError.readLine()) != null) {
-                    System.out.println(s);
+
                     res += "\n" + s;
                 }
 
             } catch (Exception e) {
-                System.out.println(e);
+                res += e.toString();
+
             }
             out.collect(res);
         }
-    }
-
-    public static String sendResultPostToBackend(JSONObject resultJSON) {
-        HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead
-        String jsonString = resultJSON.toJSONString();
-        String serverResponse = "error";
-
-        try {
-
-            HttpPost request = new HttpPost("http://sambahost.dyndns.lrz.de:8500/save_result");
-            StringEntity se = new StringEntity("details={\"name\":\"myname\",\"age\":\"20\"} ");
-            //StringEntity se = new StringEntity(jsonString);
-            request.addHeader("content-type", "application/json");
-            request.setEntity(se);
-            HttpResponse response = httpClient.execute(request);
-            serverResponse = response.toString();
-            //handle response here...
-
-        } catch (Exception ex) {
-
-            //handle exception here
-            serverResponse = ex.toString();
-        } finally {
-            //Deprecated
-            //httpClient.getConnectionManager().shutdown();
-        }
-        return serverResponse;
     }
 }

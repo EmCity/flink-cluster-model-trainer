@@ -1,12 +1,12 @@
 {
   "algorithms":{
     "SVM":{
-      "C":[0, 1, 2, 4, 6],
-      "epsilon":[0.1, 0.2, 0.3],
-      "kernel":["rbf", "linear", "poly", "sigmoid"],
-      "degree":[1,2,3],
-      "gamma":[0.1,0.2,0.3],
-      "coef0":[0,1,2,3,4],
+      "C":[1, 100],
+      "epsilon":[0.1],
+      "kernel":["rbf"],
+      "degree":[1],
+      "gamma":[0.1],
+      "coef0":[0],
       "shrinking" : true,
       "tol" : 0.0001,
       "cache_size": 500,
