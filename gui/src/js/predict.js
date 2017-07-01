@@ -27,7 +27,7 @@ function predict() {
     });
 
 
-    fetch("http://sambahost.dyndns.lrz.de:8000/api", {
+    fetch("http://sambahost.dyndns.lrz.de:8500/api", {
   method: 'POST',
   body: JSON.stringify(data), // stringify JSON
   headers: new Headers({ "Content-Type": "application/json" }) // add headers
