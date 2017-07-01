@@ -14,12 +14,12 @@ app.get('/', function(req, res) {
 });
 
 // save AlgoParaImputs?
-app.get('/', (req, res) => {
-  console.log(typeof(req))
-  console.log(req.body)
-  data = req.body;
-  res.send("node is running. indexhtml will get here");
-});
+//app.get('/', (req, res) => {
+ // console.log(typeof(req))
+ // console.log(req.body)
+  //data = req.body;
+ // res.send("node is running. indexhtml will get here");
+//});
 
 
 // save AlgoParaImputs?
@@ -56,6 +56,3 @@ app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-
-// we need that right?
-app.listen(8500);
