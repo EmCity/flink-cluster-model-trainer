@@ -5,7 +5,8 @@ var app = express();
 app.use(bodyParser.json()); // add a middleware (so that express can parse request.body's json)
 const hostname = 'sambahost.dyndns.lrz.de';
 const port = 8500;
-var MongoClient = require('mongodb').MongoClient;
+var MongoClient = require('mongodb').MongoClient,
+    Grid = mongo.Grid;
 var url = "mongodb://"+hostname+":27017/samba";
 var path = require('path');
 var pathguisrc = '/root/code/sose17-small-data/gui/src'
@@ -33,6 +34,9 @@ app.post('/api/', (req, res) => {
 
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
+
+    //saveCsvToMongo(db);
+
     db.collection("jobs").insertOne(data);
     db.collection("jobs").find().sort({timestart:-1},function(err,cursor){});
     db.close();
@@ -41,6 +45,18 @@ app.post('/api/', (req, res) => {
   });
     res.send(req.body);
 });
+
+function saveCsvToMongo(db, csv){
+    var grid = new Grid(db,'fs');
+    var buffer = new Buffer(csv);
+    grid.put.(buffer, {metadata:{category:'text'}, content_type: 'text'}, function(err, fileInfo){
+        grid.get(fileInfo._id, function(err, data){
+            if (err) throw err;
+            console.log("Retrieved data: " + data.toString());
+        })
+    })
+    }
+}
 
 // save AlgoParaImputs
 app.get('/start_job/:job_name', (req, res) => {

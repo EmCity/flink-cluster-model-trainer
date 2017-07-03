@@ -63,8 +63,10 @@ def trainModel(jsonDict):
     result_mape = ""
 
     if "LR" == algorithms:
+        result_mape += ""
     #    result_mape = trainLR(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
     if "SVM" == algorithms:
+        result_mape += ""
     #    result_mape = trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
     if "NN" == algorithms:
         #result_mape = trainNN(df_x_train, df_x_test, df_y_train, df_y_test, algorithms['NN'])
@@ -143,4 +145,7 @@ def get_error(model, df_x_test, df_y_test):
 
 
 json_string = sys.argv[1]
-trainModel(json.loads(json_string))
+print('trainmodel.py: ' + json_string)
+jsonpara = json.loads(json_string)
+print('trainmodel.py: ' + jsonpara)
+trainModel(jsonpara)
