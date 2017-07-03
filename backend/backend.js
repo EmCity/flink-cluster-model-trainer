@@ -50,7 +50,7 @@ app.post('/api/', (req, res) => {
 function saveCsvToMongo(db, csv){
     var grid = new Grid(db,'fs');
     var buffer = new Buffer(csv);
-    grid.put.(buffer, {metadata:{category:'text'}, content_type: 'text'}, function(err, fileInfo){
+    grid.put(buffer, {metadata:{category:'text'}, content_type: 'text'}, function(err, fileInfo){
         grid.get(fileInfo._id, function(err, data){
             if (err) throw err;
             console.log("Retrieved data: " + data.toString());
