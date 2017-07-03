@@ -5,8 +5,9 @@ var app = express();
 app.use(bodyParser.json()); // add a middleware (so that express can parse request.body's json)
 const hostname = 'sambahost.dyndns.lrz.de';
 const port = 8500;
-var MongoClient = require('mongodb').MongoClient,
-    Grid = mongo.Grid;
+var MongoClient = require('mongodb').MongoClient;
+var Grid = require('mongodb').Grid;
+var GridStore = require('mongodb').GridStore;
 var url = "mongodb://"+hostname+":27017/samba";
 var path = require('path');
 var pathguisrc = '/root/code/sose17-small-data/gui/src'
