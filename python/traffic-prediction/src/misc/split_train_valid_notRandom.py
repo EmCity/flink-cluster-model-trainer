@@ -3,6 +3,7 @@ import datetime
 from src.vector_gen import generate_VectorY as vecY
 from src.vector_gen import generateTimeInformationVector as vecX
 from src.misc import paths
+import csv
 import os, glob
 
 def split_dataset(df_X, df_Y, train = 0.6, validation = 0.1, test = 0.3):
@@ -35,10 +36,10 @@ def split_dataset(df_X, df_Y, train = 0.6, validation = 0.1, test = 0.3):
         for file in files:
             os.remove(file)
 
-        train_X.to_csv(path_or_buf= "../../../../python/traffic-prediction/src/misc/splitting_csv_files/train_X.csv")
-        train_Y.to_csv(path_or_buf= "../../../../python/traffic-prediction/src/misc/splitting_csv_files/train_Y.csv")
-        test_X.to_csv(path_or_buf= "../../../../python/traffic-prediction/src/misc/splitting_csv_files/test_X.csv")
-        test_Y.to_csv(path_or_buf= "../../../../python/traffic-prediction/src/misc/splitting_csv_files/test_Y.csv")
+        train_X.to_csv(path_or_buf= "train_x.csv", sep=';',line_terminator='')
+        train_Y.to_csv(path_or_buf= "train_y.csv", sep=';',line_terminator='')
+        test_X.to_csv(path_or_buf= "test_x.csv", sep=';',line_terminator='')
+        test_Y.to_csv(path_or_buf= "test_y.csv", sep=';',line_terminator='')
 
     else:
         train_start = min_date

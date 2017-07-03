@@ -215,11 +215,27 @@ public class FlinkJobDistribution {
             String res = "";
             try {
                 Runtime rt = Runtime.getRuntime();
-                rt.exec("source activate dataScience");
 
-                String cmd = "python3";
-                String pythonPath = "~/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
-                Process proc = rt.exec(new String[]{cmd, pythonPath, value});
+                String os = System.getProperty("os.name").toLowerCase();
+
+
+                String cmd;
+                String pythonPath;
+
+                if(os.equals("windows 10")){
+                    //rt.exec("activate dataScience");
+                    cmd = "python3";
+                    pythonPath = "../../../sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+
+                }
+                else{
+                    rt.exec("source activate dataScience");
+                    cmd = "python3";
+                    pythonPath = "~/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+                }
+
+                //Process proc = rt.exec(new String[]{cmd, pythonPath, value});
+                Process proc = rt.exec("python" + " "  + pythonPath + value);
 
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
