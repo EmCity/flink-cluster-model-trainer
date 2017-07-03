@@ -37,7 +37,7 @@ app.post('/api/', (req, res) => {
     if (err) throw err;
 
     
-    saveCsvToMongo(db, data.data.training.x);
+    //saveCsvToMongo(db, data.data.training.x);
 
     db.collection("jobs").insertOne(data);
     db.collection("jobs").find().sort({timestart:-1},function(err,cursor){});
