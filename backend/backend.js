@@ -18,11 +18,11 @@ app.use(express.static(pathguisrc+'/img'));
 app.use(express.static(pathguisrc+'/css'));
 
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/index.html'));
+  res.sendFile(path.join('/index.html'));
 });
 
 app.get('/results', function(req, res) {
-  res.sendFile(path.join(__dirname + '/results.html'));
+  res.sendFile(path.join('/results.html'));
 });
 
 // save AlgoParaImputs
