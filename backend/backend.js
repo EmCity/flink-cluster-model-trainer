@@ -12,7 +12,7 @@ var pathguisrc = '/root/code/sose17-small-data/gui/src'
 
 console.log("__dirname :" + __dirname);
 
-app.use(express.static( pathguisrc+'/'));
+app.use('/', express.static( pathguisrc+'/'));
 app.use(express.static(pathguisrc+'/js'));
 app.use(express.static(pathguisrc+'/img'));
 app.use(express.static(pathguisrc+'/css'));
@@ -21,7 +21,7 @@ app.get('/', function(req, res) {
   res.sendFile(path.join('/index.html'));
 });
 
-app.get('/results', function(req, res) {
+app.get('/results/', function(req, res) {
   res.sendFile(path.join('/results.html'));
 });
 
