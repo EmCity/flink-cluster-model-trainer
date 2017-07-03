@@ -1,18 +1,10 @@
 package org.lmu;
 
 import com.mongodb.*;
-import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.util.Collector;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.varia.NullAppender;
 
 import org.lmu.JSON.JSONArray;
@@ -21,12 +13,10 @@ import org.lmu.JSON.parser.JSONParser;
 import org.lmu.JSON.parser.ParseException;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class FlinkJobDistribution {
 
@@ -34,7 +24,7 @@ public class FlinkJobDistribution {
         MongoClient mongoClient = new MongoClient("sambahost.dyndns.lrz.de", 27017);
         DBCollection coll = mongoClient.getDB("samba").getCollection("jobs");
 
-        BasicDBObject query = new BasicDBObject("data.job_name", jobName);
+        BasicDBObject query = new BasicDBObject("job_name", jobName);
 
         DBCursor cursor = coll.find(query);
         if(cursor== null){
@@ -129,8 +119,10 @@ public class FlinkJobDistribution {
         List<String> res = dataset.collect();
 
         JSONArray resJsonArray = new JSONArray();
+        JSONParser parser = new JSONParser();
         for (String s : res) {
-            resJsonArray.add((JSONObject)new JSONParser().parse(s));
+            System.out.print(s);
+            resJsonArray.add(parser.parse(s));
         }
 
 
@@ -223,15 +215,10 @@ public class FlinkJobDistribution {
             String res = "";
             try {
                 Runtime rt = Runtime.getRuntime();
-                String cmd = "python";
-                // TODO: check path
-                String pythonPath = "../BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
-                //value = value.replaceAll("\"", "?");
+                rt.exec("source activate dataScience");
 
-                //TODO: activate correct environment
-                //rt.exec("activate dataScience");
-                cmd = "/home/l/lemkec/anaconda3/envs/python2/bin/python";
-
+                String cmd = "python3";
+                String pythonPath = "~/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
                 Process proc = rt.exec(new String[]{cmd, pythonPath, value});
 
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
