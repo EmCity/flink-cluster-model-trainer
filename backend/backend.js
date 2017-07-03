@@ -8,10 +8,19 @@ const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://"+hostname+":27017/samba";
 var path = require('path');
+var pathguisrc = '/root/code/soso17-small-data/gui/src'
+
+app.use(pathguisrc, express.static(__dirname + '/'));
+app.use(pathguisrc, express.static(__dirname + '/js'));
+app.use(pathguisrc, express.static(__dirname + '/img'));
+app.use(pathguisrc, express.static(__dirname + '/css'));
 
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/../gui/src/index.html'));
-//  res.sendFile('/root/code/sose17-small-data/gui/src/index.html')
+  res.sendFile(path.join(__dirname + '/index.html'));
+});
+
+app.get('/results', function(req, res) {
+  res.sendFile(path.join(__dirname + '/results.html'));
 });
 
 // save AlgoParaImputs
@@ -29,8 +38,6 @@ app.post('/api/', (req, res) => {
     callFlink(data.job_name)
   });
     res.send(req.body);
-
-
 });
 
 // save AlgoParaImputs
@@ -39,8 +46,6 @@ app.get('/start_job/:job_name', (req, res) => {
     callFlink(req.params.job_name);
 
 });
-
-
 
 function callFlink (jobname) {
     child.exec('~/flink-1.3.0/bin/flink run -c org.lmu.JobNameBatchDB ' +
@@ -56,9 +61,7 @@ function callFlink (jobname) {
 
 // get results
 app.get('/get_results/', (req, res) => {
-  setInterval(function(){
-      var x = "";
-    console.log("3secs")
+    var x = "";
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
         var coll = db.collection('results');
@@ -70,9 +73,8 @@ app.get('/get_results/', (req, res) => {
               res.send(x);
             db.close();
         });
-      });
-      });
-   }, 8000);
+    });
+  });
 });
 
 app.listen(port, hostname, () => {
