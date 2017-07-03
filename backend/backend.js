@@ -8,14 +8,14 @@ const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://"+hostname+":27017/samba";
 var path = require('path');
-var pathguisrc = '../gui/src'
+var pathguisrc = '/root/code/sose17-small-data/gui/src'
 
 console.log("__dirname :" + __dirname);
 
-app.use(express.static(pathguisrc+ '/'));
-app.use(express.static(pathguisrc+'/js'));
-app.use(express.static(pathguisrc+'/img'));
-app.use(express.static(pathguisrc+'/css'));
+app.use(pathguisrc, express.static( '/'));
+app.use(pathguisrc, express.static('/js'));
+app.use(pathguisrc, express.static('/img'));
+app.use(pathguisrc, express.static('/css'));
 
 app.get('/', function(req, res) {
   res.sendFile(path.join('/index.html'));
