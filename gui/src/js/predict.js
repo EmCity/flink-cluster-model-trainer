@@ -1,10 +1,12 @@
+
 function predict() {
-    handleFileSelect("trainingXFile");
-    handleFileSelect("trainingYFile");
-    handleFileSelect("testingXFile");
-    handleFileSelect("testingYFile");
-    handleFileSelect("validationXFile");
-    handleFileSelect("validationYFile");
+    data = new Object();
+    handleFileSelect("trainingXFile", data);
+    handleFileSelect("trainingYFile", data);
+    handleFileSelect("testingXFile", data);
+    handleFileSelect("testingYFile", data);
+    handleFileSelect("validationXFile", data);
+    handleFileSelect("validationYFile", data);
     data.job_name = $("#job").val();
     data.timestart = Date.now();
     data.algorithm = new Object();
@@ -26,6 +28,8 @@ function predict() {
         });
     });
 
+    console.log(data);
+
 
     fetch("http://sambahost.dyndns.lrz.de:8500/api", {
   method: 'POST',
@@ -41,4 +45,5 @@ function predict() {
   }).catch(function(error) {
     console.log('Request failed', error);
   });
+  
 }

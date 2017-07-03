@@ -35,7 +35,8 @@ app.post('/api/', (req, res) => {
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
 
-    //saveCsvToMongo(db);
+    
+    saveCsvToMongo(db, data.data.training.x);
 
     db.collection("jobs").insertOne(data);
     db.collection("jobs").find().sort({timestart:-1},function(err,cursor){});
@@ -53,9 +54,8 @@ function saveCsvToMongo(db, csv){
         grid.get(fileInfo._id, function(err, data){
             if (err) throw err;
             console.log("Retrieved data: " + data.toString());
-        })
-    })
-    }
+        });
+    });
 }
 
 // save AlgoParaImputs
