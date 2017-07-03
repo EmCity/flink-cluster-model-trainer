@@ -8,7 +8,7 @@ const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://"+hostname+":27017/samba";
 var path = require('path');
-var pathguisrc = '/gui/src'
+var pathguisrc = '../gui/src'
 
 app.use(pathguisrc, express.static(__dirname + '/'));
 app.use(pathguisrc, express.static(__dirname + '/js'));
