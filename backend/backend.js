@@ -1,17 +1,17 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var child = require('child_process')
+var child = require('child_process');
 var app = express();
 app.use(bodyParser.json()); // add a middleware (so that express can parse request.body's json)
 const hostname = 'sambahost.dyndns.lrz.de';
 const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/samba";
+var url = "mongodb://"+hostname+":27017/samba";
 var path = require('path');
 
 app.get('/', function(req, res) {
-  //res.sendFile(path.join(__dirname + '../gui/src/index.html'));
-  res.sendFile('/root/code/sose17-small-data/gui/src/index.html') 
+  res.sendFile(path.join(__dirname + '/../gui/src/index.html'));
+//  res.sendFile('/root/code/sose17-small-data/gui/src/index.html')
 });
 
 // save AlgoParaImputs
@@ -54,45 +54,27 @@ function callFlink (jobname) {
 });
 }
 
-// not in use
-app.post('/save_result/', (req, res) => {
-  console.log(typeof(req))
-  console.log(req.body)
-  data = req.body;
-
-  MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    // TODO db.collection("results").insertOne(data);
-    db.close();
-  });
-    //res.send(req.body);
-    res.send('ok-....'+ req.body);
-});
 // get results
 app.get('/get_results/', (req, res) => {
-  var x = "";  
-  MongoClient.connect(url, function(err, db) {
-      var col = db.collection('results');
-      x += "error: " + err + "<br>";
-      
-      var cursor =  col.find({});
-      cursor.toArray(function(err, result){
-          x = result;
-          res.send(x);   
-          console.log(result);
-
-          db.close();
+  setInterval(function(){
+      var x = "";
+    console.log("3secs")
+    MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+        var coll = db.collection('results');
+        x += "error: " + err + "<br>";
+        coll.find({},function(err,cursor){
+          if (err) throw err;
+          cursor.toArray(function(err, result){
+             x=result;
+              res.send(x);
+            db.close();
+        });
       });
-
-    });
-});
-
-
-app.post('/test/', function (req, res) {
-    console.log('works');
+      });
+   }, 8000);
 });
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
-

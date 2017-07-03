@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "backend.js",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "child_process": "^1.0.2",
+    "express": "^4.15.3",
+    "mongodb": "^2.2.29",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.cip.ifi.lmu.de:Innovationslabor_Big_Data_Science/sose17-small-data.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
