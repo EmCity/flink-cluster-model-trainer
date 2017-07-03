@@ -10,10 +10,12 @@ var url = "mongodb://"+hostname+":27017/samba";
 var path = require('path');
 var pathguisrc = '../gui/src'
 
-app.use(pathguisrc, express.static(__dirname + '/'));
-app.use(pathguisrc, express.static(__dirname + '/js'));
-app.use(pathguisrc, express.static(__dirname + '/img'));
-app.use(pathguisrc, express.static(__dirname + '/css'));
+console.log("__dirname :" + __dirname);
+
+app.use(pathguisrc, express.static( '/'));
+app.use(pathguisrc, express.static('/js'));
+app.use(pathguisrc, express.static('/img'));
+app.use(pathguisrc, express.static('/css'));
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
