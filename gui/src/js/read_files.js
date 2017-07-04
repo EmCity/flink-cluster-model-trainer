@@ -1,9 +1,12 @@
 
 function handleFileSelect(fileID, data) {
     data.data = new Object();
-    data.data.training = new Object();
-    data.data.testing = new Object();
-    data.data.validation = new Object();
+    data.data.train_x = new Object();
+    data.data.train_y = new Object();
+    data.data.test_x = new Object();
+    data.data.test_y = new Object();
+    data.data.valid_x = new Object();
+    data.data.valid_y = new Object();
 
     if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
         alert('The File APIs are not fully supported in this browser.');
@@ -27,22 +30,22 @@ function handleFileSelect(fileID, data) {
             var text = reader.result;
             switch (fileID) {
                 case "trainingXFile":
-                    data.data.training.x = text;
+                    data.data.train_x = text;
                     break;
                 case "trainingYFile":
-                    data.data.training.y = text;
+                    data.data.train_y = text;
                     break;
                 case "testingXFile":
-                    data.data.testing.x = text;
+                    data.data.test_x = text;
                     break;
                 case "testingYFile":
-                    data.data.testing.y = text;
+                    data.data.test_y = text;
                     break;
                 case "validationXFile":
-                    data.data.validation.x = text;
+                    data.data.valid_x = text;
                     break;
                 case "validationYFile":
-                    data.data.validation.y = text;
+                    data.data.valid_y = text;
                     break;
             }
             
