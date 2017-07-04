@@ -1,13 +1,13 @@
 image: kaiwinter/docker-java8-maven
-image: python:3.5
+#image: python:3.5
 
 cache:
   paths:
     - .m2/
 
 before_script:
-  - python --version
-  - source activate dataScience
+  #- python --version
+  #- source activate dataScience
 
 
 variables:
@@ -23,10 +23,10 @@ maven-build:
     - "mvn -f flink clean compile -B"
   stage: build
 
-python_test:
-    stage: test
-    script:
-      - "python manage.py /python/traffic-prediction/test/ -k"
+#python_test:
+ #   stage: test
+ #   script:
+ #    - "python manage.py /python/traffic-prediction/test/ -k"
 
 maven-test:
   script:
