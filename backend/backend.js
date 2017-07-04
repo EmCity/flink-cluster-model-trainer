@@ -9,8 +9,16 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://"+hostname+":27017/samba";
 var path = require('path');
 
+app.set('views', path.join(__dirname, '/../gui/src/views'));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
+app.use('/img',express.static(path.join(__dirname, '/../gui/src/public/img')));
+app.use('/js',express.static(path.join(__dirname, '/../gui/src/public/js')));
+app.use('/css',express.static(path.join(__dirname, '/../gui/src/public/css')));
+
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/../gui/src/index.html'));
+  res.sendFile(path.join(__dirname + '/../gui/src/views/index.html'));
 //  res.sendFile('/root/code/sose17-small-data/gui/src/index.html')
 });
 
@@ -55,25 +63,16 @@ function callFlink (jobname) {
 }
 
 // get results
-app.get('/get_results/', (req, res) => {
-  setInterval(function(){
-      var x = "";
-    console.log("3secs")
-    MongoClient.connect(url, function(err, db) {
-      if (err) throw err;
-        var coll = db.collection('results');
-        x += "error: " + err + "<br>";
-        coll.find({},function(err,cursor){
-          if (err) throw err;
-          cursor.toArray(function(err, result){
-             x=result;
-              res.send(x);
-            db.close();
-        });
+  app.get('/get_results/', (req, res) => {
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+      var coll = db.collection('results');
+      cursor = coll.find({});
+        cursor.toArray(function(err, result){
+               res.render("results",{ data: JSON.stringify(result) });
       });
-      });
-   }, 8000);
-});
+    });
+  })
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
