@@ -75,3 +75,16 @@ function callFlink (jobname) {
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+// var Grid = require('mongodb').Grid;
+// var GridStore = require('mongodb').GridStore;
+// function saveCsvToMongo(db, csv){
+//     var grid = new Grid(db,'fs');                                                        
+//     var buffer = new Buffer(csv);
+//         grid.get(fileInfo._id, function(err, data){ontent_type: 'text'}, functio$
+//   console.log(`stderr: ${stderr}`);
+//             if (err) throw err;
+//             console.log("Retrieved data: " + data.toString());
+//         });
+//     });
+// }
