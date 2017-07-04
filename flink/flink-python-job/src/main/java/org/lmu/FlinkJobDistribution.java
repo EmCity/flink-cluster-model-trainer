@@ -223,7 +223,7 @@ public class FlinkJobDistribution {
 
 
                 //rt.exec("source activate dataScience");
-                cmd = "python3";
+                cmd = "/root/anaconda/envs/dataScience/bin/python3";
                 pythonPath = "/root/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
 
 
