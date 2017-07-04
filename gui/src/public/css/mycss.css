@@ -1,4 +1,8 @@
-
+.container {
+    padding: 10px 10px;
+    margin-top: 5px;
+    padding-top: 0.6cm;
+}
 .group 			  {
   position:relative;
   margin-bottom:45px;
@@ -110,6 +114,6 @@ background-position: center center;              /* optional, center the image *
      margin: auto;
      margin-top : 50px
      max-height:40%;
-     background:rgba(255,255,255,0.7); /* applies a 50% transparent white background */
+     background:rgba(255,255,255,0.8); /* applies a 50% transparent white background */
 
     }
