@@ -48,7 +48,7 @@ app.get('/start_job/:job_name', (req, res) => {
 
 function callFlink (jobname) {
     child.exec('/root/flink-1.3.0/bin/flink run -c org.lmu.JobNameBatchDB ' +
-        'root/code/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar' + ' ' + jobname, (error, stdout, stderr) =>{
+        '/root/code/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar' + ' ' + jobname, (error, stdout, stderr) =>{
   if (error) {
     console.error(`exec error: ${error}`);
     return;
