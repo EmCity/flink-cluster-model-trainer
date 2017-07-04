@@ -221,17 +221,10 @@ public class FlinkJobDistribution {
                 String cmd;
                 String pythonPath;
 
-                String os = System.getProperty("os.name").toLowerCase();
-                if(os.equals("windows 10")){
-                    //rt.exec("activate dataScience");
-                    cmd = "python3";
-                    pythonPath = "../../../sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
-                }
-                else{
-                    rt.exec("source activate dataScience");
-                    cmd = "python3";
-                    pythonPath = "~/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
-                }
+
+                //rt.exec("source activate dataScience");
+                cmd = "python3";
+                pythonPath = "~/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
 
 
                 //TODO cl
