@@ -1,12 +1,19 @@
 
 function predict() {
     data = new Object();
-    handleFileSelect("trainingXFile", data);
-    handleFileSelect("trainingYFile", data);
-    handleFileSelect("testingXFile", data);
-    handleFileSelect("testingYFile", data);
-    handleFileSelect("validationXFile", data);
-    handleFileSelect("validationYFile", data);
+  data.data = new Object();
+  data.data.train_x = new Object();
+  data.data.train_y = new Object();
+  data.data.test_x = new Object();
+  data.data.test_y = new Object();
+  data.data.valid_x = new Object();
+  data.data.valid_y = new Object();
+    handleFileSelect("trainingXFile");
+    handleFileSelect("trainingYFile");
+    handleFileSelect("testingXFile");
+    handleFileSelect("testingYFile");
+    handleFileSelect("validationXFile");
+    handleFileSelect("validationYFile");
     data.job_name = $("#job").val();
     data.timestart = Date.now();
     data.algorithm = new Object();
@@ -50,5 +57,5 @@ function predict() {
     }).catch(function(error) {
         console.log('Request failed', error);
     });
-  
+
 }

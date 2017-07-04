@@ -1,12 +1,5 @@
 
-function handleFileSelect(fileID, data) {
-    data.data = new Object();
-    data.data.train_x = new Object();
-    data.data.train_y = new Object();
-    data.data.test_x = new Object();
-    data.data.test_y = new Object();
-    data.data.valid_x = new Object();
-    data.data.valid_y = new Object();
+function handleFileSelect(fileID) {
 
     if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
         alert('The File APIs are not fully supported in this browser.');
@@ -48,7 +41,7 @@ function handleFileSelect(fileID, data) {
                     data.data.valid_y = text;
                     break;
             }
-            
+
         }
         reader.readAsText(file);
     }
