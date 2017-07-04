@@ -62,6 +62,8 @@ public class JobNameBatchDB {
         // set status
         System.out.println("Save best result with status Finished" );
         bestResultJosnObject.put("status", "Finished");
+        bestResultJosnObject.put("timeend", System.currentTimeMillis());
+
         flinkdistribute.saveResultJSONObjectToMongoDB(bestResultJosnObject);
 
     }
