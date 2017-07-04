@@ -90,7 +90,7 @@ public class FlinkJobDistribution {
         JSONObject lr = (JSONObject) algorithms.get("LR");
         JSONObject nn = (JSONObject) algorithms.get("NN");
 
-        String jobName = data.get("job_name").toString();
+        String jobName = json.get("job_name").toString();
 
         System.out.println("FlinkJobDistribution: Job: " + jobName);
         //TODO env.createProgramPlan(jobName);
@@ -101,11 +101,11 @@ public class FlinkJobDistribution {
 
         // get input data
         ArrayList<String> tasks = new ArrayList<>();
-        fillList(data, svmArray, tasks);
-        fillList(data, lrArray, tasks);
-        fillList(data, nnArray, tasks);
+        fillList(json, svmArray, tasks);
+        fillList(json, lrArray, tasks);
+        fillList(json, nnArray, tasks);
 
-        System.out.println("FlinkJobDistribution: Distribute: " + tasks.size() + " jobs on the workers:");
+        System.out.println("FlinkJobDistripbution: Distribute: " + tasks.size() + " jobs on the workers:");
         //for (String task: tasks) {
             //System.out.println("FlinkJobDistribution: Do Task" +  task);
         //}
@@ -134,10 +134,11 @@ public class FlinkJobDistribution {
         return resJsonArray;
     }
 
-    private static void fillList(JSONObject data, JSONArray array, ArrayList<String> tasks) {
+    private static void fillList(JSONObject json, JSONArray array, ArrayList<String> tasks) {
         for (Object obj : array) {
             obj = new JSONObject((JSONObject) obj);
-            ((JSONObject) obj).put("data", data);
+            ((JSONObject) obj).put("job_name", json.get("job_name"));
+            //((JSONObject) obj).put("data", data);
             tasks.add(((JSONObject) obj).toJSONString());
         }
     }
@@ -219,24 +220,17 @@ public class FlinkJobDistribution {
 
                 String cmd;
                 String pythonPath;
-                /*
-                String os = System.getProperty("os.name").toLowerCase();
-                if(os.equals("windows 10")){
-                    //rt.exec("activate dataScience");
-                    cmd = "python3";
-                    pythonPath = "../../../sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
-                }
-                else{
-                    rt.exec("source activate dataScience");
-                    cmd = "python3";
-                    pythonPath = "~/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
-                }
-                */
+
+
+                //rt.exec("source activate dataScience");
+                cmd = "/root/anaconda/envs/dataScience/bin/python3";
+                pythonPath = "/root/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+
 
                 //TODO cl
-                cmd = "/home/l/lemkec/anaconda3/envs/python2/bin/python";
+                //cmd = "/home/l/lemkec/anaconda3/bin/python";
                 // TODO cl
-                pythonPath = "/home/l/lemkec/BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+                //pythonPath = "/home/l/lemkec/BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
 
 
                 //Process proc = rt.exec(new String[]{cmd, pythonPath, value});

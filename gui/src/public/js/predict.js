@@ -31,7 +31,7 @@ function predict() {
                 if (id == "gamma" && !($(this).val().length))
                     data.algorithm[algoID][id] = "auto";
                 else
-                    data.algorithm[algoID][id] = $(this).val();
+                    data.algorithm[algoID][id] = "[".concat($(this).val(), "]");
             }
         });
     });

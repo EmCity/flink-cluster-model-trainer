@@ -41,22 +41,27 @@ app.post('/api/',(req, res) => {
 // save AlgoParaImputs
 app.get('/start_job/:job_name', (req, res) => {
     console.log(req.params.job_name);
-    callFlink(req.params.job_name);
+    callFlink(req.params.job_name, function(javaOut){
+        res.send(javaOut);
+    });
 
 });
 
 
 
-function callFlink (jobname) {
-    child.exec('~/flink-1.3.0/bin/flink run -c org.lmu.JobNameBatchDB ' +
-        '~/code/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar' + ' ' + jobname, (error, stdout, stderr) =>{
-  if (error) {
-    console.error(`exec error: ${error}`);
-    return;
-  }
-  console.log(`stdout: ${stdout}`);
-  console.log(`stderr: ${stderr}`);
-});
+function callFlink (jobname, func) {
+    child.exec('/root/flink-1.3.0/bin/flink run -c org.lmu.JobNameBatchDB ' +
+        '/root/code/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar' + ' ' + jobname, (error, stdout, stderr) =>{
+      if (error) {
+        console.error(`exec error: ${error}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+      if (stderr) func(stderr);
+
+      func(stdout);
+    });
 }
 
 // get results

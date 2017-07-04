@@ -15,15 +15,15 @@ $(document).ready(function() {
                     "<input type='checkbox' id='normalize'>" +
                     "<span>normalize(default=false)</span>" +
                     "</label>" + "<br>" +
-                    /*COPY_X*/
+                    /*COPY_X*/ /*
                     "<label for='checkbox-3'>" +
                     "<input type='checkbox' id='copy_x' checked>" +
-                    "<span>copy_X(default=true)</span>" +
-                    "</label>" + "<br>" +
-                    /*N_JOBS*/
+                    "<span>copy_X(default=true)</span>" + 
+                    "</label>" + "<br>" + */
+                    /*N_JOBS */ /*
                     "<label>Number of jobs to use for the computation (default 1): </label>" +
-                    "<input id='number' type='number' min='-1' max='10' onkeydown='return false' value='1'>" +
-                    "</div>");
+                    "<input id='number' type='number' min='-1' max='10' onkeydown='return false' value='1'>" + */
+                    "</div>"); 
             }
             if ($(this).val() == "svm") {
                 /*kernel='rbf', degree=3, gamma='auto', coef0=0.0, tol=0.001, C=1.0, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1*/
@@ -60,7 +60,7 @@ $(document).ready(function() {
                     /*VERBOSE*/
                     "<label>" +
                     "<input type='checkbox' value='true' id='verbose'>" +
-                    "<span>shrinking(optional)(default=false)</span>" +
+                    "<span>verbose(optional)(default=false)</span>" +
                     "</label>" + "<br>" +
                     /*MAX_ITER*/
                     "<label>Hard limit on iterations within solver (int optional)(default -1): </label>" +
@@ -103,9 +103,32 @@ $(document).ready(function() {
                     }
                 });
             }
-            if ($(this).val() == "tf") {
-                console.log("tf checked");
-                $(this).parent().after("<div id='" + $(this).val() + "'>" + $(this).val() + "</div>");
+            if ($(this).val() == "nn") {
+                console.log("NN checked");
+                $(this).parent().after("<div id='" + $(this).val() + "'>" +
+                    "<legend><b>Parameters</b></legend> " +
+                    /*NORMALIZATION*/
+                    "<label>" +
+                    "<input type='checkbox' value='true' id='normalization' checked>" +
+                    "<span>normalization(optional)(default=true)</span>" +
+                    "</label>" + "<br>" +
+                    /*LEARNING RATE*/
+                    "<label>Learning rate (float)(default 0.01): </label>" +
+                    "<input id='learning_rate' type='number' value='0.01' step='any' min='0.001' max='10'>" + "<br>" +
+                    /*EPOCHS*/
+                    "<label>Epochs (int)(default 3): </label>" +
+                    "<input id='epochs' type='number' value='3' step='1'>" + "<br>" +
+                    /* DISPLAY STEP*/
+                    "<label>Display step (int)(default 3): </label>" +
+                    "<input id='display_step' type='number' value='3' step='1'>" + "<br>" +
+                    /*LOSS FUNCTION*/
+                    "<label>Cost function(default 'mse'): </label>" +
+                    "<select id='cost_function' name='costfunction'>" +
+                    "<option value='mean_squared_error'>Mean Squared Error</option>" +
+                    "<option value='cross_entropy'>Cross Entropy Loss</option>" +
+                    " </select>" +
+                    "</div>"
+                );
             }
         } else {
             if ($(this).val() == "lr") {
