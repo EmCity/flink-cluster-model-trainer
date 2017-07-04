@@ -222,9 +222,9 @@ public class FlinkJobDistribution {
                 String pythonPath;
 
 
-                //rt.exec("source activate dataScience");
+                rt.exec("source activate dataScience");
                 cmd = "python3";
-                pythonPath = "~/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+                pythonPath = "/root/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
 
 
                 //TODO cl
