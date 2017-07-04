@@ -35,25 +35,25 @@ function predict() {
         });
     });
 
-    console.log('log2');
     console.log(data);
-
 
     fetch("http://sambahost.dyndns.lrz.de:8500/api", {
         method: 'POST',
-        body: JSON.stringify(data), // stringify JSON
+        body: data, // stringify JSON
         headers: new Headers({ "Content-Type": "application/json", 'Access-Control-Allow-Origin':'*'}) // add headers
     }).then(function(response) {
         // The response is a Response instance.
         // You parse the data into a useable format using `.json()`
         console.log('response1');
         console.log(response);
+        console.log(typeof(response));
         return response.json();
     }).then(function(data) {
         // `data` is the parsed version of the JSON returned from the above endpoint.
         console.log('data2');
         console.log(data);  // { "userId": 1, "id": 1, "title": "...", "body": "..." }
-        return response.json();
+        console.log(typeof(data));
+        return data.json();
     }).catch(function(error) {
         console.log('Request failed', error);
     });
