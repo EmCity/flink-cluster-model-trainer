@@ -1,9 +1,14 @@
 image: kaiwinter/docker-java8-maven
-
+image: python:3.5
 
 cache:
   paths:
     - .m2/
+
+before_script:
+  - python --version
+  - pip install virtualenv
+
 
 variables:
   MAVEN_OPTS: -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2
@@ -18,11 +23,10 @@ maven-build:
     - "mvn -f flink clean compile -B"
   stage: build
 
-# test for python (christian)
-# python_test:
-#    stage: test
-#    script:
-#      - "python manage.py /python/traffic-prediction/test/ -k"
+python_test:
+    stage: test
+    script:
+      - "python manage.py /python/traffic-prediction/test/ -k"
 
 maven-test:
   script:
