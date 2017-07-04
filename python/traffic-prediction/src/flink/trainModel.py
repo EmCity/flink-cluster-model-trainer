@@ -6,27 +6,33 @@ from sklearn.multioutput import MultiOutputRegressor
 import numpy as np
 import pandas as pd
 import io as io
+import pymongo as mongo
 
 
 def trainModel(jsonDict):
 
-    #client = mongo.MongoClient('sambahost.dyndns.lrz.de',27017)
-    #db = client['samba']
-    #collection = db['jobs']
+    client = mongo.MongoClient('sambahost.dyndns.lrz.de',27017)
+    db = client['samba']
+    collection = db['jobs']
 
-    #jobname = jsonDict['job_name']
-    #json_string = collection.find(jobname)
-    #json_data = json.load(json_string)
-    #json_data['data']
+    jobname = jsonDict['job_name']
+
+    cursor = collection.find({'job_name': jobname})
+
+    json_data = None
+    for doc in cursor:
+        json_data = doc
+
+    data = json_data['data']
+
 
     # crate result json
     result_json = json.loads("{}")
     result_json['parameter_set'] = jsonDict
 
     algorithms = jsonDict['algorithm']
-    data = jsonDict['data']
 
-    train_x = data['train_X']
+    train_x = data['train_x']
     test_x = data['test_x']
     train_y = data['train_y']
     test_y = data['test_y']
@@ -36,38 +42,23 @@ def trainModel(jsonDict):
     train_y_io = io.StringIO(train_y)
     test_y_io = io.StringIO(test_y)
 
-    df_x_train = pd.read_csv(train_x_io, index_col=0, sep=';',line_terminator='')
-    df_x_test = pd.read_csv(test_x_io, index_col=0, sep=';',line_terminator='')
-    df_y_train = pd.read_csv(train_y_io, index_col=0, sep=';',line_terminator='')
-    df_y_valid = pd.read_csv(test_y_io, index_col=0, sep=';',line_terminator='')
+    #file = open("train_x.csv","w")
+    #file.write(test_x)
+    #file.close();
 
-    print (df_x_train)
-    #df_x_train = pd.read_csv('C:/Users/Effi2/Documents/sose17-small-data/python/traffic-prediction/src/flink/train_x.csv', index_col=0)
-    #df_x_test = pd.read_csv('C:/Users/Effi2/Documents/sose17-small-data/python/traffic-prediction/src/flink/test_x.csv', index_col=0)
-    #df_x_valid = pd.read_csv(data['valid_x'], index_col=0)
-
-    #df_y_train = pd.read_csv('C:/Users/Effi2/Documents/sose17-small-data/python/traffic-prediction/src/flink/train_y.csv', index_col=0)
-    #df_y_test = pd.read_csv('C:/Users/Effi2/Documents/sose17-small-data/python/traffic-prediction/src/flink/test_y.csv', index_col=0)
-    #df_y_valid = pd.read_csv(data['valid_y'], index_col=0)
-
-    # meine
-    #df_x_train = pd.read_csv('/home/l/lemkec/BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/train_x.csv', index_col=0)
-    #df_x_test = pd.read_csv('/home/l/lemkec/BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/test_x.csv', index_col=0)
-    #df_x_valid = pd.read_csv(data['valid_x'], index_col=0)
-
-    #df_y_train = pd.read_csv('/home/l/lemkec/BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/train_y.csv', index_col=0)
-    #df_y_test = pd.read_csv('/home/l/lemkec/BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/test_y.csv', index_col=0)
-    #df_y_valid = pd.read_csv(data['valid_y'], index_col=0)
-    #print('reading csv files')
+    df_x_train = pd.read_csv(train_x_io, index_col=0, sep=';', lineterminator='#')
+    df_x_test = pd.read_csv(test_x_io, index_col=0, sep=';', lineterminator='#')
+    df_y_train = pd.read_csv(train_y_io, index_col=0, sep=';',lineterminator='#')
+    df_y_test = pd.read_csv(test_y_io, index_col=0, sep=';',lineterminator='#')
 
     result_mape = ""
 
     if "LR" == algorithms:
         result_mape += ""
-    #    result_mape = trainLR(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
+        result_mape = trainLR(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
     if "SVM" == algorithms:
         result_mape += ""
-    #    result_mape = trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
+        result_mape = trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
     if "NN" == algorithms:
         #result_mape = trainNN(df_x_train, df_x_test, df_y_train, df_y_test, algorithms['NN'])
         print("NO NN IMPLEMENTED YET")
@@ -145,7 +136,5 @@ def get_error(model, df_x_test, df_y_test):
 
 
 json_string = sys.argv[1]
-print('trainmodel.py: ' + json_string)
 jsonpara = json.loads(json_string)
-print('trainmodel.py: ' + jsonpara)
 trainModel(jsonpara)

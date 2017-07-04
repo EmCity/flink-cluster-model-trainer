@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<div id="centerwrap">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="A frontend application for the Big Data Science course.">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+        <title>Team Samba</title>
+
+        <!-- Add to homescreen for Chrome on Android -->
+        <meta name="mobile-web-app-capable" content="yes">
+        <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+
+        <!-- Add to homescreen for Safari on iOS -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+        <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+
+        <!-- Tile icon for Win8 (144x144 + tile color) -->
+        <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+        <meta name="msapplication-TileColor" content="#3372DF">
+
+        <link rel="shortcut icon" href="images/favicon.png">
+
+        <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+        <!--
+    <link rel="canonical" href="http://www.example.com/">
+    -->
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/mycss.css">
+        <!-- <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+
+    </head>
+
+    <body>
+        <div class="container">
+        <div class="group">
+            <input id="job" type="text" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label class="jobLabel">Job name</label>
+        </div>
+        <legend><b>Algorithm</b></legend>
+        <div class="mdl-card__supporting-text">
+            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check" for="checkbox-1">
+      <input type="checkbox" value="lr" id="checkbox-1" class="mdl-checkbox__input">
+      <span class="mdl-checkbox__label">Linear regression</span>
+    </label>
+            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check" for="checkbox-2">
+      <input type="checkbox" value="svm" id="checkbox-2" class="mdl-checkbox__input">
+      <span class="mdl-checkbox__label">SVM</span>
+    </label>
+            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check" for="checkbox-3">
+      <input type="checkbox" value="nn" id="checkbox-3" class="mdl-checkbox__input">
+      <span class="mdl-checkbox__label">Neural Network</span>
+    </label><!--
+            <div class='mdl-textfield mdl-js-textfield mdl-textfield--floating-label'>
+                <input class='mdl-textfield__input' type='text' pattern='-?[0-9]*(\.[0-9]+)?' id='text5'>
+                <label class='mdl-textfield__label' for='text5'>Number...</label>
+                <span class='mdl-textfield__error'>Number required!</span>
+            </div> -->
+        </div>
+
+
+        <!-- file uploads-->
+        <legend><b>Training</b></legend>
+        <table>
+            <tr>
+                <!--training X-->
+                <td>
+                    <div class="trainingX">
+                        <div class="file_input">
+                            <label class="image_input_button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+         <i class="material-icons">file_upload</i>
+         <input id="trainingXFile" class="none" type="file" />
+       </label>
+                        </div>
+                        <div id="trainingX" class="mdl-textfield mdl-js-textfield textfield-demo">
+                            <input class="trainingXFileText mdl-textfield__input" type="text" disabled readonly id="trainingXFileText" />
+                            <label class="mdl-textfield__label" for="trainingXFileText"></label>
+                        </div>
+                    </div>
+                </td>
+                <!--training Y-->
+                <td>
+                    <div class="trainingY">
+                        <div class="file_input">
+                            <label class="image_input_button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+        <i class="material-icons">file_upload</i>
+        <input id="trainingYFile" class="none" type="file" />
+      </label>
+                        </div>
+                        <div id="trainingY" class="mdl-textfield mdl-js-textfield textfield-demo">
+                            <input class="trainingYFileText mdl-textfield__input" type="text" disabled readonly id="trainingYFileText" />
+                            <label class="mdl-textfield__label" for="trainingXFileText"></label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!--testing-->
+        <legend><b>Testing</b></legend>
+        <table>
+            <tr>
+                <!--testing X-->
+                <td>
+                    <div class="testingX">
+                        <div class="file_input">
+                            <label class="image_input_button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+       <i class="material-icons">file_upload</i>
+       <input id="testingXFile" class="none" type="file" />
+     </label>
+                        </div>
+                        <div id="testingX" class="mdl-textfield mdl-js-textfield textfield-demo">
+                            <input class="testingXFileText mdl-textfield__input" type="text" disabled readonly id="testingXFileText" />
+                            <label class="mdl-textfield__label" for="testingXFileText"></label>
+                        </div>
+                    </div>
+                </td>
+                <!--testing Y-->
+                <td>
+                    <div class="testingY">
+                        <div class="file_input">
+                            <label class="image_input_button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+      <i class="material-icons">file_upload</i>
+      <input id="testingYFile" class="none" type="file" />
+    </label>
+                        </div>
+                        <div id="testingY" class="mdl-textfield mdl-js-textfield textfield-demo">
+                            <input class="testingYFileText mdl-textfield__input" type="text" disabled readonly id="testingYFileText" />
+                            <label class="mdl-textfield__label" for="testingXFileText"></label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!--validation-->
+        <legend><b>Validation</b></legend>
+        <table>
+            <tr>
+                <!--validation X-->
+                <td>
+                    <div class="validationX">
+                        <div class="file_input">
+                            <label class="image_input_button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+     <i class="material-icons">file_upload</i>
+     <input id="validationXFile" class="none" type="file" />
+   </label>
+                        </div>
+                        <div id="validationX" class="mdl-textfield mdl-js-textfield textfield-demo">
+                            <input class="validationXFileText mdl-textfield__input" type="text" disabled readonly id="validationXFileText" />
+                            <label class="mdl-textfield__label" for="validationXFileText"></label>
+                        </div>
+                    </div>
+                </td>
+                <!--validation Y-->
+                <td>
+                    <div class="validationY">
+                        <div class="file_input">
+                            <label class="image_input_button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+    <i class="material-icons">file_upload</i>
+    <input id="validationYFile" class="none" type="file" />
+  </label>
+                        </div>
+                        <div id="validationY" class="mdl-textfield mdl-js-textfield textfield-demo">
+                            <input class="validationYFileText mdl-textfield__input" type="text" disabled readonly id="validationYFileText" />
+                            <label class="mdl-textfield__label" for="validationXFileText"></label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        </fieldset>
+        <button onclick="predict()" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">Run Prediction</a>
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+      <script src="js/algo_parameters.js"></script>
+      <script src="js/read_files.js"></script>
+    <script src="js/predict.js"></script>
+      <script src="js/file_upload.js"></script>
+    </div>
+  </body>
+</div>
+</html>

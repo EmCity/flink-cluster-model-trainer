@@ -5,39 +5,27 @@ var app = express();
 app.use(bodyParser.json()); // add a middleware (so that express can parse request.body's json)
 const hostname = 'sambahost.dyndns.lrz.de';
 const port = 8500;
-var MongoClient = require('mongodb').MongoClient,
-    Grid = mongo.Grid;
-var url = "mongodb://"+hostname+":27017/samba";
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/samba";
 var path = require('path');
-var pathguisrc = '/root/code/sose17-small-data/gui/src'
 
-console.log("__dirname :" + __dirname);
+app.set('views', path.join(__dirname, '/../gui/src/views'));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.use('/',express.static(path.join(__dirname, '/../gui/src/public/')));
 
-app.use('/', express.static( pathguisrc+'/'));
-app.use(express.static(pathguisrc+'/js'));
-app.use(express.static(pathguisrc+'/img'));
-app.use(express.static(pathguisrc+'/css'));
 
 app.get('/', function(req, res) {
-  res.sendFile(path.join('index.html'));
-});
-
-app.get('/results/', function(req, res) {
-  res.sendFile(path.join('results.html'));
+  res.render("index")
 });
 
 // save AlgoParaImputs
 app.post('/api/', (req, res) => {
-  console.log(typeof(req))
-  console.log(req.body)
   data = req.body;
+  console.log(data);
 
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
-
-    
-    saveCsvToMongo(db, data.data.training.x);
-
     db.collection("jobs").insertOne(data);
     db.collection("jobs").find().sort({timestart:-1},function(err,cursor){});
     db.close();
@@ -45,56 +33,62 @@ app.post('/api/', (req, res) => {
     callFlink(data.job_name)
   });
     res.send(req.body);
-});
 
-function saveCsvToMongo(db, csv){
-    var grid = new Grid(db,'fs');
-    var buffer = new Buffer(csv);
-    grid.put(buffer, {metadata:{category:'text'}, content_type: 'text'}, function(err, fileInfo){
-        grid.get(fileInfo._id, function(err, data){
-            if (err) throw err;
-            console.log("Retrieved data: " + data.toString());
-        });
-    });
-}
+
+});
 
 // save AlgoParaImputs
 app.get('/start_job/:job_name', (req, res) => {
     console.log(req.params.job_name);
-    callFlink(req.params.job_name);
+    callFlink(req.params.job_name, function(javaOut){
+        res.send(javaOut);
+    });
 
 });
 
-function callFlink (jobname) {
-    child.exec('~/flink-1.3.0/bin/flink run -c org.lmu.JobNameBatchDB ' +
-        '~/code/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar' + ' ' + jobname, (error, stdout, stderr) =>{
-  if (error) {
-    console.error(`exec error: ${error}`);
-    return;
-  }
-  console.log(`stdout: ${stdout}`);
-  console.log(`stderr: ${stderr}`);
-});
+
+
+function callFlink (jobname, func) {
+    child.exec('/root/flink-1.3.0/bin/flink run -c org.lmu.JobNameBatchDB ' +
+        '/root/code/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar' + ' ' + jobname, (error, stdout, stderr) =>{
+      if (error) {
+        console.error(`exec error: ${error}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+      if (stderr) func(stderr);
+
+      func(stdout);
+    });
 }
 
 // get results
-app.get('/get_results/', (req, res) => {
-    var x = "";
-    MongoClient.connect(url, function(err, db) {
-      if (err) throw err;
-        var coll = db.collection('results');
-        x += "error: " + err + "<br>";
-        coll.find({},function(err,cursor){
-          if (err) throw err;
-          cursor.toArray(function(err, result){
-             x=result;
-              res.send(x);
-            db.close();
-        });
+  app.get('/get_results/', (req, res) => {
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+      var coll = db.collection('results');
+      cursor = coll.find({});
+        cursor.toArray(function(err, result){
+               res.render("results",{ data: JSON.stringify(result) });
+      });
+      db.close();
     });
-  });
-});
+  })
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+// var Grid = require('mongodb').Grid;
+// var GridStore = require('mongodb').GridStore;
+// function saveCsvToMongo(db, csv){
+//     var grid = new Grid(db,'fs');
+//     var buffer = new Buffer(csv);
+//         grid.get(fileInfo._id, function(err, data){ontent_type: 'text'}, functio$
+//   console.log(`stderr: ${stderr}`);
+//             if (err) throw err;
+//             console.log("Retrieved data: " + data.toString());
+//         });
+//     });
+// }
