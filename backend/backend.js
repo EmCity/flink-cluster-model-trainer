@@ -12,14 +12,11 @@ var path = require('path');
 app.set('views', path.join(__dirname, '/../gui/src/views'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
+app.use('/',express.static(path.join(__dirname, '/../gui/src/public/')));
 
-app.use('/img',express.static(path.join(__dirname, '/../gui/src/public/img')));
-app.use('/js',express.static(path.join(__dirname, '/../gui/src/public/js')));
-app.use('/css',express.static(path.join(__dirname, '/../gui/src/public/css')));
 
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/../gui/src/views/index.html'));
-//  res.sendFile('/root/code/sose17-small-data/gui/src/index.html')
+  res.render("index")
 });
 
 // save AlgoParaImputs
@@ -71,6 +68,7 @@ function callFlink (jobname) {
         cursor.toArray(function(err, result){
                res.render("results",{ data: JSON.stringify(result) });
       });
+      db.close();
     });
   })
 
