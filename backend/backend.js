@@ -1,13 +1,12 @@
 var express = require('express');
-var bodyParser = require('body-parser');
 var child = require('child_process');
 var app = express();
-app.use(bodyParser.json()); // add a middleware (so that express can parse request.body's json)
 const hostname = 'sambahost.dyndns.lrz.de';
 const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/samba";
 var path = require('path');
+var bodyParser = require('body-parser');
 
 app.set('views', path.join(__dirname, '/../gui/src/views'));
 app.engine('html', require('ejs').renderFile);
@@ -15,12 +14,16 @@ app.set('view engine', 'html');
 app.use('/',express.static(path.join(__dirname, '/../gui/src/public/')));
 
 
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
 app.get('/', function(req, res) {
+  //console.log('Limit file size: '+limit);
   res.render("index")
 });
 
 // save AlgoParaImputs
-app.post('/api/', (req, res) => {
+app.post('/api/',(req, res) => {
   data = req.body;
   console.log(data);
 
@@ -29,12 +32,10 @@ app.post('/api/', (req, res) => {
     db.collection("jobs").insertOne(data);
     db.collection("jobs").find().sort({timestart:-1},function(err,cursor){});
     db.close();
-    console.log(data.job_name)
-    callFlink(data.job_name)
-  });
+  //  callFlink(data.job_name)
+
     res.send(req.body);
-
-
+  });
 });
 
 // save AlgoParaImputs
