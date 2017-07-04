@@ -92,7 +92,7 @@ public class FlinkJobDistribution {
 
         String jobName = data.get("job_name").toString();
 
-        System.out.println("Job: " + jobName);
+        System.out.println("FlinkJobDistribution: Job: " + jobName);
         //TODO env.createProgramPlan(jobName);
 
         JSONArray svmArray = svm != null ? createSVMJobs(svm) : new JSONArray();
@@ -105,10 +105,10 @@ public class FlinkJobDistribution {
         fillList(data, lrArray, tasks);
         fillList(data, nnArray, tasks);
 
-        System.out.println("Distribute: " + tasks.size() + " jobs on the workers:");
-        for (String task: tasks) {
-            System.out.println(task);
-        }
+        System.out.println("FlinkJobDistribution: Distribute: " + tasks.size() + " jobs on the workers:");
+        //for (String task: tasks) {
+            //System.out.println("FlinkJobDistribution: Do Task" +  task);
+        //}
 
         DataSet<String> elementsDataSet = env.fromCollection(tasks);
 
@@ -215,11 +215,33 @@ public class FlinkJobDistribution {
             String res = "";
             try {
                 Runtime rt = Runtime.getRuntime();
-                rt.exec("source activate dataScience");
 
-                String cmd = "python3";
-                String pythonPath = "~/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
-                Process proc = rt.exec(new String[]{cmd, pythonPath, value});
+
+                String cmd;
+                String pythonPath;
+                /*
+                String os = System.getProperty("os.name").toLowerCase();
+                if(os.equals("windows 10")){
+                    //rt.exec("activate dataScience");
+                    cmd = "python3";
+                    pythonPath = "../../../sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+                }
+                else{
+                    rt.exec("source activate dataScience");
+                    cmd = "python3";
+                    pythonPath = "~/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+                }
+                */
+
+                //TODO cl
+                cmd = "/home/l/lemkec/anaconda3/envs/python2/bin/python";
+                // TODO cl
+                pythonPath = "/home/l/lemkec/BigDataScience/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+
+
+                //Process proc = rt.exec(new String[]{cmd, pythonPath, value});
+                //TODO ... cmd
+                Process proc = rt.exec(cmd + " "  + pythonPath + " " + value);
 
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));

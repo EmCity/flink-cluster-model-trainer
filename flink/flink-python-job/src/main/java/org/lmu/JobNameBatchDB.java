@@ -40,24 +40,24 @@ public class JobNameBatchDB {
         //flink
         FlinkJobDistribution flinkdistribute = new FlinkJobDistribution();
         jobsjson = flinkdistribute.getJobJSONObject(jobName);
-        System.out.println("MONGO: " + jobsjson.toString());
-
+        System.out.println("JobNameBatchDB: Got json with jobname " + jobName +
+                " from mongo. It has " + jobsjson.toString().length() + " chars");
 
         JSONArray resCollect = flinkdistribute.distribute(jobsjson);
 
         // create result
 
         // result json
+
         for (Object t: resCollect.toArray()) {
             JSONObject jo = (JSONObject)t;
-            System.out.println(jo.toString());
-
+            JSONObject jsonObject = (JSONObject) t;
+            double mape = (double)jsonObject.get("mape");
+            System.out.println("JobNameBatchDB: Results: " + jobName + " got a result with mape: " + mape);
         }
 
         JSONObject bestResultJosnObject = flinkdistribute.getBestMapeJsonObject(resCollect);
-        System.out.println("BEST: " + bestResultJosnObject.toString());
-
-
+        //System.out.println("JobNameBatchDB: BEST Result: " + bestResultJosnObject.toString());
 
         // set status
         System.out.println("Save best result with status Finished" );
