@@ -1,4 +1,13 @@
+
 function predict() {
+    data = new Object();
+  data.data = new Object();
+  data.data.train_x = new Object();
+  data.data.train_y = new Object();
+  data.data.test_x = new Object();
+  data.data.test_y = new Object();
+  data.data.valid_x = new Object();
+  data.data.valid_y = new Object();
     handleFileSelect("trainingXFile");
     handleFileSelect("trainingYFile");
     handleFileSelect("testingXFile");
@@ -26,19 +35,27 @@ function predict() {
         });
     });
 
+    console.log('log2');
+    console.log(data);
+
 
     fetch("http://sambahost.dyndns.lrz.de:8500/api", {
-  method: 'POST',
-  body: JSON.stringify(data), // stringify JSON
-  headers: new Headers({ "Content-Type": "application/json" }) // add headers
-}).then(function(response) {
-    // The response is a Response instance.
-    // You parse the data into a useable format using `.json()`
-    return response.json();
-  }).then(function(data) {
-    // `data` is the parsed version of the JSON returned from the above endpoint.
-    console.log(data);  // { "userId": 1, "id": 1, "title": "...", "body": "..." }
-  }).catch(function(error) {
-    console.log('Request failed', error);
-  });
+        method: 'POST',
+        body: JSON.stringify(data), // stringify JSON
+        headers: new Headers({ "Content-Type": "application/json", 'Access-Control-Allow-Origin':'*'}) // add headers
+    }).then(function(response) {
+        // The response is a Response instance.
+        // You parse the data into a useable format using `.json()`
+        console.log('response1');
+        console.log(response);
+        return response.json();
+    }).then(function(data) {
+        // `data` is the parsed version of the JSON returned from the above endpoint.
+        console.log('data2');
+        console.log(data);  // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+        return response.json();
+    }).catch(function(error) {
+        console.log('Request failed', error);
+    });
+
 }
