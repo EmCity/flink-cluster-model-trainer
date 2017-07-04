@@ -43,7 +43,6 @@ app.get('/start_job/:job_name', (req, res) => {
     callFlink(req.params.job_name, function(javaOut){
         res.send(javaOut);
     });
-    }
 
 });
 
