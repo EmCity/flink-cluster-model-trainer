@@ -6,7 +6,7 @@ app.use(bodyParser.json()); // add a middleware (so that express can parse reque
 const hostname = 'sambahost.dyndns.lrz.de';
 const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://"+hostname+":27017/samba";
+var url = "mongodb://localhost:27017/samba";
 var path = require('path');
 
 app.set('views', path.join(__dirname, '/../gui/src/views'));
@@ -21,9 +21,8 @@ app.get('/', function(req, res) {
 
 // save AlgoParaImputs
 app.post('/api/', (req, res) => {
-  console.log(typeof(req))
-  console.log(req.body)
   data = req.body;
+  console.log(data);
 
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
@@ -79,7 +78,7 @@ app.listen(port, hostname, () => {
 // var Grid = require('mongodb').Grid;
 // var GridStore = require('mongodb').GridStore;
 // function saveCsvToMongo(db, csv){
-//     var grid = new Grid(db,'fs');                                                        
+//     var grid = new Grid(db,'fs');
 //     var buffer = new Buffer(csv);
 //         grid.get(fileInfo._id, function(err, data){ontent_type: 'text'}, functio$
 //   console.log(`stderr: ${stderr}`);
