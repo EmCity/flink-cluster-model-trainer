@@ -2,39 +2,34 @@ import numpy as np
 import pandas as pd
 import src.vector_gen.generateCurrentSituationWithWeather as vecX
 import src.vector_gen.generate_VectorY as vecY
-import src.misc.split_train_valid as split
+import src.misc.split_train_valid_notRandom as split
 import src.misc.evaluation as evaluation
 import src.misc.paths as paths
-from random import seed
 from sklearn import linear_model
 from sklearn.svm import SVR
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.cross_decomposition import PLSRegression
 
-seed(200617)
-df_trajectories = pd.read_csv(paths.trajectories_training_file2)
-df_weather = pd.read_csv(paths.weather_training_file2)
+df_trajectories = pd.read_csv(paths.trajectories_training_file)
+df_weather = pd.read_csv(paths.weather_training_file)
+
 
 # Create dataset
 df_X = vecX.generate_x(df_trajectories, df_weather)
-df_X.columns = [' '.join(col).strip() for col in df_X.columns.values]
-
 df_Y = vecY.generate_VectorY_df(df_trajectories)
-df_Y.columns = [' '.join(col).strip() for col in df_Y.columns.values]
 
-df_complete = df_Y.join(df_X)
 
 # Split data into training, validation and testing sets
-training, validation, testing = split.split_dataset(df_complete)
+split.split_dataset(df_X, df_Y)
 
-training_Y = training[training.columns[0:36]]
-validation_Y = validation[validation.columns[0:36]]
-testing_Y = testing[testing.columns[0:36]]
 
-training_X = training[training.columns[37:]]
-validation_X = validation[validation.columns[37:]]
-testing_X = testing[testing.columns[37:]]
+training_Y = pd.read_csv("../../../../python/traffic-prediction/src/misc/splitting_csv_files/train_Y.csv", index_col =0)
+validation_Y = pd.read_csv("../../../../python/traffic-prediction/src/misc/splitting_csv_files/valid_Y.csv", index_col =0)
+testing_Y = pd.read_csv("../../../../python/traffic-prediction/src/misc/splitting_csv_files/test_Y.csv", index_col =0)
 
+training_X = pd.read_csv("../../../../python/traffic-prediction/src/misc/splitting_csv_files/train_X.csv", index_col =0)
+validation_X = pd.read_csv("../../../../python/traffic-prediction/src/misc/splitting_csv_files/valid_X.csv", index_col =0)
+testing_X = pd.read_csv("../../../../python/traffic-prediction/src/misc/splitting_csv_files/test_X.csv", index_col =0)
 
 #-------------------------------------------------------------------------------
 # Linear Model
