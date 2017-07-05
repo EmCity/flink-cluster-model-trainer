@@ -80,7 +80,7 @@ def trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, params):
     gamma = params["gamma"];
     coef0 = params["coef0"];
     shrinking = params["shrinking"];
-    tol = params["tol"];
+    tol = params["tolerance"];
     cache_size = params["cache_size"];
     max_iter = params["max_iter"];
 
