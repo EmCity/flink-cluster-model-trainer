@@ -37,6 +37,8 @@ def trainModel(jsonDict):
     train_y = data['train_y']
     test_y = data['test_y']
 
+    
+
     train_x_io = io.StringIO(train_x)
     test_x_io = io.StringIO(test_x)
     train_y_io = io.StringIO(train_y)
@@ -46,10 +48,10 @@ def trainModel(jsonDict):
     #file.write(test_x)
     #file.close();
 
-    df_x_train = pd.read_csv(train_x_io, index_col=0, sep=';', lineterminator='#')
-    df_x_test = pd.read_csv(test_x_io, index_col=0, sep=';', lineterminator='#')
-    df_y_train = pd.read_csv(train_y_io, index_col=0, sep=';',lineterminator='#')
-    df_y_test = pd.read_csv(test_y_io, index_col=0, sep=';',lineterminator='#')
+    df_x_train = pd.read_csv(train_x_io, index_col=0, sep=',', lineterminator='\r\n', header=0)
+    df_x_test = pd.read_csv(test_x_io, index_col=0, sep=',', lineterminator='\r\n', header=0)
+    df_y_train = pd.read_csv(train_y_io, index_col=0, sep=',',lineterminator='\r\n', header=0)
+    df_y_test = pd.read_csv(test_y_io, index_col=0, sep=',',lineterminator='\r\n', header=0)
 
     result_mape = ""
 
