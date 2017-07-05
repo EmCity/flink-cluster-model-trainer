@@ -169,7 +169,7 @@ public class FlinkJobDistribution {
                                     obj.put("gamma", gamma);
                                     obj.put("coef0", coef0);
                                     obj.put("shrinking", svm.get("shrinking"));
-                                    obj.put("tolerance", svm.get("tol"));
+                                    obj.put("tolerance", svm.get("tolerance"));
                                     obj.put("cache_size", svm.get("cache_size"));
                                     obj.put("max_iter", svm.get("max_iter"));
                                     result.add(obj);
