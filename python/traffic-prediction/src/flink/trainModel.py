@@ -37,6 +37,8 @@ def trainModel(jsonDict):
     train_y = data['train_y']
     test_y = data['test_y']
 
+    
+
     train_x_io = io.StringIO(train_x)
     test_x_io = io.StringIO(test_x)
     train_y_io = io.StringIO(train_y)
@@ -46,10 +48,10 @@ def trainModel(jsonDict):
     #file.write(test_x)
     #file.close();
 
-    df_x_train = pd.read_csv(train_x_io, index_col=0, sep=';', lineterminator='#')
-    df_x_test = pd.read_csv(test_x_io, index_col=0, sep=';', lineterminator='#')
-    df_y_train = pd.read_csv(train_y_io, index_col=0, sep=';',lineterminator='#')
-    df_y_test = pd.read_csv(test_y_io, index_col=0, sep=';',lineterminator='#')
+    df_x_train = pd.read_csv(train_x_io, index_col=0, sep=',', lineterminator='\n', header=0)
+    df_x_test = pd.read_csv(test_x_io, index_col=0, sep=',', lineterminator='\n', header=0)
+    df_y_train = pd.read_csv(train_y_io, index_col=0, sep=',',lineterminator='\n', header=0)
+    df_y_test = pd.read_csv(test_y_io, index_col=0, sep=',',lineterminator='\n', header=0)
 
     result_mape = ""
 
@@ -78,9 +80,11 @@ def trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, params):
     gamma = params["gamma"];
     coef0 = params["coef0"];
     shrinking = params["shrinking"];
-    tol = params["tol"];
+    tol = params["tolerance"];
     cache_size = params["cache_size"];
     max_iter = params["max_iter"];
+
+    print(C, epsilon, kernel, gamma, coef0, shrinking, tol, cache_size, max_iter)
 
     svr = sklearn.svm.SVR(C=C, epsilon=epsilon, kernel=kernel, degree=degree, gamma=gamma, coef0=coef0,
                                        shrinking=shrinking, tol=tol, cache_size=cache_size, max_iter=max_iter)
@@ -88,7 +92,7 @@ def trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, params):
     regr_multi_svr.fit(df_x_train, df_y_train)
 
     return (get_error(regr_multi_svr, df_x_test, df_y_test))
-
+    return 0
 
 def trainLR(df_x_train, df_x_test, df_y_train, df_y_test, params):
     lr = linear_model.LinearRegression(normalize=params["normalize"], fit_intercept=params["fit_intercept"])

@@ -85,8 +85,9 @@ public class FlinkJobDistribution {
         org.apache.log4j.BasicConfigurator.configure(new NullAppender());
 
         JSONObject algorithms = (JSONObject) json.get("algorithms");
-        JSONObject data = (JSONObject) json.get("data");
+
         JSONObject svm = (JSONObject) algorithms.get("SVM");
+        System.out.println(svm.toJSONString());
         JSONObject lr = (JSONObject) algorithms.get("LR");
         JSONObject nn = (JSONObject) algorithms.get("NN");
 
@@ -150,12 +151,6 @@ public class FlinkJobDistribution {
         JSONArray degree_array = (JSONArray) svm.get("degree");
         JSONArray gamma_array = (JSONArray) svm.get("gamma");
         JSONArray coef_array = (JSONArray) svm.get("coef0");
-        Boolean shrinking = (Boolean)svm.get("shrinking");
-        Double tol = (Double) svm.get("tol");
-        Long cache_size = (Long) svm.get("cache_size");
-        Integer max_iter = Math.toIntExact((long)svm.get("max_iter"));
-
-
 
         JSONArray result = new JSONArray();
         if(c_array != null & e_array != null & kernel_array != null & degree_array != null & gamma_array != null & coef_array != null) {
@@ -173,10 +168,10 @@ public class FlinkJobDistribution {
                                     obj.put("degree", degree);
                                     obj.put("gamma", gamma);
                                     obj.put("coef0", coef0);
-                                    obj.put("shrinking", shrinking);
-                                    obj.put("tol", tol);
-                                    obj.put("cache_size", cache_size);
-                                    obj.put("max_iter", max_iter);
+                                    obj.put("shrinking", svm.get("shrinking"));
+                                    obj.put("tolerance", svm.get("tolerance"));
+                                    obj.put("cache_size", svm.get("cache_size"));
+                                    obj.put("max_iter", svm.get("max_iter"));
                                     result.add(obj);
                                 }
                             }
