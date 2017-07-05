@@ -17,26 +17,28 @@ function predict() {
 
     data.job_name = $("#job").val();
     data.timestart = Date.now();
-    data.algorithm = new Object();
+    data.algorithms = new Object();
     $(".mdl-checkbox__input:checkbox:checked").each(function() {
         var algoID = $(this).val();
-        data.algorithm[algoID] = new Object();
+        data.algorithms[algoID] = new Object();
         $("#" + algoID + " :input").each(function() {
             id = this.id;
-            data.algorithm[algoID][id] = new Object();
+            data.algorithms[algoID][id] = new Object();
             if ($(this).is(':checkbox'))
-                data.algorithm[algoID][id] = ($(this).prop('checked') == true);
+                data.algorithms[algoID][id] = ($(this).prop('checked') == true);
 
             else {
                 if (id == "gamma" && !($(this).val().length))
-                    data.algorithm[algoID][id] = "auto";
+                    data.algorithms[algoID][id] = "auto";
                 else
-                    data.algorithm[algoID][id] = "[".concat($(this).val(), "]");
+                    data.algorithms[algoID][id] = "[".concat($(this).val(), "]");
             }
         });
     });
 
     Promise.all([a, b, c, d, e, f]).then(function() {
+        console.log(data);
+
         fetch("http://sambahost.dyndns.lrz.de:8500/api", {
             method: 'POST',
             body: JSON.stringify(data), // stringify JSON
