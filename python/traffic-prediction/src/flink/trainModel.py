@@ -84,13 +84,15 @@ def trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, params):
     cache_size = params["cache_size"];
     max_iter = params["max_iter"];
 
-    svr = sklearn.svm.SVR(C=C, epsilon=epsilon, kernel=kernel, degree=degree, gamma=gamma, coef0=coef0,
-                                       shrinking=shrinking, tol=tol, cache_size=cache_size, max_iter=max_iter)
-    regr_multi_svr = MultiOutputRegressor(svr)
-    regr_multi_svr.fit(df_x_train, df_y_train)
+    print(C, epsilon, kernel, gamma, coef0, shrinking, tol, cache_size, max_iter)
 
-    return (get_error(regr_multi_svr, df_x_test, df_y_test))
+    #svr = sklearn.svm.SVR(C=C, epsilon=epsilon, kernel=kernel, degree=degree, gamma=gamma, coef0=coef0,
+    #                                   shrinking=shrinking, tol=tol, cache_size=cache_size, max_iter=max_iter)
+    #regr_multi_svr = MultiOutputRegressor(svr)
+    #regr_multi_svr.fit(df_x_train, df_y_train)
 
+    #return (get_error(regr_multi_svr, df_x_test, df_y_test))
+    return 0
 
 def trainLR(df_x_train, df_x_test, df_y_train, df_y_test, params):
     lr = linear_model.LinearRegression(normalize=params["normalize"], fit_intercept=params["fit_intercept"])
