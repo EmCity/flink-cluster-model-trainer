@@ -91,14 +91,13 @@ def trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, params):
     regr_multi_svr = MultiOutputRegressor(svr)
     regr_multi_svr.fit(df_x_train, df_y_train)
 
-    return (get_error(regr_multi_svr, df_x_test, df_y_test))
-    return 0
+    return get_error(regr_multi_svr, df_x_test, df_y_test)
 
 def trainLR(df_x_train, df_x_test, df_y_train, df_y_test, params):
     lr = linear_model.LinearRegression(normalize=params["normalize"], fit_intercept=params["fit_intercept"])
     lr.fit(df_x_train, df_y_train)
 
-    return (get_error(lr, df_x_test, df_y_test))
+    return get_error(lr, df_x_test, df_y_test)
 
 
 def get_error(model, df_x_test, df_y_test):
