@@ -32,10 +32,10 @@ $(document).ready(function() {
                     "<legend><b>Parameters</b></legend> " +
                     /*C*/
                     "<label>Penalty parameter C of the error term (float)(default 1): </label>" +
-                    "<input id='c' type='number' value='1.0' step='any'>" + "<br>" +
+                    "<input id='c' type='text' value='1.0' step='any'>" + "<br>" +
                     /*EPSILON*/
                     "<label>Epsilon (float)(default 0.1): </label>" +
-                    "<input id='epsilon' type='number' value='0.1' step='any'>" + "<br>" +
+                    "<input id='epsilon' type='text' value='0.1,0.2' step='any'>" + "<br>" +
                     /*KERNEL*/
                     "<label>Kernel(default 'rbf'): </label>" +
                     "<select id='kernel' name='kernel'>" +
@@ -45,7 +45,7 @@ $(document).ready(function() {
                     "<option value='sigmoid'>sigmoid</option>" +
                     " </select>" +
                     "<div id='gammaDIV'>" + "<label>Gamma (float)(default auto): </label>" +
-                    "<input id='gamma' type='number' min='1' step='1'>" + "</div>" +
+                    "<input id='gamma' type='text' min='1' step='1'>" + "</div>" +
                     /*SHRINKING*/
                     "<label>" +
                     "<input type='checkbox' value='true' id='shrinking' checked>" +
@@ -53,10 +53,10 @@ $(document).ready(function() {
                     "</label>" + "<br>" +
                     /*TOLERANCE*/
                     "<label>tol (float optional)(default 0.001): </label>" +
-                    "<input id='tol' type='number' value='0.001' step='any'>" + "<br>" +
+                    "<input id='tol' type='text' value='0.001' step='any'>" + "<br>" +
                     /*CACHE_SIZE*/
                     "<label>cache_size (float optional)(default 0.001): </label>" +
-                    "<input id='cache_size' type='number' value='0.001' step='any'>" + "<br>" +
+                    "<input id='cache_size' type='text' value='0.001' step='any'>" + "<br>" +
                     /*VERBOSE*/
                     "<label>" +
                     "<input type='checkbox' value='true' id='verbose'>" +
@@ -64,7 +64,7 @@ $(document).ready(function() {
                     "</label>" + "<br>" +
                     /*MAX_ITER*/
                     "<label>Hard limit on iterations within solver (int optional)(default -1): </label>" +
-                    "<input id='max_iter' type='number' min='-1' max='10' onkeydown='return false' value='-1'>" +
+                    "<input id='max_iter' type='text' min='-1' max='10' onkeydown='return false' value='-1'>" +
                     "</div>"
                 );
                 $("select").change(function() {
@@ -114,13 +114,13 @@ $(document).ready(function() {
                     "</label>" + "<br>" +
                     /*LEARNING RATE*/
                     "<label>Learning rate (float)(default 0.01): </label>" +
-                    "<input id='learning_rate' type='number' value='0.01' step='any' min='0.001' max='10'>" + "<br>" +
+                    "<input id='learning_rate' type='text' value='0.01' step='any' min='0.001' max='10'>" + "<br>" +
                     /*EPOCHS*/
                     "<label>Epochs (int)(default 3): </label>" +
-                    "<input id='epochs' type='number' value='3' step='1'>" + "<br>" +
+                    "<input id='epochs' type='text' value='3' step='1'>" + "<br>" +
                     /* DISPLAY STEP*/
                     "<label>Display step (int)(default 3): </label>" +
-                    "<input id='display_step' type='number' value='3' step='1'>" + "<br>" +
+                    "<input id='display_step' type='text' value='3' step='1'>" + "<br>" +
                     /*LOSS FUNCTION*/
                     "<label>Cost function(default 'mse'): </label>" +
                     "<select id='cost_function' name='costfunction'>" +

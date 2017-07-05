@@ -29,8 +29,19 @@ function predict() {
             else {
                 if (id == "gamma" && !($(this).val().length))
                     data.algorithm[algoID][id] = "auto";
+                else if($(this).val().split(',').length > 1)
+                {
+                    var array = $(this).val().split(',')
+                    console.log("Was parsable as String");
+                    data.algorithm[algoID][id] = array;
+                }
                 else
-                    data.algorithm[algoID][id] = "[".concat($(this).val(), "]");
+                {
+                    //data.algorithm[algoID][id] = "[".concat($(this).val(), "]");
+                    var array = [$(this).val()];
+                    data.algorithm[algoID][id] = array;
+                }
+                    
             }
         });
     });
