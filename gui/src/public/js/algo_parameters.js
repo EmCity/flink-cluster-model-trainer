@@ -34,7 +34,7 @@ $(document).ready(function() {
                     "<label>Penalty parameter C of the error term (float)(default 1): </label>" +
                     "<input id='c' type='text' value='1.0' step='any'>" + "<br>" +
                     /*EPSILON*/
-                    "<label>Epsilon (float)(default 0.1): </label>" +
+                    "<label>Epsilon (float)(default 0.1,0.2): </label>" +
                     "<input id='epsilon' type='text' value='0.1,0.2' step='any'>" + "<br>" +
                     /*KERNEL*/
                     "<label>Kernel(default 'rbf'): </label>" +
