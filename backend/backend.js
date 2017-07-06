@@ -1,10 +1,10 @@
 var express = require('express');
 var child = require('child_process');
 var app = express();
-const hostname = 'sambauser:teamsamba@sambahost.dyndns.lrz.de/?authSource=db1&authMechanism=MONGODB-CR';
-const port = 27017;
+const hostname = 'sambahost.dyndns.lrz.de';
+const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/samba";
+var url = "mongodb://sambauser:teamsamba@localhost:27017/samba";
 var path = require('path');
 var bodyParser = require('body-parser');
 
@@ -28,6 +28,7 @@ app.post('/api/',(req, res) => {
   console.log(data);
 
   MongoClient.connect(url, function(err, db) {
+  }
     if (err) throw err;
     db.collection("jobs").insertOne(data);
     db.collection("jobs").find().sort({timestart:-1},function(err,cursor){});
