@@ -64,7 +64,7 @@ function predict() {
         console.log('data2');
         console.log(data);  // { "userId": 1, "id": 1, "title": "...", "body": "..." }
         console.log(typeof(data));
-        return data.json();
+        return data;
     }).catch(function(error) {
         console.log('Request failed', error);
     });
