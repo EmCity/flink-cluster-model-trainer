@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $(".mdl-checkbox__input:checkbox").change(function() {
         if (this.checked) {
-            if ($(this).val() == "lr") {
+            if ($(this).val() == "LR") {
                 console.log("lr checked");
                 $(this).parent().after("<div id='" + $(this).val() + "'>" +
                     "<legend><b>Parameters</b></legend> " +
@@ -25,14 +25,14 @@ $(document).ready(function() {
                     "<input id='number' type='number' min='-1' max='10' onkeydown='return false' value='1'>" + */
                     "</div>"); 
             }
-            if ($(this).val() == "svm") {
+            if ($(this).val() == "SVM") {
                 /*kernel='rbf', degree=3, gamma='auto', coef0=0.0, tol=0.001, C=1.0, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1*/
                 console.log("svm checked");
                 $(this).parent().after("<div id='" + $(this).val() + "'>" +
                     "<legend><b>Parameters</b></legend> " +
                     /*C*/
                     "<label>Penalty parameter C of the error term (float)(default 1): </label>" +
-                    "<input id='c' type='text' value='1.0' step='any'>" + "<br>" +
+                    "<input id='C' type='text' value='1.0' step='any'>" + "<br>" +
                     /*EPSILON*/
                     "<label>Epsilon (float)(default 0.1,0.2): </label>" +
                     "<input id='epsilon' type='text' value='0.1,0.2' step='any'>" + "<br>" +
@@ -44,24 +44,24 @@ $(document).ready(function() {
                     "<option value='poly'>poly</option>" +
                     "<option value='sigmoid'>sigmoid</option>" +
                     " </select>" +
-                    "<div id='gammaDIV'>" + "<label>Gamma (float)(default auto): </label>" +
-                    "<input id='gamma' type='text' min='1' step='1'>" + "</div>" +
+                    "<div id='gammaDIV'>" + "<label>Gamma (float)(default 0.1): </label>" +
+                    "<input id='gamma' type='text' value='0.1' min='1' step='1'>" + "</div>" +
                     /*SHRINKING*/
                     "<label>" +
                     "<input type='checkbox' value='true' id='shrinking' checked>" +
                     "<span>shrinking(optional)(default=true)</span>" +
                     "</label>" + "<br>" +
                     /*TOLERANCE*/
-                    "<label>tol (float optional)(default 0.001): </label>" +
-                    "<input id='tol' type='text' value='0.001' step='any'>" + "<br>" +
+                    "<label>tolerance (float optional)(default 0.001): </label>" +
+                    "<input id='tolerance' type='text' value='0.001' step='any'>" + "<br>" +
                     /*CACHE_SIZE*/
                     "<label>cache_size (float optional)(default 0.001): </label>" +
                     "<input id='cache_size' type='text' value='0.001' step='any'>" + "<br>" +
-                    /*VERBOSE*/
+                    /*VERBOSE*/ /*
                     "<label>" +
                     "<input type='checkbox' value='true' id='verbose'>" +
                     "<span>verbose(optional)(default=false)</span>" +
-                    "</label>" + "<br>" +
+                    "</label>" + "<br>" + */
                     /*MAX_ITER*/
                     "<label>Hard limit on iterations within solver (int optional)(default -1): </label>" +
                     "<input id='max_iter' type='text' min='-1' max='10' onkeydown='return false' value='-1'>" +
@@ -103,7 +103,7 @@ $(document).ready(function() {
                     }
                 });
             }
-            if ($(this).val() == "nn") {
+            if ($(this).val() == "NN") {
                 console.log("NN checked");
                 $(this).parent().after("<div id='" + $(this).val() + "'>" +
                     "<legend><b>Parameters</b></legend> " +
