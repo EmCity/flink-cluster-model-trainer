@@ -10,7 +10,7 @@ public class DBListener {
 
     public static void main(String[] args) throws Exception{
         //connect to DB
-        MongoClient mongoClient = new MongoClient("sambahost.dyndns.lrz.de", 27017);
+        MongoClient mongoClient = new MongoClient("sambauser:teamsamba@sambahost.dyndns.lrz.de/?authSource=db1&authMechanism=MONGODB-CR", 27017);
         DBCollection coll = mongoClient.getDB("samba").getCollection("jobs");
 
         //list for the jobs

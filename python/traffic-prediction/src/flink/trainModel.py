@@ -11,7 +11,7 @@ import pymongo as mongo
 
 def trainModel(jsonDict):
 
-    client = mongo.MongoClient('sambahost.dyndns.lrz.de',27017)
+    client = mongo.MongoClient('sambauser:teamsamba@sambahost.dyndns.lrz.de/?authSource=db1&authMechanism=MONGODB-CR',27017)
     db = client['samba']
     collection = db['jobs']
 
