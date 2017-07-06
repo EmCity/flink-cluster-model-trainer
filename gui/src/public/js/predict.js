@@ -16,30 +16,30 @@ function predict() {
     handleFileSelect("validationYFile");
     data.job_name = $("#job").val();
     data.timestart = Date.now();
-    data.algorithm = new Object();
+    data.algorithms = new Object();
     $(".mdl-checkbox__input:checkbox:checked").each(function() {
         var algoID = $(this).val();
-        data.algorithm[algoID] = new Object();
+        data.algorithms[algoID] = new Object();
         $("#" + algoID + " :input").each(function() {
             id = this.id;
-            data.algorithm[algoID][id] = new Object();
+            data.algorithms[algoID][id] = new Object();
             if ($(this).is(':checkbox'))
-                data.algorithm[algoID][id] = ($(this).prop('checked') == true);
+                data.algorithms[algoID][id] = ($(this).prop('checked') == true);
 
             else {
                 if (id == "gamma" && !($(this).val().length))
-                    data.algorithm[algoID][id] = "auto";
+                    data.algorithms[algoID][id] = "auto";
                 else if($(this).val().split(',').length > 1)
                 {
                     var array = $(this).val().split(',')
                     console.log("Was parsable as String");
-                    data.algorithm[algoID][id] = array;
+                    data.algorithms[algoID][id] = array;
                 }
                 else
                 {
                     //data.algorithm[algoID][id] = "[".concat($(this).val(), "]");
                     var array = [$(this).val()];
-                    data.algorithm[algoID][id] = array;
+                    data.algorithms[algoID][id] = array;
                 }
                     
             }
