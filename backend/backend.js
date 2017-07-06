@@ -2,7 +2,7 @@ var express = require('express');
 var child = require('child_process');
 var app = express();
 const hostname = 'sambauser:teamsamba@sambahost.dyndns.lrz.de/?authSource=db1&authMechanism=MONGODB-CR';
-const port = 8500;
+const port = 27017;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/samba";
 var path = require('path');
