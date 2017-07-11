@@ -29,6 +29,7 @@ app.post('/api/',(req, res) => {
 
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
+    console.log(data);
     db.collection("jobs").insertOne(data);
     db.collection("jobs").find().sort({timestart:-1},function(err,cursor){});
     db.close();
