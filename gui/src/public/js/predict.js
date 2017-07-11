@@ -72,6 +72,5 @@ function predict() {
 }
 
 function browse_fct(){
-        //window.location.href = 'get_results';
         window.open('get_results','_blank');
 }

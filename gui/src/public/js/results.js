@@ -127,7 +127,7 @@ function format_SVM (d) {
 };
 
 function format_NN (d) {
-    return '<b>Algorithm: </b>'+d.parameter_set.algorithm+'<br>'+
+    return '<b>Algorithm: </b>'+ d.parameter_set.algorithm+'<br>'+
         '<b>Normalize: </b>'+d.parameter_set.normalization+'<br>'+
         '<b>Learning_rate: </b>'+d.parameter_set.learning_rate+'<br>'+
         '<b>Epochs: </b>'+d.parameter_set.epochs+'<br>'+
