@@ -50,7 +50,7 @@ function predict() {
 
     fetch("http://sambahost.dyndns.lrz.de:8500/api", {
         method: 'POST',
-        body: data, // stringify JSON
+        body: JSON.stringify(data), // stringify JSON
         headers: new Headers({ "Content-Type": "application/json", 'Access-Control-Allow-Origin':'*'}) // add headers
     }).then(function(response) {
         // The response is a Response instance.
