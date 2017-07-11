@@ -4,7 +4,7 @@ var app = express();
 const hostname = 'sambahost.dyndns.lrz.de';
 const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://sambauser:teamsamba@sambahost.dyndns.lrz.de:27017/admin";
+var url = "sambauser:teamsamba@sambahost.dyndns.lrz.de:27017/admin";
 var path = require('path');
 var bodyParser = require('body-parser');
 
