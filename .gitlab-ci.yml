@@ -1,5 +1,4 @@
 image: kaiwinter/docker-java8-maven
-#image: python:3.5
 
 cache:
   paths:
@@ -19,6 +18,7 @@ maven-build:
   stage: build
 
 python_test:
+    tag:python
     stage: test
     script:
      - "python manage.py /python/traffic-prediction/test/ -k"
