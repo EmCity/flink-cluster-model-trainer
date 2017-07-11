@@ -1,5 +1,5 @@
 image: kaiwinter/docker-java8-maven
-image: python:3.5
+#image: python:3.5
 
 cache:
   paths:
