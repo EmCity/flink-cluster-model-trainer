@@ -19,7 +19,7 @@ maven-build:
 python_test:
     stage: test
     script:
-     - "sudo apt-get install -y python3-pip"
+     - "apt-get install -y python3-pip"
      - "python -m unittest /python/traffic-prediction/test/"
 
 maven-test:
