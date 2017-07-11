@@ -18,7 +18,8 @@ maven-build:
   stage: build
 
 python_test:
-    tag:python
+    tags:
+    - python
     stage: test
     script:
      - "python manage.py /python/traffic-prediction/test/ -k"
