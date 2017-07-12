@@ -66,17 +66,20 @@ function callFlink (jobname, func) {
 }
 
 // get results
-  app.get('/get_results/', (req, res) => {
+app.get('/get_results/', (req, res) => {
+  try{
   MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
       var coll = db.collection('results');
       cursor = coll.find({});
         cursor.toArray(function(err, result){
                res.render("results",{ data: JSON.stringify(result) });
       });
       db.close();
-    });
-  })
+  });
+  }catch(err){
+    console.log('Error has occured!', error);
+  }
+});
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
