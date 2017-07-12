@@ -4,7 +4,7 @@ var app = express();
 const hostname = 'sambahost.dyndns.lrz.de';
 const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://sambauser:teamsamba@localhost:27017/samba";
+var url = "mongodb://sambauser:teamsamba@sambahost.dyndns.lrz.de:27017/samba";
 var path = require('path');
 var bodyParser = require('body-parser');
 
@@ -29,6 +29,7 @@ app.post('/api/',(req, res) => {
 
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
+    console.log(data);
     db.collection("jobs").insertOne(data);
     db.collection("jobs").find().sort({timestart:-1},function(err,cursor){});
     db.close();
@@ -65,17 +66,20 @@ function callFlink (jobname, func) {
 }
 
 // get results
-  app.get('/get_results/', (req, res) => {
+app.get('/get_results/', (req, res) => {
+  try{
   MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
       var coll = db.collection('results');
       cursor = coll.find({});
         cursor.toArray(function(err, result){
                res.render("results",{ data: JSON.stringify(result) });
       });
       db.close();
-    });
-  })
+  });
+  }catch(err){
+    console.log('Error has occured!', error);
+  }
+});
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
