@@ -1,7 +1,6 @@
 image: kaiwinter/docker-java8-maven
 services:
   - python:latest
-  command: ["python"]
 
 cache:
   paths:
@@ -24,6 +23,8 @@ python_test:
     stage: test
     services:
     - python:latest
+    command: ["python"]
+
     script:
     - "python -m unittest /python/traffic-prediction/test/"
 
