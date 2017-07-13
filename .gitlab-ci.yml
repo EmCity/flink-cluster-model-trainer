@@ -1,4 +1,6 @@
 image: kaiwinter/docker-java8-maven
+services:
+  - python:3.61
 cache:
   paths:
     - .m2/
@@ -18,9 +20,10 @@ maven-build:
 
 python_test:
     stage: test
+    services:
+    - python:3.61
     script:
-     - "apt-get install -y python3-pip"
-     - "python -m unittest /python/traffic-prediction/test/"
+    - "python -m unittest /python/traffic-prediction/test/"
 
 maven-test:
   script:
