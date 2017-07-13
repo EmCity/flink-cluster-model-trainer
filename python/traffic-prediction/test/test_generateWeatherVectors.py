@@ -10,7 +10,7 @@ class GenerateWeatherVectorsTest(unittest.TestCase):
     weather_df = None
 
     def setUp(self):
-        self.trajectories_df = pd.read_csv(path.trajectories_training_file2)
+        self.trajectories_df = pd.read_csv(path.trajectories_training_file)
         self.weather_df = pd.read_csv(path.weather_training_file)
 
     def test_get_simple_result(self):
