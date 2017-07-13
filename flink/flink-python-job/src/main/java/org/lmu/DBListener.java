@@ -6,7 +6,7 @@ import org.lmu.JSON.JSONObject;
 import org.lmu.JSON.parser.JSONParser;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class DBListener {
+public final class DBListener {
 
     public static void main(String[] args) throws Exception{
         //connect to DB
@@ -60,7 +60,6 @@ public class DBListener {
                 }
             }
             catch(Exception e){
-                //System.out.println(e);
             }
         };
         new Thread(task1).start();

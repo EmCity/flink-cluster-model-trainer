@@ -18,7 +18,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlinkJobDistribution {
+public final class FlinkJobDistribution {
     private final static String DBNAME = "samba";
     private final static String COLLECTION = "jobs";
     private final static MongoCredential CREDENTIALS = MongoCredential.createMongoCRCredential("sambauser",DBNAME, "teamsamba".toCharArray());
