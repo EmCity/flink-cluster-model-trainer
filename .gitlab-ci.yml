@@ -23,10 +23,8 @@ python_test:
     stage: test
     services:
     - python:latest
-    command: ["python"]
-
     script:
-    - "python -m unittest /python/traffic-prediction/test/"
+    - "python3 -m unittest /python/traffic-prediction/test/"
 
 maven-test:
   script:
