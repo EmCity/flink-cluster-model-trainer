@@ -1,6 +1,8 @@
 image: kaiwinter/docker-java8-maven
 services:
-  - anaconda:3
+  - python:latest
+  command: ["python"]
+
 cache:
   paths:
     - .m2/
@@ -21,7 +23,7 @@ maven-build:
 python_test:
     stage: test
     services:
-    - anaconda:3
+    - python:latest
     script:
     - "python -m unittest /python/traffic-prediction/test/"
 
