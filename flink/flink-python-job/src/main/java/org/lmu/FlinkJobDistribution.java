@@ -11,7 +11,7 @@ import org.lmu.JSON.JSONArray;
 import org.lmu.JSON.JSONObject;
 import org.lmu.JSON.parser.JSONParser;
 import org.lmu.JSON.parser.ParseException;
-
+import java.util.Arrays;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
@@ -21,7 +21,8 @@ import java.util.List;
 public class FlinkJobDistribution {
 
     public JSONObject getJobJSONObject(String jobName) throws UnknownHostException, ParseException {
-        MongoClient mongoClient = new MongoClient("sambahost.dyndns.lrz.de", 27017);
+        MongoCredential credential = MongoCredential.createMongoCRCredential("sambauser","samba","teamsamba".toCharArray());
+	MongoClient mongoClient = new MongoClient(new ServerAddress("sambahost.dyndns.lrz.de", 27017), Arrays.asList(credential));
         DBCollection coll = mongoClient.getDB("samba").getCollection("jobs");
 
         BasicDBObject query = new BasicDBObject("job_name", jobName);
@@ -54,8 +55,9 @@ public class FlinkJobDistribution {
     }
 
     public void saveResultJSONObjectToMongoDB(JSONObject jsonObject) throws UnknownHostException {
-        MongoClient mongoClient = new MongoClient("sambahost.dyndns.lrz.de", 27017);
-        DBCollection coll = mongoClient.getDB("samba").getCollection("results");
+	MongoCredential credential = MongoCredential.createMongoCRCredential("sambauser","samba","teamsamba".toCharArray());
+        MongoClient mongoClient = new MongoClient(new ServerAddress("sambahost.dyndns.lrz.de", 27017), Arrays.asList(credential));
+	DBCollection coll = mongoClient.getDB("samba").getCollection("results");
 
         DBObject b = (DBObject)com.mongodb.util.JSON.parse(jsonObject.toString()) ;
         System.out.println("Object: " + b);
@@ -87,7 +89,7 @@ public class FlinkJobDistribution {
         JSONObject algorithms = (JSONObject) json.get("algorithms");
 
         JSONObject svm = (JSONObject) algorithms.get("SVM");
-        System.out.println(svm.toJSONString());
+        //System.out.println(svm.toJSONString());
         JSONObject lr = (JSONObject) algorithms.get("LR");
         JSONObject nn = (JSONObject) algorithms.get("NN");
 
@@ -148,34 +150,27 @@ public class FlinkJobDistribution {
         JSONArray c_array = (JSONArray) svm.get("C");
         JSONArray e_array = (JSONArray) svm.get("epsilon");
         JSONArray kernel_array = (JSONArray) svm.get("kernel");
-        JSONArray degree_array = (JSONArray) svm.get("degree");
         JSONArray gamma_array = (JSONArray) svm.get("gamma");
-        JSONArray coef_array = (JSONArray) svm.get("coef0");
+        //JSONArray coef_array = (JSONArray) svm.get("coef0");
 
         JSONArray result = new JSONArray();
-        if(c_array != null & e_array != null & kernel_array != null & degree_array != null & gamma_array != null & coef_array != null) {
+        if(c_array != null & e_array != null & kernel_array != null & gamma_array != null) {
             for (Object c : c_array) {
                 for (Object e : e_array) {
                     for (Object kernel : kernel_array) {
-                        for (Object degree : degree_array) {
                             for (Object gamma : gamma_array) {
-                                for (Object coef0 : coef_array) {
                                     JSONObject obj = new JSONObject();
                                     obj.put("algorithm", "SVM");
-                                    obj.put("C", c);
-                                    obj.put("epsilon", e);
+                                    obj.put("C", Double.parseDouble(c.toString()));
+                                    obj.put("epsilon", Double.parseDouble(e.toString()));
                                     obj.put("kernel", kernel);
-                                    obj.put("degree", degree);
-                                    obj.put("gamma", gamma);
-                                    obj.put("coef0", coef0);
+                                    obj.put("gamma", Double.parseDouble(gamma.toString())); 
                                     obj.put("shrinking", svm.get("shrinking"));
-                                    obj.put("tolerance", svm.get("tolerance"));
-                                    obj.put("cache_size", svm.get("cache_size"));
-                                    obj.put("max_iter", svm.get("max_iter"));
+                                    obj.put("tolerance", Double.parseDouble(svm.get("tolerance").toString()));
+                                    obj.put("cache_size", Double.parseDouble(svm.get("cache_size").toString()));
+                                    obj.put("max_iter", Integer.parseInt(svm.get("max_iter").toString()));
                                     result.add(obj);
-                                }
                             }
-                        }
                     }
                 }
             }

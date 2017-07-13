@@ -25,15 +25,15 @@ app.get('/', function(req, res) {
 // save AlgoParaImputs
 app.post('/api/',(req, res) => {
   data = req.body;
-  console.log(data);
 
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
-    console.log(data);
     db.collection("jobs").insertOne(data);
     db.collection("jobs").find().sort({timestart:-1},function(err,cursor){});
     db.close();
-  //  callFlink(data.job_name)
+    callFlink(data.job_name, function(msg) {
+    	console.log(msg);
+    });
 
     res.send(req.body);
   });
@@ -45,7 +45,7 @@ app.get('/start_job/:job_name', (req, res) => {
     callFlink(req.params.job_name, function(javaOut){
         res.send(javaOut);
     });
-
+    console.log("Started flink job.")
 });
 
 

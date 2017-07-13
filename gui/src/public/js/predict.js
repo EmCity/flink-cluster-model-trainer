@@ -45,7 +45,13 @@ function predict() {
             }
         });
     });
-
+     if(data.algorithms['SVM'])
+     {
+          data.algorithms['SVM']['tolerance'] = data.algorithms['SVM']['tolerance'][0];
+          data.algorithms['SVM']['cache_size'] = data.algorithms['SVM']['cache_size'][0];
+          data.algorithms['SVM']['max_iter'] = data.algorithms['SVM']['max_iter'][0];
+   
+     }
      Promise.all([a, b, c, d, e, f]).then(function() {
         fetch("http://sambahost.dyndns.lrz.de:8500/api", {
             method: 'POST',

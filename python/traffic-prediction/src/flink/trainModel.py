@@ -10,14 +10,13 @@ import pymongo as mongo
 
 
 def trainModel(jsonDict):
-
-    client = mongo.MongoClient('sambauser:teamsamba@sambahost.dyndns.lrz.de/?authSource=db1&authMechanism=MONGODB-CR',27017)
-    db = client['samba']
-    collection = db['jobs']
-
+    uri= "mongodb://sambauser:teamsamba@sambahost.dyndns.lrz.de:27017/samba"
+    client = mongo.MongoClient(uri)
+    db = client.samba
+    jobs = db.jobs
     jobname = jsonDict['job_name']
 
-    cursor = collection.find({'job_name': jobname})
+    cursor = jobs.find({'job_name': jobname})
 
     json_data = None
     for doc in cursor:
@@ -29,7 +28,7 @@ def trainModel(jsonDict):
     # crate result json
     result_json = json.loads("{}")
     result_json['parameter_set'] = jsonDict
-
+    result_json['job_name'] = jobname
     algorithms = jsonDict['algorithm']
 
     train_x = data['train_x']
@@ -76,19 +75,19 @@ def trainSVM(df_x_train, df_x_test, df_y_train, df_y_test, params):
     C = params["C"];
     epsilon = params["epsilon"];
     kernel = params["kernel"];
-    degree = params["degree"];
     gamma = params["gamma"];
-    coef0 = params["coef0"];
     shrinking = params["shrinking"];
     tol = params["tolerance"];
     cache_size = params["cache_size"];
     max_iter = params["max_iter"];
 
-    print(C, epsilon, kernel, gamma, coef0, shrinking, tol, cache_size, max_iter)
+    #print(C, epsilon, kernel, gamma, coef0, shrinking, tol, cache_size, max_iter)
 
-    svr = sklearn.svm.SVR(C=C, epsilon=epsilon, kernel=kernel, degree=degree, gamma=gamma, coef0=coef0,
+    svr = sklearn.svm.SVR(C=C, epsilon=epsilon, kernel=kernel, gamma=gamma,
                                        shrinking=shrinking, tol=tol, cache_size=cache_size, max_iter=max_iter)
     regr_multi_svr = MultiOutputRegressor(svr)
+    #print('type of df x train: ', type(df_x_train))
+    #print('type of df y train: ', type(df_y_train))
     regr_multi_svr.fit(df_x_train, df_y_train)
 
     return get_error(regr_multi_svr, df_x_test, df_y_test)
