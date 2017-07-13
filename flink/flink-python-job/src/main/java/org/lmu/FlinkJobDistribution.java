@@ -194,8 +194,8 @@ public final class FlinkJobDistribution {
         public void flatMap(String value, final Collector<String> out) {
             String res = "";
             try {
-                String pythonPath = "/anaconda/envs/dataScience/bin/python3 ";
-                String trainModelPath = "/Users/Effi/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+                String pythonPath = "/root/anaconda/envs/dataScience/bin/python3";
+                String trainModelPath = "/root/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
 
                 Process proc = Runtime.getRuntime().exec(pythonPath + " "  + trainModelPath + " " + value);
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
