@@ -21,7 +21,10 @@ python_test:
     stage: test
     image: python
     script:
-    - python -m unittest /sose17-small-data/python/traffic-prediction/test
+    - cd  /sose17-small-data/python/traffic-prediction
+    - python -m unittest test
+    - python -m unittest
+
 
 maven-test:
   script:
