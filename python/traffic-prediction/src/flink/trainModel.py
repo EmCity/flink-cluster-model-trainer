@@ -7,7 +7,6 @@ import io as io
 import pymongo as mongo
 import tensorflow as tf
 import pandas as pd
-import src.misc.evaluation as eval
 import numpy as np
 
 
