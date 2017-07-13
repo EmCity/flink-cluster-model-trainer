@@ -25,7 +25,7 @@ python_test:
     - python
     script:
     #-  apt-get install -y python-dev python-pip
-    -python -m unittest /python/traffic-prediction/test/
+    - python -m unittest /python/traffic-prediction/test/
 
 maven-test:
   script:
