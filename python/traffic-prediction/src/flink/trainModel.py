@@ -3,6 +3,9 @@ import sys
 import json
 from sklearn import linear_model
 from sklearn.multioutput import MultiOutputRegressor
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
+
 import io as io
 import pymongo as mongo
 import tensorflow as tf

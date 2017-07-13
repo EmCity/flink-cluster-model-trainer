@@ -20,14 +20,13 @@ import java.util.List;
 
 public final class FlinkJobDistribution {
     private final static String DBNAME = "samba";
-    private final static String COLLECTION = "jobs";
     private final static MongoCredential CREDENTIALS = MongoCredential.createMongoCRCredential("sambauser",DBNAME, "teamsamba".toCharArray());
     private final static String URL = "sambahost.dyndns.lrz.de";
     private final static int PORT = 27017;
 
     public JSONObject getJobJSONObject(String jobName) throws UnknownHostException, ParseException {
 	    MongoClient mongoClient = new MongoClient(new ServerAddress(URL, PORT), Arrays.asList(CREDENTIALS));
-        DBCollection coll = mongoClient.getDB(DBNAME).getCollection(COLLECTION);
+        DBCollection coll = mongoClient.getDB(DBNAME).getCollection("jobs");
         BasicDBObject query = new BasicDBObject("job_name", jobName);
 
         DBCursor cursor = coll.find(query);
@@ -52,8 +51,9 @@ public final class FlinkJobDistribution {
 
     public void saveResultJSONObjectToMongoDB(JSONObject jsonObject) throws UnknownHostException {
 	    MongoClient mongoClient = new MongoClient(new ServerAddress(URL, PORT), Arrays.asList(CREDENTIALS));
-	    DBCollection coll = mongoClient.getDB(DBNAME).getCollection(COLLECTION);
+	    DBCollection coll = mongoClient.getDB(DBNAME).getCollection("results");
 	    DBObject b = (DBObject)com.mongodb.util.JSON.parse(jsonObject.toString()) ;
+
         System.out.println("Object: " + b);
         coll.insert(b);
         mongoClient.close();
@@ -194,8 +194,9 @@ public final class FlinkJobDistribution {
         public void flatMap(String value, final Collector<String> out) {
             String res = "";
             try {
-                String pythonPath = "/root/anaconda/envs/dataScience/bin/python3";
-                String trainModelPath = "/root/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+                String pythonPath = "/anaconda/envs/dataScience/bin/python3 ";
+                String trainModelPath = "/Users/Effi/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
+
                 Process proc = Runtime.getRuntime().exec(pythonPath + " "  + trainModelPath + " " + value);
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
