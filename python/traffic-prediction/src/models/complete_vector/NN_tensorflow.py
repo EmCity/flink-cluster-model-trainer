@@ -3,10 +3,16 @@ import pandas as pd
 import src.misc.evaluation as eval
 import numpy as np
 
-# tf Graph input
-x = tf.placeholder(tf.float32, [None, 147])
-y = tf.placeholder(tf.float32, [None, 36])
+training_X = pd.read_csv("train_x.csv", index_col=0)
+training_Y = pd.read_csv("train_y.csv", index_col=0)
 
+testing_X = pd.read_csv("test_x.csv", index_col=0)
+testing_Y = pd.read_csv("test_y.csv", index_col=0)
+
+x_dim = len(training_X.columns)
+y_dim = len(training_Y.columns)
+x = tf.placeholder(tf.float32, [None, x_dim])
+y = tf.placeholder(tf.float32, [None, y_dim])
 
 # Create model
 def multilayer_perceptron(x, weights, biases):
@@ -22,22 +28,22 @@ def multilayer_perceptron(x, weights, biases):
 
 # Store layers weight & bias
 weights = {
-    'h1': tf.Variable(tf.random_normal([147, 200])),
+    'h1': tf.Variable(tf.random_normal([x_dim, 200])),
     'h2': tf.Variable(tf.random_normal([200, 500])),
-    'out': tf.Variable(tf.random_normal([500, 36]))
+    'out': tf.Variable(tf.random_normal([500, y_dim]))
 }
 biases = {
     'b1': tf.Variable(tf.random_normal([200])),
     'b2': tf.Variable(tf.random_normal([500])),
-    'out': tf.Variable(tf.random_normal([36]))
+    'out': tf.Variable(tf.random_normal([y_dim]))
 }
 
 # Construct model
 pred = multilayer_perceptron(x, weights, biases)
 
 # Define loss and optimizer
-cost = tf.losses.mean_pairwise_squared_error(predictions=pred, labels=y)
-optimizer = tf.train.ProximalGradientDescentOptimizer(learning_rate=0.001).minimize(cost)
+cost_func = tf.reduce_mean(tf.div(tf.abs(pred - y), y))
+optimizer = tf.train.AdagradOptimizer(learning_rate=0.001).minimize(cost_func)
 
 # Initializing the variables
 init = tf.global_variables_initializer()
@@ -45,23 +51,16 @@ init = tf.global_variables_initializer()
 # Launch the graph
 with tf.Session() as sess:
     sess.run(init)
-    training_X = pd.read_csv("train_x.csv", index_col=0)
-    training_Y = pd.read_csv("train_y.csv", index_col=0)
 
-    testing_X = pd.read_csv("test_x.csv", index_col=0)
-    testing_Y = pd.read_csv("test_y.csv", index_col=0)
-
-    batch_size=120
+    batch_size=1
     # Training cycle
-    for epoch in range(150):
+    for epoch in range(50):
         avg_cost = 0.
-        total_batch = int(len(training_X)/batch_size)
-        # Loop over all batches
-        for batch in range(total_batch):
+        for batch in range(int(len(training_X)/batch_size)):
             x_batch = training_X[batch * batch_size: batch * batch_size + batch_size]
             y_batch = training_Y[batch * batch_size: batch * batch_size + batch_size]
             # Run optimization op (backprop) and cost op (to get loss value)
-            _, c = sess.run([optimizer, cost], feed_dict={x: x_batch, y: y_batch})
+            _, c = sess.run([optimizer, cost_func], feed_dict={x: x_batch, y: y_batch})
             # Compute average loss
             avg_cost += c
     # Test model
