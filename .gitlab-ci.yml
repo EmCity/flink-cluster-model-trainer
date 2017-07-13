@@ -24,7 +24,7 @@ python_test:
     services:
     - python:latest
     script:
-    - "python3 -m unittest /python/traffic-prediction/test/"
+    - "python -m unittest /python/traffic-prediction/test/"
 
 maven-test:
   script:
