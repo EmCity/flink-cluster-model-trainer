@@ -85,9 +85,9 @@ app.get('/get_results/', (req, res) => {
 app.get('/get_results_api/', (req, res) => {
   try{
   MongoClient.connect(url, function(err, db) {
-      if (error) {
-        console.error(`exec error: ${error}`);
-        //res.send(JSON.stringify("{error:\"Database query error\"}") );
+      if (err) {
+        console.error(`exec error: ${err}`);
+        res.send(JSON.stringify("{error:\"Database query error\"}") );
         return;
       }
       var coll = db.collection('results');
@@ -98,8 +98,8 @@ app.get('/get_results_api/', (req, res) => {
       db.close();
   });
   }catch(err){
-    console.log('Error has occured!', error);
-    //res.send(JSON.stringify("{error:\"Database connect error\"}") );
+    console.error('Error has occured!', err);
+    res.send(JSON.stringify("{error:\"Database connect error\"}") );
   }
 });
 
