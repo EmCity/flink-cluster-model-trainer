@@ -92,9 +92,8 @@ app.get('/get_results_api/', (req, res) => {
       }
       var coll = db.collection('results');
       cursor = coll.find({});
-        cursor.toArray(function(err, result){
-               res.send(JSON.stringify(result) );
-               });
+      cursor.toArray(function(err, result){
+        res.send(JSON.stringify(result) );
       });
       db.close();
   });
