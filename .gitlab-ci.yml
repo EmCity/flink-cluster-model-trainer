@@ -19,10 +19,9 @@ maven-build:
 
 python_test:
     stage: test
-    image: python
+    image: continuumio/anaconda
     script:
     - cd python/traffic-prediction
-    - python -m unittest test
     - python -m unittest
 
 
