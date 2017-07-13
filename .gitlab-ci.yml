@@ -21,8 +21,7 @@ python_test:
     stage: test
     image: python
     script:
-    - ls
-    - cd /python/traffic-prediction
+    - cd python/traffic-prediction
     - python -m unittest test
     - python -m unittest
 
