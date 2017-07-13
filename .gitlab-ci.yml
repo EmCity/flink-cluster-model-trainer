@@ -19,7 +19,7 @@ maven-build:
 
 python_test:
     stage: test
-    image: continuumio/anaconda
+    image: continuumio/anaconda3
     script:
     - conda install numpy
     - conda install pandas
