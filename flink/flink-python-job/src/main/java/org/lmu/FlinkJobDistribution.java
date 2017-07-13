@@ -129,14 +129,14 @@ public final class FlinkJobDistribution {
                         for (Object gamma : gamma_array) {
                             JSONObject obj = new JSONObject();
                             obj.put("algorithm", "SVM");
-                            obj.put("C", Double.parseDouble(c.toString()));
-                            obj.put("epsilon", Double.parseDouble(e.toString()));
+                            obj.put("C", Double.parseDouble(c.toString().replaceAll("\\s+","")));
+                            obj.put("epsilon", Double.parseDouble(e.toString().replaceAll("\\s+","")));
                             obj.put("kernel", kernel);
-                            obj.put("gamma", Double.parseDouble(gamma.toString()));
+                            obj.put("gamma", Double.parseDouble(gamma.toString().replaceAll("\\s+","")));
                             obj.put("shrinking", svm.get("shrinking"));
-                            obj.put("tolerance", Double.parseDouble(svm.get("tolerance").toString()));
-                            obj.put("cache_size", Double.parseDouble(svm.get("cache_size").toString()));
-                            obj.put("max_iter", Integer.parseInt(svm.get("max_iter").toString()));
+                            obj.put("tolerance", Double.parseDouble(svm.get("tolerance").toString().replaceAll("\\s+","")));
+                            obj.put("cache_size", Double.parseDouble(svm.get("cache_size").toString().replaceAll("\\s+","")));
+                            obj.put("max_iter", Integer.parseInt(svm.get("max_iter").toString().replaceAll("\\s+","")));
                             result.add(obj);
                         }
                     }
@@ -173,8 +173,8 @@ public final class FlinkJobDistribution {
                         JSONObject obj = new JSONObject();
                         obj.put("algorithm", "NN");
                         obj.put("normalization", nn.get("normalization"));
-                        obj.put("learning_rate", Double.parseDouble(learningRate.toString()));
-                        obj.put("epochs", Integer.parseInt(epoch.toString()));
+                        obj.put("learning_rate", Double.parseDouble(learningRate.toString().replaceAll("\\s+","")));
+                        obj.put("epochs", Integer.parseInt(epoch.toString().replaceAll(" ", "").replaceAll("\\s+","")));
                         obj.put("cost_function", costFunction);
                         result.add(obj);
                     }
