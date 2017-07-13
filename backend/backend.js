@@ -4,7 +4,7 @@ var app = express();
 const hostname = 'sambahost.dyndns.lrz.de';
 const port = 8500;
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://sambauser:teamsamba@localhost:27017/samba";
+var url = "mongodb://sambauser:teamsamba@sambahost.dyndns.lrz.de:27017/samba";
 var path = require('path');
 var bodyParser = require('body-parser');
 
@@ -25,14 +25,15 @@ app.get('/', function(req, res) {
 // save AlgoParaImputs
 app.post('/api/',(req, res) => {
   data = req.body;
-  console.log(data);
 
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
     db.collection("jobs").insertOne(data);
     db.collection("jobs").find().sort({timestart:-1},function(err,cursor){});
     db.close();
-  //  callFlink(data.job_name)
+    callFlink(data.job_name, function(msg) {
+    	console.log(msg);
+    });
 
     res.send(req.body);
   });
@@ -44,7 +45,7 @@ app.get('/start_job/:job_name', (req, res) => {
     callFlink(req.params.job_name, function(javaOut){
         res.send(javaOut);
     });
-
+    console.log("Started flink job.")
 });
 
 
@@ -65,17 +66,20 @@ function callFlink (jobname, func) {
 }
 
 // get results
-  app.get('/get_results/', (req, res) => {
+app.get('/get_results/', (req, res) => {
+  try{
   MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
       var coll = db.collection('results');
       cursor = coll.find({});
         cursor.toArray(function(err, result){
                res.render("results",{ data: JSON.stringify(result) });
       });
       db.close();
-    });
-  })
+  });
+  }catch(err){
+    console.log('Error has occured!', error);
+  }
+});
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);

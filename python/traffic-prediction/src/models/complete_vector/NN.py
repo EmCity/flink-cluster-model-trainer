@@ -1,4 +1,4 @@
-from keras.layers import Dense, Activation
+from keras.layers import Dense
 from keras.models import Sequential
 from sklearn import preprocessing
 from src.misc.evaluation import mape

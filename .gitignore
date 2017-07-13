@@ -186,3 +186,9 @@ flink/flink-python-job/.idea/libraries/Maven__javax_xml_stream_stax_api_1_0_2.xm
 flink/flink-python-job/.idea/libraries/Maven__javax_xml_bind_jaxb_api_2_2_2.xml
 flink/flink-python-job/.idea/libraries/Maven__javax_servlet_servlet_api_2_5.xml
 flink/flink-python-job/.idea/libraries/Maven__javax_activation_activation_1_1.xml
+gui/.idea/modules.xml
+backend/.idea/misc.xml
+backend/.idea/backend.iml
+backend/.idea/modules.xml
+gui/.idea/gui.iml
+gui/.idea/misc.xml
