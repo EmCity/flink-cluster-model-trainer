@@ -10,7 +10,7 @@ class GenerateWeatherVectorsTest(unittest.TestCase):
     weather_df = None
 
     def setUp(self):
-        self.trajectories_df = pd.read_csv(path.trajectories_training_file)
+        self.trajectories_df = pd.read_csv(path.trajectories_training_file2)
         self.weather_df = pd.read_csv(path.weather_training_file)
 
     def test_get_simple_result(self):
@@ -22,10 +22,7 @@ class GenerateWeatherVectorsTest(unittest.TestCase):
         X = gwv.generate_TimeInformationCurrentSituationWeatherVectors(self.trajectories_df, self.weather_df)
 
         # 91 days of training data, 12*2hours per day(
-        number = 91*12
-        # - 2h
-        number -= 1
-
+        number = 7*12
         self.assertEqual(len(X), number)
 
 
