@@ -117,3 +117,7 @@ background-position: center center;              /* optional, center the image *
      background:rgba(255,255,255,0.8); /* applies a 50% transparent white background */
 
     }
+
+.file_input{
+    font_size: 25px;
+}
