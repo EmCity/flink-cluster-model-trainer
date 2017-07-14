@@ -5,18 +5,15 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.util.Collector;
-import org.apache.log4j.varia.NullAppender;
-
-import org.lmu.JSON.JSONArray;
-import org.lmu.JSON.JSONObject;
-import org.lmu.JSON.parser.JSONParser;
-import org.lmu.JSON.parser.ParseException;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import java.util.Arrays;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.List;
 
 public final class FlinkJobDistribution {
     private final static String DBNAME = "samba";

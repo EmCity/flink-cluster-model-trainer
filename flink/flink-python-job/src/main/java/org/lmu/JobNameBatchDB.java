@@ -1,6 +1,6 @@
 package org.lmu;
-import org.lmu.JSON.JSONArray;
-import org.lmu.JSON.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 /**
  * Created by lemkec on 6/30/17.
  *

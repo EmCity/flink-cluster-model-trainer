@@ -2,8 +2,9 @@ package org.lmu;
 
 import com.mongodb.*;
 import com.mongodb.util.JSON;
-import org.lmu.JSON.JSONObject;
-import org.lmu.JSON.parser.JSONParser;
+
+import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONObject;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public final class DBListener {
