@@ -4,6 +4,10 @@
  */
 package org.lmu.JSON;
 
+import org.lmu.JSON.JSONAware;
+import org.lmu.JSON.JSONStreamAware;
+import org.lmu.JSON.JSONValue;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -80,7 +84,7 @@ public class JSONArray extends ArrayList implements JSONAware, JSONStreamAware {
 	 * Convert a list to JSON text. The result is a JSON array. 
 	 * If this list is also a JSONAware, JSONAware specific behaviours will be omitted at this top level.
 	 * 
-	 * @see org.json.simple.JSONValue#toJSONString(Object)
+	 * @see JSONValue#toJSONString(Object)
 	 * 
 	 * @param collection
 	 * @return JSON text, or "null" if list is null.

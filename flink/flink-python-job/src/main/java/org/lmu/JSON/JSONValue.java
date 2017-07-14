@@ -13,6 +13,10 @@ import java.util.Collection;
 // import java.util.List;
 import java.util.Map;
 
+import org.lmu.JSON.*;
+import org.lmu.JSON.JSONArray;
+import org.lmu.JSON.JSONAware;
+import org.lmu.JSON.JSONObject;
 import org.lmu.JSON.parser.JSONParser;
 import org.lmu.JSON.parser.ParseException;
 
@@ -25,13 +29,13 @@ public class JSONValue {
 	 * Parse JSON text into java object from the input source. 
 	 * Please use parseWithException() if you don't want to ignore the exception.
 	 * 
-	 * @see org.json.simple.parser.JSONParser#parse(Reader)
+	 * @see JSONParser#parse(Reader)
 	 * @see #parseWithException(Reader)
 	 * 
 	 * @param in
 	 * @return Instance of the following:
-	 *	org.json.simple.JSONObject,
-	 * 	org.json.simple.JSONArray,
+	 *	org.lmu.JSON.JSONObject,
+	 * 	org.lmu.JSON.JSONArray,
 	 * 	java.lang.String,
 	 * 	java.lang.Number,
 	 * 	java.lang.Boolean,
@@ -55,13 +59,13 @@ public class JSONValue {
 	 * Parse JSON text into java object from the given string. 
 	 * Please use parseWithException() if you don't want to ignore the exception.
 	 * 
-	 * @see org.json.simple.parser.JSONParser#parse(Reader)
+	 * @see JSONParser#parse(Reader)
 	 * @see #parseWithException(Reader)
 	 * 
 	 * @param s
 	 * @return Instance of the following:
-	 *	org.json.simple.JSONObject,
-	 * 	org.json.simple.JSONArray,
+	 *	org.lmu.JSON.JSONObject,
+	 * 	org.lmu.JSON.JSONArray,
 	 * 	java.lang.String,
 	 * 	java.lang.Number,
 	 * 	java.lang.Boolean,
@@ -79,12 +83,12 @@ public class JSONValue {
 	/**
 	 * Parse JSON text into java object from the input source.
 	 * 
-	 * @see org.json.simple.parser.JSONParser
+	 * @see JSONParser
 	 * 
 	 * @param in
 	 * @return Instance of the following:
-	 * 	org.json.simple.JSONObject,
-	 * 	org.json.simple.JSONArray,
+	 * 	org.lmu.JSON.JSONObject,
+	 * 	org.lmu.JSON.JSONArray,
 	 * 	java.lang.String,
 	 * 	java.lang.Number,
 	 * 	java.lang.Boolean,
@@ -111,8 +115,8 @@ public class JSONValue {
      * DO NOT call this method from writeJSONString(Writer) of a class that implements both JSONStreamAware and (Map or List) with 
      * "this" as the first parameter, use JSONObject.writeJSONString(Map, Writer) or JSONArray.writeJSONString(List, Writer) instead. 
      * 
-     * @see org.json.simple.JSONObject#writeJSONString(Map, Writer)
-     * @see org.json.simple.JSONArray#writeJSONString(List, Writer)
+     * @see org.lmu.JSON.JSONObject#writeJSONString(Map, Writer)
+     * @see org.lmu.JSON.JSONArray#writeJSONString(List, Writer)
      * 
      * @param value
      * @param writer
@@ -156,12 +160,12 @@ public class JSONValue {
 			return;
 		}
 		
-		if((value instanceof JSONStreamAware)){
-			((JSONStreamAware)value).writeJSONString(out);
+		if((value instanceof org.lmu.JSON.JSONStreamAware)){
+			((org.lmu.JSON.JSONStreamAware)value).writeJSONString(out);
 			return;
 		}
 		
-		if((value instanceof JSONAware)){
+		if((value instanceof org.lmu.JSON.JSONAware)){
 			out.write(((JSONAware)value).toJSONString());
 			return;
 		}
@@ -172,47 +176,47 @@ public class JSONValue {
 		}
 		
 		if(value instanceof Collection){
-			JSONArray.writeJSONString((Collection)value, out);
+			org.lmu.JSON.JSONArray.writeJSONString((Collection)value, out);
             return;
 		}
 		
 		if(value instanceof byte[]){
-			JSONArray.writeJSONString((byte[])value, out);
+			org.lmu.JSON.JSONArray.writeJSONString((byte[])value, out);
 			return;
 		}
 		
 		if(value instanceof short[]){
-			JSONArray.writeJSONString((short[])value, out);
+			org.lmu.JSON.JSONArray.writeJSONString((short[])value, out);
 			return;
 		}
 		
 		if(value instanceof int[]){
-			JSONArray.writeJSONString((int[])value, out);
+			org.lmu.JSON.JSONArray.writeJSONString((int[])value, out);
 			return;
 		}
 		
 		if(value instanceof long[]){
-			JSONArray.writeJSONString((long[])value, out);
+			org.lmu.JSON.JSONArray.writeJSONString((long[])value, out);
 			return;
 		}
 		
 		if(value instanceof float[]){
-			JSONArray.writeJSONString((float[])value, out);
+			org.lmu.JSON.JSONArray.writeJSONString((float[])value, out);
 			return;
 		}
 		
 		if(value instanceof double[]){
-			JSONArray.writeJSONString((double[])value, out);
+			org.lmu.JSON.JSONArray.writeJSONString((double[])value, out);
 			return;
 		}
 		
 		if(value instanceof boolean[]){
-			JSONArray.writeJSONString((boolean[])value, out);
+			org.lmu.JSON.JSONArray.writeJSONString((boolean[])value, out);
 			return;
 		}
 		
 		if(value instanceof char[]){
-			JSONArray.writeJSONString((char[])value, out);
+			org.lmu.JSON.JSONArray.writeJSONString((char[])value, out);
 			return;
 		}
 		
@@ -232,8 +236,8 @@ public class JSONValue {
 	 * DO NOT call this method from toJSONString() of a class that implements both JSONAware and Map or List with 
 	 * "this" as the parameter, use JSONObject.toJSONString(Map) or JSONArray.toJSONString(List) instead. 
 	 * 
-	 * @see org.json.simple.JSONObject#toJSONString(Map)
-	 * @see org.json.simple.JSONArray#toJSONString(List)
+	 * @see JSONObject#toJSONString(Map)
+	 * @see JSONArray#toJSONString(List)
 	 * 
 	 * @param value
 	 * @return JSON text, or "null" if value is null or it's an NaN or an INF number.

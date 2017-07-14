@@ -1,6 +1,4 @@
 image: kaiwinter/docker-java8-maven
-services:
-  - python:latest
 
 cache:
   paths:
@@ -21,10 +19,12 @@ maven-build:
 
 python_test:
     stage: test
-    services:
-    - python:latest
+    image: continuumio/anaconda3
     script:
-    - "python -m unittest /python/traffic-prediction/test/"
+    - conda install numpy
+    - conda install pandas
+    - cd python/traffic-prediction
+    - python -m unittest
 
 maven-test:
   script:

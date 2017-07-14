@@ -10,8 +10,11 @@ import java.io.StringReader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import org.lmu.JSON.JSONArray;
 import org.lmu.JSON.JSONObject;
+import org.lmu.JSON.parser.*;
+import org.lmu.JSON.parser.Yytoken;
 
 
 /**
@@ -30,8 +33,8 @@ public class JSONParser {
 	public static final int S_IN_ERROR=-1;
 	
 	private LinkedList handlerStatusStack;
-	private Yylex lexer = new Yylex((Reader)null);
-	private Yytoken token = null;
+	private org.lmu.JSON.parser.Yylex lexer = new org.lmu.JSON.parser.Yylex((Reader)null);
+	private org.lmu.JSON.parser.Yytoken token = null;
 	private int status = S_INIT;
 	
 	private int peekStatus(LinkedList statusStack){
@@ -97,8 +100,8 @@ public class JSONParser {
 	 * @param in
      * @param containerFactory - Use this factory to createyour own JSON object and JSON array containers.
 	 * @return Instance of the following:
-	 *  org.json.simple.JSONObject,
-	 * 	org.json.simple.JSONArray,
+	 *  org.lmu.JSON.JSONObject,
+	 * 	org.lmu.JSON.JSONArray,
 	 * 	java.lang.String,
 	 * 	java.lang.Number,
 	 * 	java.lang.Boolean,
@@ -118,17 +121,17 @@ public class JSONParser {
 				switch(status){
 				case S_INIT:
 					switch(token.type){
-					case Yytoken.TYPE_VALUE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_VALUE:
 						status=S_IN_FINISHED_VALUE;
 						statusStack.addFirst(new Integer(status));
 						valueStack.addFirst(token.value);
 						break;
-					case Yytoken.TYPE_LEFT_BRACE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_BRACE:
 						status=S_IN_OBJECT;
 						statusStack.addFirst(new Integer(status));
 						valueStack.addFirst(createObjectContainer(containerFactory));
 						break;
-					case Yytoken.TYPE_LEFT_SQUARE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_SQUARE:
 						status=S_IN_ARRAY;
 						statusStack.addFirst(new Integer(status));
 						valueStack.addFirst(createArrayContainer(containerFactory));
@@ -139,16 +142,16 @@ public class JSONParser {
 					break;
 					
 				case S_IN_FINISHED_VALUE:
-					if(token.type==Yytoken.TYPE_EOF)
+					if(token.type== org.lmu.JSON.parser.Yytoken.TYPE_EOF)
 						return valueStack.removeFirst();
 					else
 						throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 					
 				case S_IN_OBJECT:
 					switch(token.type){
-					case Yytoken.TYPE_COMMA:
+					case org.lmu.JSON.parser.Yytoken.TYPE_COMMA:
 						break;
-					case Yytoken.TYPE_VALUE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_VALUE:
 						if(token.value instanceof String){
 							String key=(String)token.value;
 							valueStack.addFirst(key);
@@ -159,7 +162,7 @@ public class JSONParser {
 							status=S_IN_ERROR;
 						}
 						break;
-					case Yytoken.TYPE_RIGHT_BRACE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_RIGHT_BRACE:
 						if(valueStack.size()>1){
 							statusStack.removeFirst();
 							valueStack.removeFirst();
@@ -177,16 +180,16 @@ public class JSONParser {
 					
 				case S_PASSED_PAIR_KEY:
 					switch(token.type){
-					case Yytoken.TYPE_COLON:
+					case org.lmu.JSON.parser.Yytoken.TYPE_COLON:
 						break;
-					case Yytoken.TYPE_VALUE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_VALUE:
 						statusStack.removeFirst();
 						String key=(String)valueStack.removeFirst();
 						Map parent=(Map)valueStack.getFirst();
 						parent.put(key,token.value);
 						status=peekStatus(statusStack);
 						break;
-					case Yytoken.TYPE_LEFT_SQUARE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_SQUARE:
 						statusStack.removeFirst();
 						key=(String)valueStack.removeFirst();
 						parent=(Map)valueStack.getFirst();
@@ -196,7 +199,7 @@ public class JSONParser {
 						statusStack.addFirst(new Integer(status));
 						valueStack.addFirst(newArray);
 						break;
-					case Yytoken.TYPE_LEFT_BRACE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_BRACE:
 						statusStack.removeFirst();
 						key=(String)valueStack.removeFirst();
 						parent=(Map)valueStack.getFirst();
@@ -213,13 +216,13 @@ public class JSONParser {
 					
 				case S_IN_ARRAY:
 					switch(token.type){
-					case Yytoken.TYPE_COMMA:
+					case org.lmu.JSON.parser.Yytoken.TYPE_COMMA:
 						break;
-					case Yytoken.TYPE_VALUE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_VALUE:
 						List val=(List)valueStack.getFirst();
 						val.add(token.value);
 						break;
-					case Yytoken.TYPE_RIGHT_SQUARE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_RIGHT_SQUARE:
 						if(valueStack.size()>1){
 							statusStack.removeFirst();
 							valueStack.removeFirst();
@@ -229,7 +232,7 @@ public class JSONParser {
 							status=S_IN_FINISHED_VALUE;
 						}
 						break;
-					case Yytoken.TYPE_LEFT_BRACE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_BRACE:
 						val=(List)valueStack.getFirst();
 						Map newObject=createObjectContainer(containerFactory);
 						val.add(newObject);
@@ -237,7 +240,7 @@ public class JSONParser {
 						statusStack.addFirst(new Integer(status));
 						valueStack.addFirst(newObject);
 						break;
-					case Yytoken.TYPE_LEFT_SQUARE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_SQUARE:
 						val=(List)valueStack.getFirst();
 						List newArray=createArrayContainer(containerFactory);
 						val.add(newArray);
@@ -255,7 +258,7 @@ public class JSONParser {
 				if(status==S_IN_ERROR){
 					throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 				}
-			}while(token.type!=Yytoken.TYPE_EOF);
+			}while(token.type!= org.lmu.JSON.parser.Yytoken.TYPE_EOF);
 		}
 		catch(IOException ie){
 			throw ie;
@@ -267,7 +270,7 @@ public class JSONParser {
 	private void nextToken() throws ParseException, IOException{
 		token = lexer.yylex();
 		if(token == null)
-			token = new Yytoken(Yytoken.TYPE_EOF, null);
+			token = new org.lmu.JSON.parser.Yytoken(org.lmu.JSON.parser.Yytoken.TYPE_EOF, null);
 	}
 	
 	private Map createObjectContainer(ContainerFactory containerFactory){
@@ -347,19 +350,19 @@ public class JSONParser {
 					contentHandler.startJSON();
 					nextToken();
 					switch(token.type){
-					case Yytoken.TYPE_VALUE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_VALUE:
 						status=S_IN_FINISHED_VALUE;
 						statusStack.addFirst(new Integer(status));
 						if(!contentHandler.primitive(token.value))
 							return;
 						break;
-					case Yytoken.TYPE_LEFT_BRACE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_BRACE:
 						status=S_IN_OBJECT;
 						statusStack.addFirst(new Integer(status));
 						if(!contentHandler.startObject())
 							return;
 						break;
-					case Yytoken.TYPE_LEFT_SQUARE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_SQUARE:
 						status=S_IN_ARRAY;
 						statusStack.addFirst(new Integer(status));
 						if(!contentHandler.startArray())
@@ -372,7 +375,7 @@ public class JSONParser {
 					
 				case S_IN_FINISHED_VALUE:
 					nextToken();
-					if(token.type==Yytoken.TYPE_EOF){
+					if(token.type== org.lmu.JSON.parser.Yytoken.TYPE_EOF){
 						contentHandler.endJSON();
 						status = S_END;
 						return;
@@ -385,9 +388,9 @@ public class JSONParser {
 				case S_IN_OBJECT:
 					nextToken();
 					switch(token.type){
-					case Yytoken.TYPE_COMMA:
+					case org.lmu.JSON.parser.Yytoken.TYPE_COMMA:
 						break;
-					case Yytoken.TYPE_VALUE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_VALUE:
 						if(token.value instanceof String){
 							String key=(String)token.value;
 							status=S_PASSED_PAIR_KEY;
@@ -399,7 +402,7 @@ public class JSONParser {
 							status=S_IN_ERROR;
 						}
 						break;
-					case Yytoken.TYPE_RIGHT_BRACE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_RIGHT_BRACE:
 						if(statusStack.size()>1){
 							statusStack.removeFirst();
 							status=peekStatus(statusStack);
@@ -419,9 +422,9 @@ public class JSONParser {
 				case S_PASSED_PAIR_KEY:
 					nextToken();
 					switch(token.type){
-					case Yytoken.TYPE_COLON:
+					case org.lmu.JSON.parser.Yytoken.TYPE_COLON:
 						break;
-					case Yytoken.TYPE_VALUE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_VALUE:
 						statusStack.removeFirst();
 						status=peekStatus(statusStack);
 						if(!contentHandler.primitive(token.value))
@@ -429,7 +432,7 @@ public class JSONParser {
 						if(!contentHandler.endObjectEntry())
 							return;
 						break;
-					case Yytoken.TYPE_LEFT_SQUARE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_SQUARE:
 						statusStack.removeFirst();
 						statusStack.addFirst(new Integer(S_IN_PAIR_VALUE));
 						status=S_IN_ARRAY;
@@ -437,7 +440,7 @@ public class JSONParser {
 						if(!contentHandler.startArray())
 							return;
 						break;
-					case Yytoken.TYPE_LEFT_BRACE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_BRACE:
 						statusStack.removeFirst();
 						statusStack.addFirst(new Integer(S_IN_PAIR_VALUE));
 						status=S_IN_OBJECT;
@@ -464,13 +467,13 @@ public class JSONParser {
 				case S_IN_ARRAY:
 					nextToken();
 					switch(token.type){
-					case Yytoken.TYPE_COMMA:
+					case org.lmu.JSON.parser.Yytoken.TYPE_COMMA:
 						break;
-					case Yytoken.TYPE_VALUE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_VALUE:
 						if(!contentHandler.primitive(token.value))
 							return;
 						break;
-					case Yytoken.TYPE_RIGHT_SQUARE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_RIGHT_SQUARE:
 						if(statusStack.size()>1){
 							statusStack.removeFirst();
 							status=peekStatus(statusStack);
@@ -481,13 +484,13 @@ public class JSONParser {
 						if(!contentHandler.endArray())
 							return;
 						break;
-					case Yytoken.TYPE_LEFT_BRACE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_BRACE:
 						status=S_IN_OBJECT;
 						statusStack.addFirst(new Integer(status));
 						if(!contentHandler.startObject())
 							return;
 						break;
-					case Yytoken.TYPE_LEFT_SQUARE:
+					case org.lmu.JSON.parser.Yytoken.TYPE_LEFT_SQUARE:
 						status=S_IN_ARRAY;
 						statusStack.addFirst(new Integer(status));
 						if(!contentHandler.startArray())
@@ -507,7 +510,7 @@ public class JSONParser {
 				if(status==S_IN_ERROR){
 					throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 				}
-			}while(token.type!=Yytoken.TYPE_EOF);
+			}while(token.type!= Yytoken.TYPE_EOF);
 		}
 		catch(IOException ie){
 			status = S_IN_ERROR;

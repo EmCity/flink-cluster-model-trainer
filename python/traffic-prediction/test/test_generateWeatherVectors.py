@@ -22,10 +22,7 @@ class GenerateWeatherVectorsTest(unittest.TestCase):
         X = gwv.generate_TimeInformationCurrentSituationWeatherVectors(self.trajectories_df, self.weather_df)
 
         # 91 days of training data, 12*2hours per day(
-        number = 91*12
-        # - 2h
-        number -= 1
-
+        number = 7*12
         self.assertEqual(len(X), number)
 
 

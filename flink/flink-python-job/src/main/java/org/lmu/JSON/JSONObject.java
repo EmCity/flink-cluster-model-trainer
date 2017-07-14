@@ -4,6 +4,8 @@
  */
 package org.lmu.JSON;
 
+import org.lmu.JSON.*;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -16,7 +18,7 @@ import java.util.Map;
  * 
  * @author FangYidong<fangyidong@yahoo.com.cn>
  */
-public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAware{
+public class JSONObject extends HashMap implements Map, org.lmu.JSON.JSONAware, JSONStreamAware{
 	
 	private static final long serialVersionUID = -503443796854799292L;
 	
@@ -40,7 +42,7 @@ public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAwa
      * Encode a map into JSON text and write it to out.
      * If this map is also a JSONAware or JSONStreamAware, JSONAware or JSONStreamAware specific behaviours will be ignored at this top level.
      * 
-     * @see org.json.simple.JSONValue#writeJSONString(Object, Writer)
+     * @see JSONValue#writeJSONString(Object, Writer)
      * 
      * @param map
      * @param out
@@ -78,7 +80,7 @@ public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAwa
 	 * Convert a map to JSON text. The result is a JSON object. 
 	 * If this map is also a JSONAware, JSONAware specific behaviours will be omitted at this top level.
 	 * 
-	 * @see org.json.simple.JSONValue#toJSONString(Object)
+	 * @see JSONValue#toJSONString(Object)
 	 * 
 	 * @param map
 	 * @return JSON text, or "null" if map is null.
@@ -121,7 +123,7 @@ public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAwa
 	 * Escape quotes, \, /, \r, \n, \b, \f, \t and other control characters (U+0000 through U+001F).
 	 * It's the same as JSONValue.escape() only for compatibility here.
 	 * 
-	 * @see org.json.simple.JSONValue#escape(String)
+	 * @see JSONValue#escape(String)
 	 * 
 	 * @param s
 	 * @return

@@ -10,7 +10,7 @@ class TestVector(unittest.TestCase):
 
     def setUp(self):
         self.trajectories_df = pd.read_csv(path.trajectories_training_file2)
-        self.x = gen.generate_vector(self.trajectories_df)
+        self.x = gen.generate_x_df(self.trajectories_df)
 
     def test_number_columns(self):
         # links * 20min-windws/h + minute + hour + day

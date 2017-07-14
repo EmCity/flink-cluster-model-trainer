@@ -3,11 +3,13 @@ import sys
 import json
 from sklearn import linear_model
 from sklearn.multioutput import MultiOutputRegressor
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
+
 import io as io
 import pymongo as mongo
 import tensorflow as tf
 import pandas as pd
-import src.misc.evaluation as eval
 import numpy as np
 
 
@@ -142,7 +144,7 @@ def train_nn(df_x_train, df_x_test, df_y_train, df_y_test, params):
                 avg_cost += c
         # Test model
         prediction = pred.eval(feed_dict={x: df_x_test}, session=sess)
-        mape = eval.mape(prediction, df_y_test)
+        mape = np.mean(np.abs((df_y_test - prediction) / df_y_test))
         return np.mean(mape)
 
 

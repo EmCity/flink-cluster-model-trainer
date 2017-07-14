@@ -1,12 +1,14 @@
 package org.lmu.JSON.parser;
 
+import org.lmu.JSON.parser.ParseException;
+
 import java.io.IOException;
 
 /**
  * A simplified and stoppable SAX-like content handler for stream processing of JSON text. 
  * 
  * @see org.xml.sax.ContentHandler
- * @see org.json.simple.parser.JSONParser#parse(java.io.Reader, ContentHandler, boolean)
+ * @see org.lmu.JSON.parser.JSONParser#parse(java.io.Reader, ContentHandler, boolean)
  * 
  * @author FangYidong<fangyidong@yahoo.com.cn>
  */
@@ -15,7 +17,7 @@ public interface ContentHandler {
 	 * Receive notification of the beginning of JSON processing.
 	 * The parser will invoke this method only once.
      * 
-	 * @throws ParseException 
+	 * @throws ParseException
 	 * 			- JSONParser will stop and throw the same exception to the caller when receiving this exception.
 	 */
 	void startJSON() throws ParseException, IOException;
