@@ -36,6 +36,7 @@ public final class JobNameBatchDB {
         JSONObject bestResultJosnObject = flinkdistribute.getBestMapeJsonObject(resCollect);
         System.out.println("Save best result with status Finished");
         bestResultJosnObject.put("status", "Finished");
+        bestResultJosnObject.put("timestart", jobsjson.get("timestart"));
         bestResultJosnObject.put("timeend", System.currentTimeMillis());
         flinkdistribute.saveResultJSONObjectToMongoDB(bestResultJosnObject);
     }
