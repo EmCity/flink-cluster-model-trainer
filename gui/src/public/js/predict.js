@@ -1,6 +1,6 @@
 
 function predict() {
-    data = new Object();
+  var data = new Object();
   data.data = new Object();
   data.data.train_x = new Object();
   data.data.train_y = new Object();
@@ -15,7 +15,8 @@ function predict() {
     let e = handleFileSelect("validationXFile");
     let f = handleFileSelect("validationYFile");
     data.job_name = $("#job").val();
-    data.timestart = Date.getTime();
+    var d = new Date();
+    data.timestart = d.getTime();
     data.algorithms = new Object();
     $(".mdl-checkbox__input:checkbox:checked").each(function() {
         var algoID = $(this).val();
