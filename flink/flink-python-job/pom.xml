@@ -209,6 +209,20 @@ under the License.
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<groupId>org.apache.felix</groupId>
+						<artifactId>maven-bundle-plugin</artifactId>
+						<version>3.3.0</version>
+						<configuration>
+							<instructions>
+
+								<Embed-Dependency>*;scope=compile;inline=false</Embed-Dependency>
+								<Embed-Transitive>true</Embed-Transitive>
+
+							</instructions>
+						</configuration>
+
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
