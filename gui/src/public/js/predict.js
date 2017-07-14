@@ -15,8 +15,8 @@ function predict() {
     let e = handleFileSelect("validationXFile");
     let f = handleFileSelect("validationYFile");
     data.job_name = $("#job").val();
-    var d = new Date();
-    data.timestart = d.getTime();
+    var date = new Date();
+    data.timestart = date.getTime();
     data.algorithms = new Object();
     $(".mdl-checkbox__input:checkbox:checked").each(function() {
         var algoID = $(this).val();
