@@ -1,6 +1,6 @@
 
 function predict() {
-  var data = new Object();
+  data = new Object();
   data.data = new Object();
   data.data.train_x = new Object();
   data.data.train_y = new Object();
