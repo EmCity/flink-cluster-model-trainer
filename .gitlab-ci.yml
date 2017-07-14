@@ -25,8 +25,7 @@ python_test:
     - conda install pandas
     - cd python/traffic-prediction
     - python -m unittest
-    - python -m unittest test
-    
+
 maven-test:
   script:
     - "mvn -f flink test -B"
