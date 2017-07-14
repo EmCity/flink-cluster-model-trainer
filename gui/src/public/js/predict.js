@@ -15,7 +15,7 @@ function predict() {
     let e = handleFileSelect("validationXFile");
     let f = handleFileSelect("validationYFile");
     data.job_name = $("#job").val();
-    data.timestart = Date.now();
+    data.timestart = Date.now().getTime();
     data.algorithms = new Object();
     $(".mdl-checkbox__input:checkbox:checked").each(function() {
         var algoID = $(this).val();
@@ -41,7 +41,7 @@ function predict() {
                     var array = [$(this).val()];
                     data.algorithms[algoID][id] = array;
                 }
-                    
+
             }
         });
     });
@@ -50,9 +50,9 @@ function predict() {
           data.algorithms['SVM']['tolerance'] = data.algorithms['SVM']['tolerance'][0];
           data.algorithms['SVM']['cache_size'] = data.algorithms['SVM']['cache_size'][0];
           data.algorithms['SVM']['max_iter'] = data.algorithms['SVM']['max_iter'][0];
-   
+
      }
-     Promise.all([a, b, c, d, e, f]).then(function() {
+     Promise.all([a, b, c, d]).then(function() {
         fetch("http://sambahost.dyndns.lrz.de:8500/api", {
             method: 'POST',
             body: JSON.stringify(data), // stringify JSON
