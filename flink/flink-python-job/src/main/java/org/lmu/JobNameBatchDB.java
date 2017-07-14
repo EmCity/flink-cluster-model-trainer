@@ -9,20 +9,29 @@ import org.json.simple.JSONObject;
  * Call:
  * flink-1.3.0/bin/flink run -c org.lmu.JobNameBatchDB BigDataScience/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar TestJob42
  */
-public final class JobNameBatchDB {
+final class JobNameBatchDB {
 
-    public static void main(String[] args) throws Exception {
-        String jobName = "";
+    /**
+     * private constructor.
+     */
+    private JobNameBatchDB() { }
+
+    /**
+     * Flink entry point.
+     * @param args job arguments
+     * @throws Exception if json can't be parsed
+     */
+    public static void main(final String[] args) throws Exception {
+        String jobName;
         if (args.length > 0 && args[0] != null) {
             jobName = args[0];
             System.out.println("Got JobName: " + jobName);
         } else {
-            throw new Exception("check args parameters: " + args);
+            throw new Exception("check args parameters:");
         }
         FlinkJobDistribution flinkdistribute = new FlinkJobDistribution();
         JSONObject jobsjson = flinkdistribute.getJobJSONObject(jobName);
-        System.out.println("JobNameBatchDB: Got json with jobname " + jobName +
-                " from mongo. It has " + jobsjson.toString().length() + " chars");
+        System.out.println("JobNameBatchDB: Got json with jobname " + jobName + " from mongo.");
 
         JSONArray resCollect = FlinkJobDistribution.distribute(jobsjson);
         for (Object t : resCollect.toArray()) {
