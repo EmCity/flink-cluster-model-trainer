@@ -9,6 +9,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+
 import java.util.Arrays;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,29 +18,29 @@ import java.util.ArrayList;
 
 public final class FlinkJobDistribution {
     private final static String DBNAME = "samba";
-    private final static MongoCredential CREDENTIALS = MongoCredential.createMongoCRCredential("sambauser",DBNAME, "teamsamba".toCharArray());
+    private final static MongoCredential CREDENTIALS = MongoCredential.createMongoCRCredential("sambauser", DBNAME, "teamsamba".toCharArray());
     private final static String URL = "sambahost.dyndns.lrz.de";
     private final static int PORT = 27017;
 
     public JSONObject getJobJSONObject(String jobName) throws UnknownHostException, ParseException {
-	    MongoClient mongoClient = new MongoClient(new ServerAddress(URL, PORT), Arrays.asList(CREDENTIALS));
+        MongoClient mongoClient = new MongoClient(new ServerAddress(URL, PORT), Arrays.asList(CREDENTIALS));
         DBCollection coll = mongoClient.getDB(DBNAME).getCollection("jobs");
         BasicDBObject query = new BasicDBObject("job_name", jobName);
 
         DBCursor cursor = coll.find(query);
-        if(cursor== null){
+        if (cursor == null) {
             return null;
         }
 
         BasicDBObject job = null;
-        try{
-            while(cursor.hasNext()){
+        try {
+            while (cursor.hasNext()) {
                 job = (BasicDBObject) cursor.next();
             }
-        } finally{
+        } finally {
             cursor.close();
         }
-        if(job == null){
+        if (job == null) {
             System.out.println("Query: " + query + " found nothing");
         }
         mongoClient.close();
@@ -47,22 +48,22 @@ public final class FlinkJobDistribution {
     }
 
     public void saveResultJSONObjectToMongoDB(JSONObject jsonObject) throws UnknownHostException {
-	    MongoClient mongoClient = new MongoClient(new ServerAddress(URL, PORT), Arrays.asList(CREDENTIALS));
-	    DBCollection coll = mongoClient.getDB(DBNAME).getCollection("results");
-	    DBObject b = (DBObject)com.mongodb.util.JSON.parse(jsonObject.toString()) ;
+        MongoClient mongoClient = new MongoClient(new ServerAddress(URL, PORT), Arrays.asList(CREDENTIALS));
+        DBCollection coll = mongoClient.getDB(DBNAME).getCollection("results");
+        DBObject b = (DBObject) com.mongodb.util.JSON.parse(jsonObject.toString());
 
         System.out.println("Object: " + b);
         coll.insert(b);
         mongoClient.close();
     }
 
-    public JSONObject getBestMapeJsonObject(JSONArray resultsJSONArray){
+    public JSONObject getBestMapeJsonObject(JSONArray resultsJSONArray) {
         double bestmape = 420;
         JSONObject bestJsonObject = new JSONObject();
-        for (Object o: resultsJSONArray) {
+        for (Object o : resultsJSONArray) {
             JSONObject jsonObject = (JSONObject) o;
-            double mape = (double)jsonObject.get("mape");
-            if(bestmape > mape){
+            double mape = (double) jsonObject.get("mape");
+            if (bestmape > mape) {
                 bestmape = mape;
                 bestJsonObject = jsonObject;
             }
@@ -112,43 +113,42 @@ public final class FlinkJobDistribution {
         }
     }
 
-    private static JSONArray createSVMJobs(JSONObject svm) throws Exception{
+    private static JSONArray createSVMJobs(JSONObject svm) throws Exception {
         JSONArray c_array = (JSONArray) svm.get("C");
         JSONArray e_array = (JSONArray) svm.get("epsilon");
         JSONArray kernel_array = (JSONArray) svm.get("kernel");
         JSONArray gamma_array = (JSONArray) svm.get("gamma");
 
         JSONArray result = new JSONArray();
-        if(c_array != null & e_array != null & kernel_array != null & gamma_array != null) {
+        if (c_array != null & e_array != null & kernel_array != null & gamma_array != null) {
             for (Object c : c_array) {
                 for (Object e : e_array) {
                     for (Object kernel : kernel_array) {
                         for (Object gamma : gamma_array) {
                             JSONObject obj = new JSONObject();
                             obj.put("algorithm", "SVM");
-                            obj.put("C", Double.parseDouble(c.toString().replaceAll("\\s+","")));
-                            obj.put("epsilon", Double.parseDouble(e.toString().replaceAll("\\s+","")));
+                            obj.put("C", Double.parseDouble(c.toString().replaceAll("\\s+", "")));
+                            obj.put("epsilon", Double.parseDouble(e.toString().replaceAll("\\s+", "")));
                             obj.put("kernel", kernel);
-                            obj.put("gamma", Double.parseDouble(gamma.toString().replaceAll("\\s+","")));
+                            obj.put("gamma", Double.parseDouble(gamma.toString().replaceAll("\\s+", "")));
                             obj.put("shrinking", svm.get("shrinking"));
-                            obj.put("tolerance", Double.parseDouble(svm.get("tolerance").toString().replaceAll("\\s+","")));
-                            obj.put("cache_size", Double.parseDouble(svm.get("cache_size").toString().replaceAll("\\s+","")));
-                            obj.put("max_iter", Integer.parseInt(svm.get("max_iter").toString().replaceAll("\\s+","")));
+                            obj.put("tolerance", Double.parseDouble(svm.get("tolerance").toString().replaceAll("\\s+", "")));
+                            obj.put("cache_size", Double.parseDouble(svm.get("cache_size").toString().replaceAll("\\s+", "")));
+                            obj.put("max_iter", Integer.parseInt(svm.get("max_iter").toString().replaceAll("\\s+", "")));
                             result.add(obj);
                         }
                     }
                 }
             }
-        }
-        else{
+        } else {
             throw new Exception("SVM-ARRAYS NULL");
         }
         return result;
     }
 
     private static JSONArray createLRJobs(JSONObject lr) {
-        Boolean normalize = (Boolean)lr.get("normalize");
-        Boolean fit_intercept = (Boolean)lr.get("fit_intercept");
+        Boolean normalize = (Boolean) lr.get("normalize");
+        Boolean fit_intercept = (Boolean) lr.get("fit_intercept");
         JSONArray result = new JSONArray();
         JSONObject obj = new JSONObject();
         obj.put("algorithm", "LR");
@@ -163,22 +163,21 @@ public final class FlinkJobDistribution {
         JSONArray epochs = (JSONArray) nn.get("epochs");
         JSONArray costFunctions = (JSONArray) nn.get("cost_function");
         JSONArray result = new JSONArray();
-        if(learningRates != null & epochs != null & costFunctions != null) {
+        if (learningRates != null & epochs != null & costFunctions != null) {
             for (Object learningRate : learningRates) {
                 for (Object epoch : epochs) {
                     for (Object costFunction : costFunctions) {
                         JSONObject obj = new JSONObject();
                         obj.put("algorithm", "NN");
                         obj.put("normalization", nn.get("normalization"));
-                        obj.put("learning_rate", Double.parseDouble(learningRate.toString().replaceAll("\\s+","")));
-                        obj.put("epochs", Integer.parseInt(epoch.toString().replaceAll(" ", "").replaceAll("\\s+","")));
+                        obj.put("learning_rate", Double.parseDouble(learningRate.toString().replaceAll("\\s+", "")));
+                        obj.put("epochs", Integer.parseInt(epoch.toString().replaceAll(" ", "").replaceAll("\\s+", "")));
                         obj.put("cost_function", costFunction);
                         result.add(obj);
                     }
                 }
             }
-        }
-        else{
+        } else {
             throw new Exception("NN-ARRAYS NULL");
         }
         return result;
@@ -194,7 +193,7 @@ public final class FlinkJobDistribution {
                 String pythonPath = "/root/anaconda/envs/dataScience/bin/python3";
                 String trainModelPath = "/root/code/sose17-small-data/python/traffic-prediction/src/flink/trainModel.py";
 
-                Process proc = Runtime.getRuntime().exec(pythonPath + " "  + trainModelPath + " " + value);
+                Process proc = Runtime.getRuntime().exec(pythonPath + " " + trainModelPath + " " + value);
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
                 String s;

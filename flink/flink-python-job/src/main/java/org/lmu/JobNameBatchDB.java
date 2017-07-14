@@ -1,12 +1,13 @@
 package org.lmu;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
 /**
  * Created by lemkec on 6/30/17.
- *
+ * <p>
  * Call:
  * flink-1.3.0/bin/flink run -c org.lmu.JobNameBatchDB BigDataScience/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar TestJob42
- *
  */
 public final class JobNameBatchDB {
 
@@ -23,14 +24,14 @@ public final class JobNameBatchDB {
         System.out.println("JobNameBatchDB: Got json with jobname " + jobName +
                 " from mongo. It has " + jobsjson.toString().length() + " chars");
 
-        JSONArray resCollect = flinkdistribute.distribute(jobsjson);
-        for (Object t: resCollect.toArray()) {
+        JSONArray resCollect = FlinkJobDistribution.distribute(jobsjson);
+        for (Object t : resCollect.toArray()) {
             JSONObject jsonObject = (JSONObject) t;
-            double mape = (double)jsonObject.get("mape");
+            double mape = (double) jsonObject.get("mape");
             System.out.println("JobNameBatchDB: Results: " + jobName + " got a result with mape: " + mape);
         }
         JSONObject bestResultJosnObject = flinkdistribute.getBestMapeJsonObject(resCollect);
-        System.out.println("Save best result with status Finished" );
+        System.out.println("Save best result with status Finished");
         bestResultJosnObject.put("status", "Finished");
         bestResultJosnObject.put("timeend", System.currentTimeMillis());
         flinkdistribute.saveResultJSONObjectToMongoDB(bestResultJosnObject);
