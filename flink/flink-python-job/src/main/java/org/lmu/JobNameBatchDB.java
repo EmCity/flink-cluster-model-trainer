@@ -9,13 +9,7 @@ import org.lmu.JSON.JSONObject;
  * Call:
  * flink-1.3.0/bin/flink run -c org.lmu.JobNameBatchDB BigDataScience/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar TestJob42
  */
-final class JobNameBatchDB {
-
-    /**
-     * private constructor.
-     */
-    private JobNameBatchDB() { }
-
+public final class JobNameBatchDB {
     /**
      * Flink entry point.
      * @param args job arguments
