@@ -72,17 +72,6 @@ under the License.
 					much cleaner jar files.
 	-->
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
-			<optional>true</optional>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<dependencies>
 		<!-- Apache Flink dependencies -->
 		<dependency>
@@ -116,12 +105,6 @@ under the License.
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
-			<optional>true</optional>
 		</dependency>
                 
 		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
@@ -208,20 +191,6 @@ under the License.
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.felix</groupId>
-						<artifactId>maven-bundle-plugin</artifactId>
-						<version>3.3.0</version>
-						<configuration>
-							<instructions>
-
-								<Embed-Dependency>*;scope=compile;inline=false</Embed-Dependency>
-								<Embed-Transitive>true</Embed-Transitive>
-
-							</instructions>
-						</configuration>
-
 					</plugin>
 				</plugins>
 			</build>

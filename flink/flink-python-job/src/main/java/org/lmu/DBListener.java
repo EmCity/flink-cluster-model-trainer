@@ -7,8 +7,8 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.JSONObject;
+import org.lmu.JSON.JSONObject;
+import org.lmu.JSON.parser.JSONParser;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
