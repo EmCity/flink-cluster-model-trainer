@@ -33,7 +33,7 @@ final class JobNameBatchDB {
         JSONObject jobsjson = flinkdistribute.getJobJSONObject(jobName);
         System.out.println("JobNameBatchDB: Got json with jobname " + jobName + " from mongo.");
 
-        JSONArray resCollect = FlinkJobDistribution.distribute(jobsjson);
+        JSONArray resCollect = flinkdistribute.distribute(jobsjson);
         for (Object t : resCollect.toArray()) {
             JSONObject jsonObject = (JSONObject) t;
             double mape = (double) jsonObject.get("mape");
