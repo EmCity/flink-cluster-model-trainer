@@ -1,32 +1,43 @@
 var express = require('express');
 var child = require('child_process');
 var app = express();
-const hostname = 'sambahost.dyndns.lrz.de';
-const port = 8500;
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://sambauser:teamsamba@sambahost.dyndns.lrz.de:27017/samba";
 var path = require('path');
 var bodyParser = require('body-parser');
 
-app.set('views', path.join(__dirname, '/../gui/src')); 
+app.set('views', path.join(__dirname, '/../gui/src'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use('/',express.static(path.join(__dirname, '/../gui/src/public/')));
-
+app.use('/',express.static(path.join(__dirname, '/../gui/src/')));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
-// CORS 
-app.all('/', function(req, res, next) { 
-    console.log('CORS'); 
-    res.header("Access-Control-Allow-Origin", "*"); 
-    res.header("Access-Control-Allow-Headers", "X-Requested-With"); 
-    next(); 
- }); 
+
+const hostname = 'sambahost.dyndns.lrz.de';
+const port = 8500;
+/*
+const hostname = 'localhost';
+const port = 8500;
+*/
+
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://sambauser:teamsamba@sambahost.dyndns.lrz.de:27017/samba";
+
+// CORS
+app.all('/', function(req, res, next) {
+    console.log('CORS');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+ });
 
 app.get('/', function(req, res) {
-  //console.log('Limit file size: '+limit);
-  res.render("index")
+  console.log('a');
+  res.render("index");
+});
+
+app.get('/results', function(req, res) {
+  res.render("results");
 });
 
 app.get('/results', function(req, res) { 
@@ -59,8 +70,6 @@ app.get('/start_job/:job_name', (req, res) => {
     console.log("Started flink job.")
 });
 
-
-
 function callFlink (jobname, func) {
     child.exec('/root/flink-1.3.0/bin/flink run -c org.lmu.JobNameBatchDB ' +
         '/root/code/sose17-small-data/flink/flink-python-job/target/flink-python-job-0.1.jar' + ' ' + jobname, (error, stdout, stderr) =>{
@@ -79,15 +88,15 @@ function callFlink (jobname, func) {
 // get results
 app.get('/get_results/', (req, res) => {
   try{
-  MongoClient.connect(url, function(err, db) { 
-        if (err) { 
-            console.error(`exec error: ${err}`); 
-            res.send(JSON.stringify("{error:\"Database query error\"}") ); 
-            return; 
-        } 
- 
-        var coll = db.collection('results'); 
-        cursor = coll.find({}); 
+    MongoClient.connect(url, function(err, db) {
+        if (err) {
+            console.error(`exec error: ${err}`);
+            res.send(JSON.stringify("{error:\"Database query error\"}") );
+            return;
+        }
+
+        var coll = db.collection('results');
+        cursor = coll.find({});
         cursor.toArray(function(err, result){
                res.render("results",{ data: JSON.stringify(result) });
     });
@@ -121,5 +130,5 @@ app.get('/get_results_api/', (req, res) => {
 });
 
 app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+    console.log(`Server running at http://${hostname}:${port}/`);
 });
