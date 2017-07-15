@@ -19,17 +19,25 @@ const port = 8500;
 const hostname = 'localhost';
 const port = 8500;
 
+
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://sambauser:teamsamba@sambahost.dyndns.lrz.de:27017/samba";
 
-app.get('/', function(req, res) {
-  //console.log('Limit file size: '+limit);
-  res.render("index")
-});
+// CORS
+app.all('/', function(req, res, next) {
+    console.log('CORS');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+ });
 
 app.get('/', function(req, res) {
-  //console.log('Limit file size: '+limit);
-  res.render("results")
+  console.log('a');
+  res.render("index");
+});
+
+app.get('/results', function(req, res) {
+  res.render("results");
 });
 
 // save AlgoParaImputs
@@ -57,8 +65,6 @@ app.get('/start_job/:job_name', (req, res) => {
     });
     console.log("Started flink job.")
 });
-
-
 
 function callFlink (jobname, func) {
     child.exec('/root/flink-1.3.0/bin/flink run -c org.lmu.JobNameBatchDB ' +
