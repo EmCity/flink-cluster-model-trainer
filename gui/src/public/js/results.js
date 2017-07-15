@@ -212,8 +212,11 @@ $(function() {
     function reloader() {
         $("#loaderProcess").addClass('mdl-progress__indeterminate');
         ajaxReloadTable(function (){
-            $("#loaderProcess").removeClass('mdl-progress__indeterminate');
-            setTimeout(reloader, 5000);
+            setTimeout(function(){
+                $("#loaderProcess").removeClass('mdl-progress__indeterminate');
+                setTimeout(reloader, 5000);
+            }, 500);
+
         });
     };
 
