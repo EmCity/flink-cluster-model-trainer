@@ -184,7 +184,7 @@ $(function() {
             url: "http://sambahost.dyndns.lrz.de:8500/get_results_api",
             type: 'GET',
             crossDomain: true,
-            dataType: 'jsonp'
+            dataType: 'json'
         }).done(function(newdata) {
             console.log("done");
             console.log(newdata);
