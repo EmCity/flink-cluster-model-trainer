@@ -40,6 +40,10 @@ app.get('/results', function(req, res) {
   res.render("results");
 });
 
+app.get('/results', function(req, res) { 
+  res.render("results"); 
+}); 
+
 // save AlgoParaImputs
 app.post('/api/',(req, res) => {
   data = req.body;
