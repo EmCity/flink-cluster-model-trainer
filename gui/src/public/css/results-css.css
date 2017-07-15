@@ -158,7 +158,22 @@ td.details-control {
 tr.details td.details-control {
     background: url('../resources/details_close.png') no-repeat center center;
 }
+
+
 */
+
+html{
+    height:auto;
+}
+
+.mdl-data-table{
+    width: 560px;
+    margin: 5px;
+}
+
+.mdl-data-table tbody .selected{
+    background-color: #AAA;
+}
 
 /*
 .mdl-data-table tbody tr:nth-child(odd) {
@@ -166,7 +181,38 @@ tr.details td.details-control {
 }
 */
 
-.mdl-data-table{
-    width: auto;
+.mdl-data-table tbody tr:hover{
+    background-color: #BBBBBB;
 }
 
+
+
+.mdl-data-table tbody{
+    height: 120px;
+    overflow-y:auto;
+}
+
+thead {
+   color: #808080;
+   background: #999;
+   font-size: 34px;
+   font-weight: bold;
+   text-transform:uppercase;
+}
+
+#results.mdl-card {
+    background: rgba(0, 0, 0, 0.0);
+    height: 400px;
+    width: auto;
+    overflow-y:auto;
+}
+
+#details.mdl-card {
+    height: 50px;
+    width: auto;
+    overflow-y:auto;
+}
+#details li {
+    padding: 3px;
+    min-height: 0px;
+}

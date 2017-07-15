@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A frontend application for the Big Data Science course.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Team Samba</title>
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+    <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <link rel="shortcut icon" href="images/favicon.png">
+
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!--
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
+    -->
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.orange-light_green.min.css" />
+
+    <!-- TODO
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/mycss.css">
+    <link rel="stylesheet" href="css/results-css.css">
+    -->
+    <link rel="stylesheet" href="public/css/styles.css">
+    <link rel="stylesheet" href="public/css/mycss.css">
+    <link rel="stylesheet" href="public/css/results-css.css">
+
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <!--TODO
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/results.js"></script>
+    -->
+    <script src="public/js/jquery-3.2.1.min.js"></script>
+    <script src="public/js/results.js"></script>
+
+    <!-- <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+<link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+
+
+</head>
+
+
+<body>
+<div id="centerwrap">
+    <div class="container">
+        <div class="table-title">
+            <i class="material-icons mdl-list__item-avatar">list</i>
+            Results
+        </div>
+
+        <div id="results" class="mdl-card">
+            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th class="mdl-data-table__cell--non-numeric">Name</th>
+                    <th>started, finished</th>
+                    <th>duration</th>
+                    <th>MAPE</th>
+                </tr>
+                </thead>
+                <tbody id="result_table_body">
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-title">
+            <i class="material-icons mdl-list__item-avatar">poll</i>
+            Details
+        </div>
+        <div id="details" class="mdl-card">
+            <ul class="demo-list-item mdl-list">
+                <li class="mdl-list__item mdl-list__item--two-line">
+                    <span class="mdl-list__item-primary-content">
+                      <i class="material-icons mdl-list__item-avatar">list</i>
+                      <span>Bryan Cranston</span>
+                      <span class="mdl-list__item-sub-title">62 Episodes</span>
+                    </span>
+                                    <span class="mdl-list__item-secondary-content">
+                      <span class="mdl-list__item-secondary-info">Actor</span>
+                      <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+                    </span>
+                </li>
+                <li class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content">
+                      Bryan Cranston
+                    </span>
+                </li>
+                                <li class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content">
+                      Aaron Paul
+                    </span>
+                                </li>
+                                <li class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content">
+                      Bob Odenkirk
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div align="center" class="top">
+            <button target="_blank" id="reload_btn"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">
+                Refresh Page
+            </button>
+            <div class="mdl-spinner mdl-js-spinner is-active"></div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
