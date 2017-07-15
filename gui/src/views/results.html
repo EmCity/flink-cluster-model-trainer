@@ -1,96 +1,143 @@
 <!doctype html>
 <html lang="en">
-<div id="centerwrap">
 
 <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="description" content="A frontend application for the Big Data Science course.">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-        <title>Team Samba</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A frontend application for the Big Data Science course.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Team Samba</title>
 
-        <!-- Add to homescreen for Chrome on Android -->
-        <meta name="mobile-web-app-capable" content="yes">
-        <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="images/android-desktop.png">
 
-        <!-- Add to homescreen for Safari on iOS -->
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black">
-        <meta name="apple-mobile-web-app-title" content="Material Design Lite">
-        <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+    <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
 
-        <!-- Tile icon for Win8 (144x144 + tile color) -->
-        <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
-        <meta name="msapplication-TileColor" content="#3372DF">
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
 
-        <link rel="shortcut icon" href="images/favicon.png">
+    <link rel="shortcut icon" href="images/favicon.png">
 
-        <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
-        <!--
-    <link rel="canonical" href="http://www.example.com/">
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+<link rel="canonical" href="http://www.example.com/">
+-->
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
+
+    <!-- TODO
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/mycss.css">
+    <link rel="stylesheet" href="css/results-css.css">
     -->
-
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
-        <link rel="stylesheet" href="css/styles.css">
-        <link rel="stylesheet" href="css/mycss.css">
-         <link rel="stylesheet" href="css/results-css.css">
-        <!-- <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
-  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
-
-    </head>
-
-
-<body onload="Javascript:createTable()">
-    <div class="container">
-  <div class="result">
-  </div>
-  <script>var data = "<%= data %>";</script>
-
-    <div class="table-title">
-    <h3>Results</h3>
-    </div>
-
-  <table class="table-fill" id="example">
-     <thead>
-          <tr>
-               <th class="text-right"></th>
-               <th class="text-center">Job Name</th>
-               <th class="text-center">MAPE</th>
-           </tr>
-     </thead>
-     <tbody id="tbody" align="center" class="table-hover">
-     </tbody>
-</table>
-
-<div id="content">
-    <div class="table-title">
-    <h3>Details</h3>
-    </div>
-         <table>
-             <thead id="thead"></thead>
-             <tbody id="tbody_detail" align="center"></tbody>
-        </table>
-
-    <div align="right" class="top">
-            <input type="button" id="hide_details" value="Hide Details" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"/>
-    </div>
-</div>
-
-
-
-<div align="center" class="top">
-<button onclick = "reload_fct()" target="_blank" id="browse_btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">Refresh Page</button>
-</div>
+    <link rel="stylesheet" href="../public/css/styles.css">
+    <link rel="stylesheet" href="../public/css/mycss.css">
+    <link rel="stylesheet" href="../public/css/results-css.css">
 
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <!--TODO
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/results.js"></script>
+    -->
+    <script src="../public/js/jquery-3.2.1.min.js"></script>
+    <script src="../public/js/results.js"></script>
+
+    <!-- <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+<link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+
+</head>
 
 
+<body>
+<div id="centerwrap">
+    <div class="container">
+        <div class="table-title">
+            <h3>Results</h3>
+        </div>
+
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-data-table--table-striped">
+            <thead>
+            <tr>
+                <th class="mdl-data-table__cell--non-numeric">Name</th>
+                <th>started</th>
+                <th>finished</th>
+                <th>duration</th>
+                <th>MAPE</th>
+            </tr>
+            </thead>
+            <tbody id="result_table_body">
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Acrylic (Transparent)</td>
+                <td>25</td>
+                <td>$2.90</td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Plywood (Birch)</td>
+                <td>50</td>
+                <td>$1.25</td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Laminate (Gold on Blue)</td>
+                <td>10</td>
+                <td>$2.35</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="table-fill" id="example">
+            <thead>
+            <tr>
+                <th class="text-right"></th>
+                <th class="text-center">Job Name</th>
+                <th class="text-center">MAPE</th>
+            </tr>
+            </thead>
+            <tbody id="tbody" align="center" class="table-hover">
+            </tbody>
+        </table>
+
+        <div id="result_list">
+            data?
+        </div>
+
+        <div id="content">
+
+
+            <div class="table-title">
+                <h3>Details</h3>
+            </div>
+            <table>
+                <thead id="thead"></thead>
+                <tbody id="tbody_detail" align="center"></tbody>
+            </table>
+
+            <div align="right" class="top">
+                <input type="button" id="hide_details" value="Hide Details"
+                       class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"/>
+            </div>
+        </div>
+
+
+        <div align="center" class="top">
+            <button target="_blank" id="reload_btn"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">
+                Refresh Page
+            </button>
+        </div>
+
+    </div>
 </div>
 </body>
-</div>
+
 </html>

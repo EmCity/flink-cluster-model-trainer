@@ -1,4 +1,4 @@
-
+/*
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
 body-tab {
   font-family: "Roboto", helvetica, arial, sans-serif;
@@ -158,3 +158,15 @@ td.details-control {
 tr.details td.details-control {
     background: url('../resources/details_close.png') no-repeat center center;
 }
+*/
+
+/*
+.mdl-data-table tbody tr:nth-child(odd) {
+  background-color: #EBEBEB;
+}
+*/
+
+.mdl-data-table{
+    width: auto;
+}
+
