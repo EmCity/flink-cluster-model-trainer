@@ -12,13 +12,13 @@ app.use('/',express.static(path.join(__dirname, '/../gui/src/')));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
-/*
+
 const hostname = 'sambahost.dyndns.lrz.de';
 const port = 8500;
-*/
+/*
 const hostname = 'localhost';
 const port = 8500;
-
+*/
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://sambauser:teamsamba@sambahost.dyndns.lrz.de:27017/samba";

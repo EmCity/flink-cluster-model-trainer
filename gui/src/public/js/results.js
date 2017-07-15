@@ -82,15 +82,17 @@ $(function() {
                 html: val.job_name
             }).appendTo(tr);
 
-            $("<td/>",{
-                html: new Date(val.timestart).toLocaleString('de') + '<br>' + new Date(val.timeend - 2*60*60*1000).toLocaleString('de')
-            }).appendTo(tr);
+            if(val.timestart && val.timeend){
+                $("<td/>",{
+                    html: new Date(val.timestart).toLocaleString('de') + '<br>' + new Date(val.timeend - 2*60*60*1000).toLocaleString('de')
+                }).appendTo(tr);
 
-            var delta = new Date(val.timeend - 3*60*60*1000 - val.timestart);
+                var delta = new Date(val.timeend - 3*60*60*1000 - val.timestart);
 
-            $("<td/>",{
-                html: delta.toLocaleTimeString('de')
-            }).appendTo(tr);
+                $("<td/>",{
+                    html: delta.toLocaleTimeString('de')
+                }).appendTo(tr);
+            }
 
             $("<td/>",{
                 html: val.mape.toFixed(4)
@@ -184,6 +186,7 @@ $(function() {
             crossDomain: true,
             dataType: 'jsonp'
         }).done(function(newdata) {
+            console.log("done");
             console.log(newdata);
 
             data2 = $.parseJSON(newdata);
@@ -198,6 +201,7 @@ $(function() {
                 $( "#result_table_body" ).fadeIn();
             }
         }).always(function(info){
+        console.log("always");
             console.log(info);
             fnAlways();
 
