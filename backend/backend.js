@@ -8,19 +8,30 @@ var url = "mongodb://sambauser:teamsamba@sambahost.dyndns.lrz.de:27017/samba";
 var path = require('path');
 var bodyParser = require('body-parser');
 
-app.set('views', path.join(__dirname, '/../gui/src/views'));
+app.set('views', path.join(__dirname, '/../gui/src')); 
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use('/',express.static(path.join(__dirname, '/../gui/src/public/')));
 
-
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
+// CORS 
+app.all('/', function(req, res, next) { 
+    console.log('CORS'); 
+    res.header("Access-Control-Allow-Origin", "*"); 
+    res.header("Access-Control-Allow-Headers", "X-Requested-With"); 
+    next(); 
+ }); 
 
 app.get('/', function(req, res) {
   //console.log('Limit file size: '+limit);
   res.render("index")
 });
+
+app.get('/results', function(req, res) { 
+  res.render("results"); 
+}); 
 
 // save AlgoParaImputs
 app.post('/api/',(req, res) => {
@@ -68,13 +79,19 @@ function callFlink (jobname, func) {
 // get results
 app.get('/get_results/', (req, res) => {
   try{
-  MongoClient.connect(url, function(err, db) {
-      var coll = db.collection('results');
-      cursor = coll.find({});
+  MongoClient.connect(url, function(err, db) { 
+        if (err) { 
+            console.error(`exec error: ${err}`); 
+            res.send(JSON.stringify("{error:\"Database query error\"}") ); 
+            return; 
+        } 
+ 
+        var coll = db.collection('results'); 
+        cursor = coll.find({}); 
         cursor.toArray(function(err, result){
                res.render("results",{ data: JSON.stringify(result) });
-      });
-      db.close();
+    });
+    db.close();
   });
   }catch(err){
     console.log('Error has occured!', error);
@@ -106,16 +123,3 @@ app.get('/get_results_api/', (req, res) => {
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
-
-// var Grid = require('mongodb').Grid;
-// var GridStore = require('mongodb').GridStore;
-// function saveCsvToMongo(db, csv){
-//     var grid = new Grid(db,'fs');
-//     var buffer = new Buffer(csv);
-//         grid.get(fileInfo._id, function(err, data){ontent_type: 'text'}, functio$
-//   console.log(`stderr: ${stderr}`);
-//             if (err) throw err;
-//             console.log("Retrieved data: " + data.toString());
-//         });
-//     });
-// }
