@@ -129,6 +129,28 @@ app.get('/get_results_api/', (req, res) => {
   }
 });
 
+// get results rest api
+app.get('/get_jobs_api/', (req, res) => {
+  try{
+  MongoClient.connect(url, function(err, db) {
+      if (err) {
+        console.error(`exec error: ${err}`);
+        res.send(JSON.stringify("{error:\"Database query error\"}") );
+        return;
+      }
+      var coll = db.collection('jobs');
+      cursor = coll.find({});
+      cursor.toArray(function(err, result){
+        res.send(JSON.stringify(result) );
+      });
+      db.close();
+  });
+  }catch(err){
+    console.error('Error has occured!', err);
+    res.send(JSON.stringify("{error:\"Database connect error\"}") );
+  }
+});
+
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
