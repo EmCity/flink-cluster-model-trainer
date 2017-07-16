@@ -85,11 +85,15 @@ def train_nn(df_x_train, df_x_test, df_y_train, df_y_test, params):
     x = tf.placeholder(tf.float32, [None, x_dim])
     y = tf.placeholder(tf.float32, [None, y_dim])
 
-    #TODO: include normalization/cost_function
+    #TODO: include cost_function
     normalization = params["normalization"]
+    if normalization == True:
+        tf.nn.l2_normalize(x, dim=0)
+
     learning_rate = params["learning_rate"];
     epochs = params["epochs"]
     cost_function = params["cost_function"]
+    neurons = 200
 
 
     # Create model
@@ -106,13 +110,13 @@ def train_nn(df_x_train, df_x_test, df_y_train, df_y_test, params):
 
     # Store layers weight & bias
     weights = {
-        'h1': tf.Variable(tf.random_normal([x_dim, 200])),
-        'h2': tf.Variable(tf.random_normal([200, 500])),
-        'out': tf.Variable(tf.random_normal([500, y_dim]))
+        'h1': tf.Variable(tf.random_normal([x_dim, neurons])),
+        'h2': tf.Variable(tf.random_normal([neurons, neurons])),
+        'out': tf.Variable(tf.random_normal([neurons, y_dim]))
     }
     biases = {
-        'b1': tf.Variable(tf.random_normal([200])),
-        'b2': tf.Variable(tf.random_normal([500])),
+        'b1': tf.Variable(tf.random_normal([neurons])),
+        'b2': tf.Variable(tf.random_normal([neurons])),
         'out': tf.Variable(tf.random_normal([y_dim]))
     }
 
@@ -121,7 +125,7 @@ def train_nn(df_x_train, df_x_test, df_y_train, df_y_test, params):
 
     # Define loss and optimizer
     cost_func = tf.reduce_mean(tf.div(tf.abs(pred-y), y))
-    optimizer = tf.train.AdagradOptimizer(learning_rate=learning_rate).minimize(cost_func)
+    optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost_func)
 
     # Initializing the variables
     init = tf.global_variables_initializer()
@@ -129,19 +133,16 @@ def train_nn(df_x_train, df_x_test, df_y_train, df_y_test, params):
     # Launch the graph
     with tf.Session() as sess:
         sess.run(init)
-        batch_size = 10
+        batch_size = 1
         # Training cycle
         for epoch in range(epochs):
-            avg_cost = 0.
-            total_batch = int(len(df_x_train) / batch_size)
             # Loop over all batches
-            for batch in range(total_batch):
+            for batch in range(int(len(df_x_train) / batch_size)):
                 x_batch = df_x_train[batch * batch_size: batch * batch_size + batch_size]
                 y_batch = df_y_train[batch * batch_size: batch * batch_size + batch_size]
                 # Run optimization op (backprop) and cost op (to get loss value)
                 _, c = sess.run([optimizer, cost_func], feed_dict={x: x_batch, y: y_batch})
                 # Compute average loss
-                avg_cost += c
         # Test model
         prediction = pred.eval(feed_dict={x: df_x_test}, session=sess)
         mape = np.mean(np.abs((df_y_test - prediction) / df_y_test))
