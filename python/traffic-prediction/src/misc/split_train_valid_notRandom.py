@@ -36,10 +36,10 @@ def split_dataset(df_X, df_Y, train = 0.6, validation = 0.1, test = 0.3):
         for file in files:
             os.remove(file)
 
-        train_X.to_csv(path_or_buf= "../../../../python/traffic-prediction/src/misc/splitting_csv_files/train_X.csv")
-        train_Y.to_csv(path_or_buf= "../../../../python/traffic-prediction/src/misc/splitting_csv_files/train_Y.csv")
-        test_X.to_csv(path_or_buf= "../../../../python/traffic-prediction/src/misc/splitting_csv_files/test_X.csv")
-        test_Y.to_csv(path_or_buf= "../../../../python/traffic-prediction/src/misc/splitting_csv_files/test_Y.csv")
+        train_X.to_csv(path_or_buf= "train_X.csv")
+        train_Y.to_csv(path_or_buf= "train_Y.csv")
+        test_X.to_csv(path_or_buf= "test_X.csv")
+        test_Y.to_csv(path_or_buf= "test_Y.csv")
 
 
     else:
