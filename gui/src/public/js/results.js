@@ -197,12 +197,19 @@ $(function() {
                 $( "#result_table_body" ).fadeOut();
                 $( "#result_table_body" ).empty();
 
+                var snackbarContainer = document.querySelector('#toast');
+                var data = {
+                    message: 'New job result is available.'
+                    };
+                snackbarContainer.MaterialSnackbar.showSnackbar(data);
+
                 createTable(data);
                 $( "#result_table_body" ).fadeIn();
             }
         }).always(function(info){
-        console.log("always");
-            console.log(info);
+
+            //console.log("always");
+            //console.log(info);
             fnAlways();
 
         });

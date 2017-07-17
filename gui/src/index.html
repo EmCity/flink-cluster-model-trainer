@@ -42,14 +42,20 @@
 <body>
 <div id="centerwrap">
     <div class="container">
+
+        <div id="toast" class="mdl-js-snackbar mdl-snackbar">
+            <div class="mdl-snackbar__text"></div>
+            <button class="mdl-snackbar__action" type="button"></button>
+        </div>
+
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-            <header class="mdl-layout__header">
+            <header id="header" class="mdl-layout__header">
                 <div class="mdl-layout__header-row">
                     <!-- Title -->
-                    <span class="mdl-layout-title">Team Samba: BigDataScience Tool</span>
+                    <span class="mdl-layout-title">SambaFlow</span>
                 </div>
                 <!-- Tabs -->
-                <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                <div class="mdl-layout__tab-bar ">
                     <a href="#scroll-tab-1" class="mdl-layout__tab is-active">Create Job</a>
                     <a href="#scroll-tab-2" class="mdl-layout__tab">Results</a>
                 </div>
@@ -306,6 +312,10 @@
         </div>
     </div>
 </div>
+
+
+
+
 </body>
 <script src="public/js/algo_parameters.js"></script>
 <script src="public/js/read_files.js"></script>

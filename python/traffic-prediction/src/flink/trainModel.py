@@ -85,7 +85,7 @@ def train_nn(df_x_train, df_x_test, df_y_train, df_y_test, params):
     x = tf.placeholder(tf.float32, [None, x_dim])
     y = tf.placeholder(tf.float32, [None, y_dim])
 
-    #TODO: include cost_function
+
     normalization = params["normalization"]
     if normalization == True:
         tf.nn.l2_normalize(x, dim=0)
@@ -123,8 +123,14 @@ def train_nn(df_x_train, df_x_test, df_y_train, df_y_test, params):
     # Construct model
     pred = multilayer_perceptron(x, weights, biases)
 
-    # Define loss and optimizer
     cost_func = tf.reduce_mean(tf.div(tf.abs(pred-y), y))
+    # Define loss and optimizer
+    if cost_function == "mean_squared_error" :
+        cost_func = tf.sqrt(tf.reduce_mean(tf.square(tf.subtract(pred, y))))
+
+    if cost_function == "mean_absolute_percentage_error" :
+        cost_func = tf.reduce_mean(tf.div(tf.abs(pred-y), y))
+
     optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost_func)
 
     # Initializing the variables
