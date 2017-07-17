@@ -198,10 +198,10 @@ $(function() {
                 $( "#result_table_body" ).empty();
 
                 var snackbarContainer = document.querySelector('#toast');
-                var data = {
+                var toastdata = {
                     message: 'New job result is available.'
                     };
-                snackbarContainer.MaterialSnackbar.showSnackbar(data);
+                snackbarContainer.MaterialSnackbar.showSnackbar(toastdata);
 
                 createTable(data);
                 $( "#result_table_body" ).fadeIn();
