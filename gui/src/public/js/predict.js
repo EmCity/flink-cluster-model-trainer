@@ -50,10 +50,7 @@ function predict() {
           data.algorithms['SVM']['max_iter'] = data.algorithms['SVM']['max_iter'][0];
      }
 
-     var snackbarContainer = document.querySelector('#toast');
-     var toastdata = {
-             message: 'Thanks for submitting your job! You’ll be able to see it in the results tab.'
-         };
+
      snackbarContainer.MaterialSnackbar.showSnackbar(toastdata );
 
      Promise.all([a, b, c, d]).then(function() {
@@ -71,11 +68,16 @@ function predict() {
             // `data` is the parsed version of the JSON returned from the above endpoint.
             console.log(data); // { "userId": 1, "id": 1, "title": "...", "body": "..." }
 
+            var snackbarContainer = document.querySelector('#toast');
+            var toastdata = {
+                message: 'Thanks for submitting your job! You’ll be able to see it in the results tab.'
+            };
+
+        }).catch(function(error) {
             var toastdata2 = {
                 message: 'Job '  + ' error.'
             };
             snackbarContainer.MaterialSnackbar.showSnackbar(toastdata2);
-        }).catch(function(error) {
             console.log('Request failed', error);
         })
     })
