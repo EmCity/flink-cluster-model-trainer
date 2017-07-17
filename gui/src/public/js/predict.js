@@ -51,7 +51,7 @@ function predict() {
      }
 
 
-     snackbarContainer.MaterialSnackbar.showSnackbar(toastdata );
+
 
      Promise.all([a, b, c, d]).then(function() {
         fetch("http://sambahost.dyndns.lrz.de:8500/api", {
@@ -72,6 +72,7 @@ function predict() {
             var toastdata = {
                 message: 'Thanks for submitting your job! You’ll be able to see it in the results tab.'
             };
+            snackbarContainer.MaterialSnackbar.showSnackbar(toastdata );
 
         }).catch(function(error) {
             var toastdata2 = {
