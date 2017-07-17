@@ -17,13 +17,14 @@ html{
 }
 
 .mdl-data-table{
-    width: auto;
+    width: 550px;
     margin: 5px;
 }
 
 .mdl-data-table tbody{
     height: 100px;
     overflow-y:auto;
+    overflow-x:auto;
 }
 
 thead {
@@ -74,4 +75,25 @@ thead {
 
 #loaderProcess{
     width: 600px;
+}
+
+#header{
+    width: 570px;
+    margin-left: 15px;
+}
+
+.mdl-list__item-avatar{
+    margin-right: 8px;
+}
+
+#header{
+    color:white;
+}
+
+.mdl-layout__tab{
+    color:white;
+}
+
+.mdl-layout.is-upgraded .mdl-layout__tab.is-active{
+    color:white;
 }
