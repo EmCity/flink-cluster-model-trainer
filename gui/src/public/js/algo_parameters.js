@@ -110,7 +110,7 @@ $(document).ready(function() {
                     /*NORMALIZATION*/
                     "<label>" +
                     "<input type='checkbox' value='true' id='normalization' checked>" +
-                    "<span>normalization(optional)(default=true)</span>" +
+                    "<span>normalization(optional)(tf.nn.l2_normalize(dim=0))(default=true)</span>" +
                     "</label>" + "<br>" +
                     /*LEARNING RATE*/
                     "<label>Learning rate (float)(default 0.01): </label>" +

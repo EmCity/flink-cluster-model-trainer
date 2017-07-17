@@ -125,10 +125,10 @@ def train_nn(df_x_train, df_x_test, df_y_train, df_y_test, params):
 
     cost_func = tf.reduce_mean(tf.div(tf.abs(pred-y), y))
     # Define loss and optimizer
-    if cost_function == "mean_squared_error" :
+    if "mean_squared_error" == cost_function :
         cost_func = tf.sqrt(tf.reduce_mean(tf.square(tf.subtract(pred, y))))
 
-    if cost_function == "mean_absolute_percentage_error" :
+    if "mean_absolute_percentage_error" == cost_function :
         cost_func = tf.reduce_mean(tf.div(tf.abs(pred-y), y))
 
     optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost_func)
