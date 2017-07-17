@@ -197,9 +197,9 @@ $(function() {
                 $( "#result_table_body" ).fadeOut();
                 $( "#result_table_body" ).empty();
                 console.log(data);
-
+                console.log("old length: "+ data.length);
                 // dont show it first load
-                if(data.length > 0){
+                if(data.length > 1){
                     var snackbarContainer = document.querySelector('#toast');
                     var toastdata = {
                         message: 'New job result is available.'
