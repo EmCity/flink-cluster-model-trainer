@@ -53,7 +53,7 @@ function predict() {
 
 
 
-     Promise.all([a, b, c, d]).then(function() {
+     Promise.all([a, b, c, d, e, f]).then(function() {
         fetch("http://sambahost.dyndns.lrz.de:8500/api", {
             method: 'POST',
             body: JSON.stringify(data), // stringify JSON
