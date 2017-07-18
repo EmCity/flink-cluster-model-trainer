@@ -125,7 +125,7 @@ $(document).ready(function() {
                     "<label>Cost function(default 'mse'): </label>" +
                     "<select id='cost_function' name='costfunction'>" +
                     "<option value='mean_squared_error'>Mean Squared Error</option>" +
-                    "<option value='mean_absolute_percentage_error'>Mean absolute percentage error</option>" +
+                    "<option value='mean_absolute_percentage_error'>Mean Absolute Percentage Error</option>" +
                     " </select>" +
                     "</div>"
                 );
