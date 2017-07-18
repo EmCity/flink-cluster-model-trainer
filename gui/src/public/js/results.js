@@ -84,10 +84,10 @@ $(function() {
 
             if(val.timestart && val.timeend){
                 $("<td/>",{
-                    html: new Date(val.timestart).toLocaleString('de') + '<br>' + new Date(val.timeend - 2*60*60*1000).toLocaleString('de')
+                    html: new Date(val.timestart).toLocaleString('de') + '<br>' + new Date(val.timeend ).toLocaleString('de')
                 }).appendTo(tr);
 
-                var delta = new Date(val.timeend - 3*60*60*1000 - val.timestart);
+                var delta = new Date(val.timeend - 1*60*60*1000 - val.timestart);
 
                 $("<td/>",{
                     html: delta.toLocaleTimeString('de')
