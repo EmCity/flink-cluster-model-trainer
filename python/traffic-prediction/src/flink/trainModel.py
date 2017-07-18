@@ -34,29 +34,35 @@ def train_model(jsonDict):
 
     train_x_io = io.StringIO(data['train_x'])
     test_x_io = io.StringIO(data['test_x'])
+    valid_x_io = io.StringIO(data['valid_x'])
     train_y_io = io.StringIO(data['train_y'])
     test_y_io = io.StringIO(data['test_y'])
+    valid_y_io = io.StringIO(data['valid_y'])
 
     df_x_train = pd.read_csv(train_x_io, index_col=0, sep=',', lineterminator='\n', header=0)
     df_x_test = pd.read_csv(test_x_io, index_col=0, sep=',', lineterminator='\n', header=0)
+    df_x_valid = pd.read_csv(valid_x_io, index_col=0, sep=',', lineterminator='\n', header=0)
     df_y_train = pd.read_csv(train_y_io, index_col=0, sep=',',lineterminator='\n', header=0)
     df_y_test = pd.read_csv(test_y_io, index_col=0, sep=',',lineterminator='\n', header=0)
+    df_y_valid = pd.read_csv(valid_y_io, index_col=0, sep=',', lineterminator='\n', header=0)
 
     result_mape = "{error}"
     if "LR" == algorithms:
-        result_mape = train_lr(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
+        result_mape,result_mape_valid = train_lr(df_x_train, df_x_test, df_x_valid, df_y_train, df_y_test, df_y_valid, jsonDict)
     if "SVM" == algorithms:
-        result_mape = train_svm(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
+        result_mape,result_mape_valid = train_svm(df_x_train, df_x_test, df_x_valid, df_y_train, df_y_test, df_y_valid,jsonDict)
     if "NN" == algorithms:
-        result_mape = train_nn(df_x_train, df_x_test, df_y_train, df_y_test, jsonDict)
+        result_mape,result_mape_valid = train_nn(df_x_train, df_x_test, df_x_valid, df_y_train, df_y_test, df_y_valid, jsonDict)
 
     # add mape
     result_json['mape'] = result_mape
+    result_json['mape_valid'] = result_mape_valid
+
     # print (return) jsonresultstring!!!
     print(json.dumps(result_json))
 
 
-def train_svm(df_x_train, df_x_test, df_y_train, df_y_test, params):
+def train_svm(df_x_train, df_x_test, df_x_valid, df_y_train, df_y_test, df_y_valid, params):
     C = params["C"];
     epsilon = params["epsilon"];
     kernel = params["kernel"];
@@ -70,16 +76,16 @@ def train_svm(df_x_train, df_x_test, df_y_train, df_y_test, params):
                             shrinking=shrinking, tol=tol, cache_size=cache_size, max_iter=max_iter)
     regr_multi_svr = MultiOutputRegressor(svr)
     regr_multi_svr.fit(df_x_train, df_y_train)
-    return get_error(regr_multi_svr, df_x_test, df_y_test)
+    return [get_error(regr_multi_svr, df_x_test, df_y_test),get_error(regr_multi_svr, df_x_valid, df_y_valid)]
 
 
-def train_lr(df_x_train, df_x_test, df_y_train, df_y_test, params):
+def train_lr(df_x_train, df_x_test, df_x_valid, df_y_train, df_y_test, df_y_valid, params):
     lr = linear_model.LinearRegression(normalize=params["normalize"], fit_intercept=params["fit_intercept"])
     lr.fit(df_x_train, df_y_train)
-    return get_error(lr, df_x_test, df_y_test)
+    return [get_error(lr, df_x_test, df_y_test),get_error(lr, df_x_valid, df_y_valid)]
 
 
-def train_nn(df_x_train, df_x_test, df_y_train, df_y_test, params):
+def train_nn(df_x_train, df_x_test, df_x_valid, df_y_train, df_y_test, df_y_valid,  params):
     x_dim = len(df_x_train.columns)
     y_dim = len(df_y_train.columns)
     x = tf.placeholder(tf.float32, [None, x_dim])
@@ -151,12 +157,14 @@ def train_nn(df_x_train, df_x_test, df_y_train, df_y_test, params):
                 # Compute average loss
         # Test model
         prediction = pred.eval(feed_dict={x: df_x_test}, session=sess)
+        prediction_valid = pred.eval(feed_dict={x: df_x_valid}, session=sess)
         mape = np.mean(np.abs((df_y_test - prediction) / df_y_test))
-        return np.mean(mape)
+        mape_valid = np.mean(np.abs((df_y_valid - prediction_valid) / df_y_valid))
+        return [np.mean(mape),np.mean(mape_valid)]
 
 
-def get_error(model, df_x_test, df_y_test):
-    mape = np.mean(np.abs((df_y_test - model.predict(df_x_test)) / df_y_test))
+def get_error(model, df_x, df_y):
+    mape = np.mean(np.abs((df_y - model.predict(df_x)) / df_y))
     return np.mean(np.array(mape))
 
 json_string = sys.argv[1]
