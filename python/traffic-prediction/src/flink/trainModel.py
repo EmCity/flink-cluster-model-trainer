@@ -47,6 +47,7 @@ def train_model(jsonDict):
     df_y_valid = pd.read_csv(valid_y_io, index_col=0, sep=',', lineterminator='\n', header=0)
 
     result_mape = "{error}"
+    result_mape_valid = "{error}"
     if "LR" == algorithms:
         result_mape,result_mape_valid = train_lr(df_x_train, df_x_test, df_x_valid, df_y_train, df_y_test, df_y_valid, jsonDict)
     if "SVM" == algorithms:
