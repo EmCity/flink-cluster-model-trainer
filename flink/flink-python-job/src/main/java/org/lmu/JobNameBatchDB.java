@@ -31,7 +31,9 @@ public final class JobNameBatchDB {
         for (Object t : resCollect.toArray()) {
             JSONObject jsonObject = (JSONObject) t;
             double mape = (double) jsonObject.get("mape");
+         //   double mape_valid = (double) jsonObject.get("mape_valid")
             System.out.println("JobNameBatchDB: Results: " + jobName + " got a result with mape: " + mape);
+         //   System.out.println("JobNameBatchDB: Results: " + jobName + " got a result with mape_valid: " + mape_valid);
         }
         JSONObject bestResultJosnObject = flinkdistribute.getBestMapeJsonObject(resCollect);
         System.out.println("Save best result with status Finished");

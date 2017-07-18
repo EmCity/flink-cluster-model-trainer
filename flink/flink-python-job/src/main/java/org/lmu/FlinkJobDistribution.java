@@ -232,15 +232,25 @@ final class FlinkJobDistribution {
      */
     JSONObject getBestMapeJsonObject(final JSONArray resultsJSONArray) {
         double bestmape = 420;
+        //double bestValidMape = 420;
         JSONObject bestJsonObject = new JSONObject();
+       // JSONObject bestJsonValidObject = new JSONObject();
         for (Object o : resultsJSONArray) {
             JSONObject jsonObject = (JSONObject) o;
             double mape = (double) jsonObject.get("mape");
+            //double mape_valid = (double) jsonObject.get("mape_valid");
             if (bestmape > mape) {
                 bestmape = mape;
                 bestJsonObject = jsonObject;
             }
+           // if (bestValidMape > mape) {
+            //    bestValidMape = mape;
+              //  bestJsonObjectValid = jsonObject;
+                //
+         //}
         }
+       // if (bestJsonObject!=bestJsonValidObject)
+       //     bestJsonObject=bestJsonValidObject;
         return bestJsonObject;
     }
 
