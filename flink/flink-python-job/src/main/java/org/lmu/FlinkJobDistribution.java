@@ -71,8 +71,8 @@ final class FlinkJobDistribution {
         fillList(json, nnArray, tasks);
 
         System.out.println("FlinkJobDistripbution: Distribute: " + tasks.size() + " jobs on the workers:");
-        DataSet<String> dataset = env.fromCollection(tasks).flatMap(new OnWorkers());
-
+        //DataSet<String> dataset = env.fromCollection(tasks).flatMap(new OnWorkers());
+        DataSet<String> dataset = env.fromCollection(tasks).setParallelism(100).flatMap(new OnWorkers());
         JSONArray resJsonArray = new JSONArray();
         JSONParser parser = new JSONParser();
         for (String s : dataset.collect()) {
