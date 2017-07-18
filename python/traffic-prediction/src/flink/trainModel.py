@@ -77,13 +77,13 @@ def train_svm(df_x_train, df_x_test, df_x_valid, df_y_train, df_y_test, df_y_val
                             shrinking=shrinking, tol=tol, cache_size=cache_size, max_iter=max_iter)
     regr_multi_svr = MultiOutputRegressor(svr)
     regr_multi_svr.fit(df_x_train, df_y_train)
-    return [get_error(regr_multi_svr, df_x_test, df_y_test),get_error(regr_multi_svr, df_x_valid, df_y_valid)]
+    return get_error(regr_multi_svr, df_x_test, df_y_test),get_error(regr_multi_svr, df_x_valid, df_y_valid)
 
 
 def train_lr(df_x_train, df_x_test, df_x_valid, df_y_train, df_y_test, df_y_valid, params):
     lr = linear_model.LinearRegression(normalize=params["normalize"], fit_intercept=params["fit_intercept"])
     lr.fit(df_x_train, df_y_train)
-    return [get_error(lr, df_x_test, df_y_test),get_error(lr, df_x_valid, df_y_valid)]
+    return get_error(lr, df_x_test, df_y_test),get_error(lr, df_x_valid, df_y_valid)
 
 
 def train_nn(df_x_train, df_x_test, df_x_valid, df_y_train, df_y_test, df_y_valid,  params):
@@ -161,7 +161,7 @@ def train_nn(df_x_train, df_x_test, df_x_valid, df_y_train, df_y_test, df_y_vali
         prediction_valid = pred.eval(feed_dict={x: df_x_valid}, session=sess)
         mape = np.mean(np.abs((df_y_test - prediction) / df_y_test))
         mape_valid = np.mean(np.abs((df_y_valid - prediction_valid) / df_y_valid))
-        return [np.mean(mape),np.mean(mape_valid)]
+        return np.mean(mape),np.mean(mape_valid)
 
 
 def get_error(model, df_x, df_y):
