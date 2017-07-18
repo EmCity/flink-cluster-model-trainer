@@ -1,0 +1,32 @@
+Cluster configuration: Standalone cluster with JobManager at sambahost.dyndns.lrz.de/10.155.208.117:6123
+Using address sambahost.dyndns.lrz.de:6123 to connect to JobManager.
+JobManager web interface address http://sambahost.dyndns.lrz.de:8081
+Starting execution of program
+Got JobName: JobSVM003
+JobNameBatchDB: Got json with jobname JobSVM003 from mongo.
+FlinkJobDistribution: Job: JobSVM003
+FlinkJobDistripbution: Distribute: 2 jobs on the workers:
+Submitting job with JobID: cd45d9c77a80712ef6c72d9e565eec1b. Waiting for job completion.
+Connected to JobManager at Actor[akka.tcp://flink@sambahost.dyndns.lrz.de:6123/user/jobmanager#306508872] with leader session id 00000000-0000-0000-0000-000000000000.
+07/16/2017 01:07:43	Job execution switched to status RUNNING.
+07/16/2017 01:07:43	CHAIN DataSource (at distribute(FlinkJobDistribution.java:74) (org.apache.flink.api.java.io.CollectionInputFormat)) -> FlatMap (FlatMap at distribute(FlinkJobDistribution.java:74))(1/1) switched to SCHEDULED 
+07/16/2017 01:07:43	CHAIN DataSource (at distribute(FlinkJobDistribution.java:74) (org.apache.flink.api.java.io.CollectionInputFormat)) -> FlatMap (FlatMap at distribute(FlinkJobDistribution.java:74))(1/1) switched to DEPLOYING 
+07/16/2017 01:07:43	CHAIN DataSource (at distribute(FlinkJobDistribution.java:74) (org.apache.flink.api.java.io.CollectionInputFormat)) -> FlatMap (FlatMap at distribute(FlinkJobDistribution.java:74))(1/1) switched to RUNNING 
+07/16/2017 01:08:17	DataSink (collect())(1/1) switched to SCHEDULED 
+07/16/2017 01:08:17	DataSink (collect())(1/1) switched to DEPLOYING 
+07/16/2017 01:08:17	CHAIN DataSource (at distribute(FlinkJobDistribution.java:74) (org.apache.flink.api.java.io.CollectionInputFormat)) -> FlatMap (FlatMap at distribute(FlinkJobDistribution.java:74))(1/1) switched to FINISHED 
+07/16/2017 01:08:17	DataSink (collect())(1/1) switched to RUNNING 
+07/16/2017 01:08:17	DataSink (collect())(1/1) switched to FINISHED 
+07/16/2017 01:08:17	Job execution switched to status FINISHED.
+
+{"parameter_set": {"epsilon": 0.1, "shrinking": true, "C": 1.0, "job_name": "JobSVM003", "cache_size": 0.001, "kernel": "rbf", "max_iter": -1, "gamma": 0.1, "tolerance": 0.001, "algorithm": "SVM"}, "job_name": "JobSVM003", "mape": 0.9616451912556343}
+{"parameter_set": {"epsilon": 0.2, "shrinking": true, "C": 1.0, "job_name": "JobSVM003", "cache_size": 0.001, "kernel": "rbf", "max_iter": -1, "gamma": 0.1, "tolerance": 0.001, "algorithm": "SVM"}, "job_name": "JobSVM003", "mape": 0.9617065632645502}JobNameBatchDB: Results: JobSVM003 got a result with mape: 0.9616451912556343
+JobNameBatchDB: Results: JobSVM003 got a result with mape: 0.9617065632645502
+Save best result with status Finished
+Object: { "timeend" : 1500160097363 , "job_name" : "JobSVM003" , "mape" : 0.9616451912556343 , "parameter_set" : { "epsilon" : 0.1 , "shrinking" : true , "C" : 1.0 , "job_name" : "JobSVM003" , "cache_size" : 0.001 , "kernel" : "rbf" , "max_iter" : -1 , "gamma" : 0.1 , "tolerance" : 0.001 , "algorithm" : "SVM"} , "timestart" : 1.499875213095E12 , "status" : "Finished"}
+Program execution finished
+Job with JobID cd45d9c77a80712ef6c72d9e565eec1b has finished.
+Job Runtime: 33965 ms
+Accumulator Results: 
+- b599ef4bda4c9c75e32777e13df825d2 (java.util.ArrayList) [2 elements]
+

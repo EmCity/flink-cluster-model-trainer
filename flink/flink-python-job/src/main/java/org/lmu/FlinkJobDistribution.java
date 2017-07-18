@@ -72,7 +72,8 @@ final class FlinkJobDistribution {
 
         System.out.println("FlinkJobDistripbution: Distribute: " + tasks.size() + " jobs on the workers:");
         //DataSet<String> dataset = env.fromCollection(tasks).flatMap(new OnWorkers());
-        DataSet<String> dataset = env.fromCollection(tasks).setParallelism(tasks.size()).flatMap(new OnWorkers());
+        DataSet<String> dataset = env.fromCollection(tasks).setParallelism(10).flatMap(new OnWorkers());
+           System.out.println("dataset is : "+dataset);
         JSONArray resJsonArray = new JSONArray();
         JSONParser parser = new JSONParser();
         for (String s : dataset.collect()) {
@@ -221,7 +222,7 @@ final class FlinkJobDistribution {
         DBCollection coll = mongoClient.getDB(DBNAME).getCollection("results");
         DBObject b = (DBObject) com.mongodb.util.JSON.parse(jsonObject.toString());
 
-        System.out.println("Object: " + b);
+        //System.out.println("Object: " + b);
         coll.insert(b);
         mongoClient.close();
     }
@@ -231,27 +232,26 @@ final class FlinkJobDistribution {
      * @return best JSONObject
      */
     JSONObject getBestMapeJsonObject(final JSONArray resultsJSONArray) {
-        double bestmape = 420;
-        //double bestValidMape = 420;
-        JSONObject bestJsonObject = new JSONObject();
-       // JSONObject bestJsonValidObject = new JSONObject();
+       // double bestmape = 420;
+        double bestValidMape = 420;
+        //JSONObject bestJsonObject = new JSONObject();
+        JSONObject bestJsonValidObject = new JSONObject();
         for (Object o : resultsJSONArray) {
             JSONObject jsonObject = (JSONObject) o;
-            double mape = (double) jsonObject.get("mape");
-            //double mape_valid = (double) jsonObject.get("mape_valid");
-            if (bestmape > mape) {
-                bestmape = mape;
-                bestJsonObject = jsonObject;
-            }
-           // if (bestValidMape > mape) {
-            //    bestValidMape = mape;
-              //  bestJsonObjectValid = jsonObject;
-                //
-         //}
+            //double mape = (double) jsonObject.get("mape");
+            double mape_valid = (double) jsonObject.get("mape_valid");
+            //if (bestmape > mape) {
+               // bestmape = mape;
+             //   bestJsonObject = jsonObject;
+            //}
+            if (bestValidMape > mape_valid) {
+                bestValidMape = mape_valid;
+                bestJsonValidObject = jsonObject;
+         	}
         }
        // if (bestJsonObject!=bestJsonValidObject)
        //     bestJsonObject=bestJsonValidObject;
-        return bestJsonObject;
+        return bestJsonValidObject;
     }
 
     /**

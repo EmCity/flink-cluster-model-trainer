@@ -28,12 +28,12 @@ public final class JobNameBatchDB {
         System.out.println("JobNameBatchDB: Got json with jobname " + jobName + " from mongo.");
 
         JSONArray resCollect = flinkdistribute.distribute(jobsjson);
-        for (Object t : resCollect.toArray()) {
+    for (Object t : resCollect.toArray()) {
             JSONObject jsonObject = (JSONObject) t;
             double mape = (double) jsonObject.get("mape");
-         //   double mape_valid = (double) jsonObject.get("mape_valid")
+//            double mape_valid = (double) jsonObject.get("mape_valid");
             System.out.println("JobNameBatchDB: Results: " + jobName + " got a result with mape: " + mape);
-         //   System.out.println("JobNameBatchDB: Results: " + jobName + " got a result with mape_valid: " + mape_valid);
+  //          System.out.println("JobNameBatchDB: Results: " + jobName + " got a result with mape_valid: " + mape_valid);
         }
         JSONObject bestResultJosnObject = flinkdistribute.getBestMapeJsonObject(resCollect);
         System.out.println("Save best result with status Finished");
