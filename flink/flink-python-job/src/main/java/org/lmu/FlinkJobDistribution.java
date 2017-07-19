@@ -77,8 +77,15 @@ final class FlinkJobDistribution {
         JSONArray resJsonArray = new JSONArray();
         JSONParser parser = new JSONParser();
         for (String s : dataset.collect()) {
-            System.out.print(s);
-            resJsonArray.add((JSONObject) parser.parse(s));
+            try
+	    {
+	        System.out.print(s);
+                resJsonArray.add((JSONObject) parser.parse(s));
+        	}
+		catch(Exception e)
+		{
+			System.out.print(e); 
+		}
         }
         return resJsonArray;
     }
