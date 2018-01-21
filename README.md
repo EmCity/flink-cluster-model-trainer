@@ -3,6 +3,7 @@ Full-stack application that lets users select Machine Learning models (Linear Re
 
 Built with
 - HTML5
+- JavaScript (Node.js)
 - Java (Apache Flink)
 - MongoDB
 - Python (scikit-learn, Tensorflow)
