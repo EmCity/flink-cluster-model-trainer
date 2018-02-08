@@ -1,6 +1,6 @@
 # Flink Cluster Model Trainer
 
-This is a project done last year for my practical course on "Big Data Science".
+This is a project done in the summer term 2017 for my practical course on "Big Data Science".
 
 ## Introduction
 
